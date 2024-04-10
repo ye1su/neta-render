@@ -12,10 +12,10 @@ export class Application {
     const { el } = options;
     this.el = el;
     this.renderer = getRenderer(options)
-    this.start()
+    this.render()
   }
 
-  private render() {
+  public render() {
     this.renderer.render(this.stage)
   }
 

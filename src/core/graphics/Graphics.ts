@@ -1,4 +1,5 @@
-import { Polygon, Rectangle } from "../Shapes";
+import { Circle, Ellipse, Polygon, Rectangle } from "../Shapes";
+import { RoundedRectangle } from "../Shapes/RoundedRectangle";
 import { Shape } from "../Shapes/Shape";
 import { Container } from "../display";
 import { CanvasRenderer } from "../renderer/CanvasRender";
@@ -16,44 +17,110 @@ export class Graphics extends Container {
   }
 
   protected renderCanvas(render: CanvasRenderer) {
-    const ctx = render.ctx
-    const { a, b, c, d, tx, ty } = this.transform.worldTransform
+    const ctx = render.ctx;
+    const { a, b, c, d, tx, ty } = this.transform.worldTransform;
 
-    ctx.setTransform(a, b, c, d, tx, ty)
+    ctx.setTransform(a, b, c, d, tx, ty);
 
-    const graphicsData = this._geometry.graphicsData
+    const graphicsData = this._geometry.graphicsData;
 
     for (let i = 0; i < graphicsData.length; i++) {
-      const data = graphicsData[i]
-      const { lineStyle, fillStyle, shape } = data
+      const data = graphicsData[i];
+      const { lineStyle, fillStyle, shape } = data;
+
+      if (fillStyle.visible) {
+        ctx.fillStyle = fillStyle.color
+      }
+
+      if (lineStyle.visible) {
+        ctx.lineWidth = lineStyle.width
+        ctx.lineCap = lineStyle.cap
+        ctx.lineJoin = lineStyle.join
+        ctx.strokeStyle = lineStyle.color
+      }
+
+      ctx.beginPath()
 
       if (shape instanceof Rectangle) {
         const rectangle = shape
-        // 先填充
+        const { x, y, width, height } = rectangle
         if (fillStyle.visible) {
-          ctx.fillStyle = fillStyle.color
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
-          ctx.fillRect(
-            rectangle.x,
-            rectangle.y,
-            rectangle.width,
-            rectangle.height
-          )
+          ctx.fillRect(x, y, width, height)
         }
-        // 再stroke
         if (lineStyle.visible) {
-          ctx.lineWidth = lineStyle.width
-          ctx.lineCap = lineStyle.cap
-          ctx.lineJoin = lineStyle.join
-          ctx.strokeStyle = lineStyle.color
           ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
+          ctx.strokeRect(x, y, width, height)
+        }
+      }
 
-          ctx.strokeRect(
-            rectangle.x,
-            rectangle.y,
-            rectangle.width,
-            rectangle.height
-          )
+      if (shape instanceof Circle) {
+        const circle = shape;
+        const { x, y, radius } = circle;
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+
+        if (fillStyle.visible) {
+          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+          ctx.fill();
+        }
+        if (lineStyle.visible) {
+          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+          ctx.stroke();
+        }
+      }
+
+      if(shape instanceof Ellipse) {
+        const ellipse = shape
+        const { x, y, radiusX, radiusY } = ellipse
+
+        ctx.ellipse(x, y, radiusX, radiusY, 0 , 0, Math.PI * 2)
+
+        if(fillStyle.visible) {
+          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
+          ctx.fill()
+        }
+
+        if (lineStyle.visible) {
+          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
+          ctx.stroke()
+        }
+      }
+
+      if (shape instanceof RoundedRectangle) {
+        const roundedRectangle = shape
+        const { x, y, width, height, radius } = roundedRectangle
+
+        ctx.moveTo(x + radius, y)
+        ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true)
+        ctx.lineTo(x, y + height - radius)
+        ctx.arc(
+          x + radius,
+          y + height - radius,
+          radius,
+          Math.PI,
+          Math.PI / 2,
+          true
+        )
+        ctx.lineTo(x + width - radius, y + height)
+        ctx.arc(
+          x + width - radius,
+          y + height - radius,
+          radius,
+          Math.PI / 2,
+          0,
+          true
+        )
+        ctx.lineTo(x + width, y + radius)
+        ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true)
+        ctx.closePath()
+
+        if (fillStyle.visible) {
+          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha
+          ctx.fill()
+        }
+        if (lineStyle.visible) {
+          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha
+          ctx.stroke()
         }
       }
     }
@@ -79,11 +146,9 @@ export class Graphics extends Container {
   }
 
   public beginFill(color = "#000000", alpha = 1) {
-
     if (this.currentPath) {
       this.startPoly();
     }
-    console.log('this.currentPath: ', this.currentPath);
 
     this._fillStyle.color = color;
     this._fillStyle.alpha = alpha;

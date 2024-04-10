@@ -34,6 +34,7 @@ function App() {
       el: document.getElementById("canvans")!,
       backgroundColor: '#aaaaaa'
     })
+    appRef.current.render()
   }, [])
 
   useEffect(() => {
@@ -50,7 +51,6 @@ function App() {
     container1.addChild(blackGraphic)
     container1.addChild(redGraphic)
     
-    console.log('container1: ', container1);
 
     const container2 = new Container()
     container2.addChild(container1)
@@ -68,7 +68,9 @@ function App() {
 
     appRef.current?.stage.addChild(container2)
     appRef.current?.stage.addChild(yellowGraphic)
+    console.log('appRef.current?.stage: ', appRef.current?.stage);
 
+    appRef.current?.render()
   }, [])
 
   return (

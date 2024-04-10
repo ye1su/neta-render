@@ -1,6 +1,7 @@
 import { ObservablePoint, Transform } from '../math'
 import { default as Eventemitter } from 'eventemitter3'
 import { Container } from './Container'
+import { DEG_TO_RAD, RAD_TO_DEG } from '../math/constants'
 
 export abstract class DisplayObject extends Eventemitter {
   public alpha = 1
@@ -67,11 +68,11 @@ export abstract class DisplayObject extends Eventemitter {
     this.transform.rotation = value
   }
 
-  // get angle(): number {
-  //   return this.transform.rotation * RAD_TO_DEG
-  // }
+  get angle(): number {
+    return this.transform.rotation * RAD_TO_DEG
+  }
 
-  // set angle(value: number) {
-  //   this.transform.rotation = value * DEG_TO_RAD
-  // }
+  set angle(value: number) {
+    this.transform.rotation = value * DEG_TO_RAD
+  }
 }

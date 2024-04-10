@@ -22,17 +22,18 @@ export class Container extends DisplayObject {
    * 递归渲染以自身为根的整棵节点树
    */
   public renderCanvasRecursive(render: CanvasRenderer) {
-    console.log('this:===== ', this.children);
-
+    console.log('render:========= ', render);
     if (!this.visible) {
       return;
     }
 
     this.renderCanvas(render);
 
+    console.log('this.children: ', this.children);
+
+
     for (let i = 0; i < this.children.length; i++) {
       const child = this.children[i];
-      console.log('child: ', child);
       child.renderCanvasRecursive(render);
     }
   }
