@@ -1,4 +1,5 @@
 export * from "./Rectangle";
-export * from "./Polygon";
+export * from "./RoundedRectangle";
 export * from "./Circle";
-export * from './Ellipse'
+export * from "./Ellipse";
+export * from "./Polygon";
