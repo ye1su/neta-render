@@ -38,33 +38,6 @@ export class Container extends DisplayObject {
     }
   }
 
-  /**
-   * 递归更新当前元素以及所有子元素的transform
-   */
-  public updateTransform() {
-    this.sortChildren();
-
-    const parentTransform = this.parent?.transform || new Transform();
-    const hasWorldTransformChanged =
-      this.transform.updateTransform(parentTransform);
-
-    this.worldAlpha = (this.parent?.worldAlpha || 1) * this.alpha;
-
-    if (this.worldAlpha <= 0 || !this.visible) {
-      return;
-    }
-
-    for (let i = 0, j = this.children.length; i < j; ++i) {
-      const child = this.children[i];
-
-      // 若当前元素的worldTransform改变了，那么其子元素的worldTransform需要重新计算
-      if (hasWorldTransformChanged) {
-        child.transform.shouldUpdateWorldTransform = true;
-      }
-
-      child.updateTransform();
-    }
-  }
 
   public addChild(child: Container) {
     child.parent?.removeChild(child); // 将要添加的child从它的父元素的children中移除

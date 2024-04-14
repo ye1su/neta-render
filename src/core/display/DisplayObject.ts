@@ -11,11 +11,6 @@ export abstract class DisplayObject extends Eventemitter {
   protected _zIndex = 0
   public parent: Container | null = null
 
-  public updateTransform() {
-    const parentTransform = this.parent?.transform || new Transform()
-    this.transform.updateTransform(parentTransform)
-    this.worldAlpha = this.alpha * (this.parent?.worldAlpha || 1)
-  }
 
   get zIndex(): number {
     return this._zIndex

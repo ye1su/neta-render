@@ -12,7 +12,6 @@ export class CanvasRenderer extends Renderer {
     this.ctx = this.el.getContext("2d") as CanvasRenderingContext2D;
   }
   public render(container: Container) {
-    container.updateTransform();
 
     this.ctx.save();
 

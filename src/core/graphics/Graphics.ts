@@ -18,9 +18,7 @@ export class Graphics extends Container {
 
   protected renderCanvas(render: CanvasRenderer) {
     const ctx = render.ctx;
-    const { a, b, c, d, tx, ty } = this.transform.worldTransform;
 
-    ctx.setTransform(a, b, c, d, tx, ty);
 
     const graphicsData = this._geometry.graphicsData;
 
