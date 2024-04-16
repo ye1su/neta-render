@@ -1,4 +1,5 @@
 import { Shape } from "../Shapes/Shape";
+import { Point } from "../math";
 import { GraphicsData } from "./GraphicsData";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
@@ -11,6 +12,23 @@ export class GraphicsGeometry {
     this.graphicsData.push(data);
   }
   public clear() {
-    this.graphicsData = []
+    this.graphicsData = [];
+  }
+  /**
+   * @param p 待检测点
+   * @returns {boolean} 待检测点是否落在某一个子图形内
+   */
+  public containsPoint(p: Point): boolean {
+    for (let i = 0; i < this.graphicsData.length; i++) {
+      const { shape, fillStyle } = this.graphicsData[i];
+      if (!fillStyle.visible) {
+        continue;
+      }
+      if (shape.contains(p)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

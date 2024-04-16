@@ -17,7 +17,15 @@ export class Ellipse extends Shape {
     this.radiusY = radiusY;
   }
 
-  public contains(point: Point): boolean {
-    return true;
+  public contains(p: Point): boolean {
+    if (
+      ((p.x - this.x) * (p.x - this.x)) / (this.radiusX * this.radiusX) +
+        ((p.y - this.y) * (p.y - this.y)) / (this.radiusY * this.radiusY) <
+      1
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

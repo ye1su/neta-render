@@ -75,11 +75,17 @@ function App() {
 
     appRef.current?.stage.addChild(quadraticBezierCurve);
 
-    // const bezierCurve = new Graphics()
-    // bezierCurve.lineStyle(1)
-    // bezierCurve.moveTo(400, 100)
-    // bezierCurve.bezierCurveTo(600, 100, 600, 400, 800, 400)
-    // appRef.current?.stage.addChild(bezierCurve)
+    const bezierCurve = new Graphics()
+    bezierCurve.lineStyle(1)
+    bezierCurve.moveTo(400, 100)
+    bezierCurve.bezierCurveTo(600, 100, 600, 400, 800, 400)
+    appRef.current?.stage.addChild(bezierCurve)
+
+    // const cir = new Graphics()
+    // cir.lineStyle(1)
+    // cir.arc(200, 200, 100, Math.PI * 2.4, Math.PI * 6.5, true)
+    // appRef.current?.stage.addChild(cir)
+
     console.log("appRef.current: ", appRef.current);
     appRef.current?.render();
   }, []);

@@ -1,5 +1,4 @@
 import { DisplayObject } from "./DisplayObject";
-import { Transform } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
 
 export class Container extends DisplayObject {
@@ -15,7 +14,6 @@ export class Container extends DisplayObject {
    */
   protected renderCanvas(render: CanvasRenderer) {
     // nothing
-    
   }
 
   /**
@@ -28,13 +26,11 @@ export class Container extends DisplayObject {
 
     this.renderCanvas(render);
 
-
     for (let i = 0; i < this.children.length; i++) {
       const child = this.children[i];
       child.renderCanvasRecursive(render);
     }
   }
-
 
   public addChild(child: Container) {
     child.parent?.removeChild(child); // 将要添加的child从它的父元素的children中移除
@@ -59,5 +55,9 @@ export class Container extends DisplayObject {
 
     this.children.sort((a, b) => a.zIndex - b.zIndex);
     this.sortDirty = false;
+  }
+
+  public containsPoint(p: Point) {
+    return false;
   }
 }

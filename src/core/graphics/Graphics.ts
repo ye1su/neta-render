@@ -7,6 +7,7 @@ import {
 } from "../Shapes";
 import { Shape } from "../Shapes/Shape";
 import { Container } from "../display";
+import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
 import { ILineStyleOptions } from "../type";
 import { GraphicsGeometry } from "./GraphicsGeometry";
@@ -22,27 +23,27 @@ export class Graphics extends Container {
   constructor() {
     super();
   }
-  public lineStyle(width: number, color?: string, alpha?: number): this
-  public lineStyle(options: ILineStyleOptions): this
+  public lineStyle(width: number, color?: string, alpha?: number): this;
+  public lineStyle(options: ILineStyleOptions): this;
   public lineStyle(
     options: ILineStyleOptions | number,
-    color: string = '0x000000',
+    color: string = "0x000000",
     alpha: number = 1
   ) {
-    this.startPoly()
+    this.startPoly();
 
-    if (typeof options === 'object') {
-      Object.assign(this._lineStyle, options)
+    if (typeof options === "object") {
+      Object.assign(this._lineStyle, options);
     } else {
-      const opts: ILineStyleOptions = { width: options, color, alpha }
-      Object.assign(this._lineStyle, opts)
+      const opts: ILineStyleOptions = { width: options, color, alpha };
+      Object.assign(this._lineStyle, opts);
     }
-    this._lineStyle.visible = true
-    return this
+    this._lineStyle.visible = true;
+    return this;
   }
 
   public resetLineStyle() {
-    this._lineStyle.reset()
+    this._lineStyle.reset();
   }
 
   protected renderCanvas(render: CanvasRenderer) {
@@ -154,8 +155,8 @@ export class Graphics extends Container {
         const polygon = shape;
 
         const { points, closeStroke } = polygon;
-        console.log('points: ', points);
-        ctx.moveTo(points[0], points[i]);
+
+        ctx.moveTo(points[0], points[1]);
 
         for (let i = 2; i < points.length; i += 2) {
           ctx.lineTo(points[i], points[i + 1]);
@@ -163,7 +164,6 @@ export class Graphics extends Container {
         if (closeStroke) {
           ctx.closePath();
         }
-        console.log('fillStyle: ', fillStyle);
 
         if (fillStyle.visible) {
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
@@ -190,11 +190,8 @@ export class Graphics extends Container {
    * 清空已有的path，开始新的path
    */
   protected startPoly() {
-    
     if (this.currentPath) {
-
       const len = this.currentPath.points.length;
-      console.log('len: ', len);
       if (len > 2) {
         this.drawShape(this.currentPath);
       }
@@ -281,7 +278,6 @@ export class Graphics extends Container {
    * @param points 多边形顶点坐标数组，每2个元素算一组(x,y)
    */
   public drawPolygon(points: number[]) {
-    console.log('points: ', points);
     const poly = new Polygon(points);
     poly.closeStroke = true;
 
@@ -293,7 +289,6 @@ export class Graphics extends Container {
 
     this.currentPath.points[0] = x;
     this.currentPath.points[1] = y;
-
 
     return this;
   }
@@ -430,9 +425,9 @@ export class Graphics extends Container {
       this.lineTo(x, y);
     }
 
+    this.startPoly();
     return this;
   }
-
   /**
    * 画圆弧
    * @param cx 圆弧对应的圆的中心点的x坐标
@@ -501,6 +496,7 @@ export class Graphics extends Container {
       this.lineTo(x, y);
     }
 
+    this.startPoly();
     return this;
   }
 
@@ -570,12 +566,15 @@ export class Graphics extends Container {
   }
 
   public clear() {
-    this._geometry.clear()
-    this._lineStyle.reset()
-    this._fillStyle.reset()
-    this.currentPath = new Polygon()
+    this._geometry.clear();
+    this._lineStyle.reset();
+    this._fillStyle.reset();
+    this.currentPath = new Polygon();
 
-    return this
+    return this;
   }
 
+  public containsPoint(p: Point): boolean {
+    return this._geometry.containsPoint(p)
+  }
 }
