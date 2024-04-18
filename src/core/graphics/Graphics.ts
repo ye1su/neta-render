@@ -47,9 +47,11 @@ export class Graphics extends Container {
   }
 
   protected renderCanvas(render: CanvasRenderer) {
+    this.startPoly()
     const ctx = render.ctx;
-
+    console.log('ctx: ', ctx);
     const graphicsData = this._geometry.graphicsData;
+    console.log('graphicsData: ', graphicsData);
 
     for (let i = 0; i < graphicsData.length; i++) {
       const data = graphicsData[i];
@@ -354,7 +356,6 @@ export class Graphics extends Container {
 
       this.lineTo(x, y);
     }
-    this.startPoly();
 
     return this;
   }
@@ -425,7 +426,6 @@ export class Graphics extends Container {
       this.lineTo(x, y);
     }
 
-    this.startPoly();
     return this;
   }
   /**
@@ -496,7 +496,6 @@ export class Graphics extends Container {
       this.lineTo(x, y);
     }
 
-    this.startPoly();
     return this;
   }
 
@@ -573,6 +572,14 @@ export class Graphics extends Container {
 
     return this;
   }
+
+  public closePath() {
+    this.currentPath.closeStroke = true
+    this.startPoly()
+
+    return this
+  }
+
 
   public containsPoint(p: Point): boolean {
     return this._geometry.containsPoint(p)

@@ -1,4 +1,5 @@
 import { Container } from "./display";
+import { EventSystem } from "./events";
 import { Point } from "./math";
 import { getRenderer } from "./renderer";
 import { Renderer } from "./renderer/Renderer";
@@ -28,7 +29,7 @@ const hitTestRecursive = (curTarget: Container, globalPos: Point) => {
   }
 
   // 最后检测自身
-  const p = curTarget.position;
+  const p = globalPos;
   if (curTarget.containsPoint(p)) {
     hitTarget = curTarget;
     hasFoundTarget = true;
@@ -45,9 +46,10 @@ const hitTest = (root: Container, globalPos: Point): Container | null => {
 };
 
 export class Application {
-  public el: HTMLCanvasElement;
-  public stage = new Container();
-  private renderer: Renderer;
+  public readonly  el: HTMLCanvasElement;
+  public readonly stage = new Container();
+  private readonly renderer: Renderer;
+  private eventSystem: EventSystem
 
   constructor(options: IApplicationOptions) {
     const { el } = options;
@@ -55,32 +57,19 @@ export class Application {
     this.renderer = getRenderer(options);
     this.render();
 
-    this.el.addEventListener('pointermove', (e) => {
-      const target = hitTest(this.stage, new Point(e.offsetX, e.offsetY))
-      if (target) {
-        this.el.style.cursor = 'pointer'
-      } else {
-        this.el.style.cursor = 'auto'
-      }
-    })
-
-    this.el.addEventListener('click', (e) => {
-      const target = hitTest(this.stage, new Point(e.offsetX, e.offsetY))
-      if (target) {
-        target.emit('click')
-      }
-    })
+    this.eventSystem = new EventSystem(this.el, this.stage)
+    this.start()
   }
 
   public render() {
     this.renderer.render(this.stage);
   }
 
-  // private start() {
-  //   const func = () => {
-  //     this.render();
-  //     requestAnimationFrame(func);
-  //   };
-  //   func();
-  // }
+  private start() {
+    const func = () => {
+      this.render()
+      requestAnimationFrame(func)
+    }
+    func()
+  }
 }

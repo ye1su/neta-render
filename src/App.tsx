@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
 import "./App.css";
-import { Application, Graphics, RendererType } from "./core";
+import { Application, Container, Graphics, RendererType } from "./core";
+import { Point } from "./core/math";
+import { Rectangle } from "./core/Shapes";
+
+const width = 1200
+const height = 700
 
 function App() {
   const appRef = useRef<Application>();
@@ -66,42 +71,136 @@ function App() {
   //   appRef.current?.render()
   // }, []);
 
-  useEffect(() => {
-    const quadraticBezierCurve = new Graphics();
-    quadraticBezierCurve.lineStyle(1)
-    quadraticBezierCurve.moveTo(100, 100);
-    quadraticBezierCurve.quadraticCurveTo(100, 300, 300, 300);
+  // useEffect(() => {
+  //   const quadraticBezierCurve = new Graphics();
+  //   quadraticBezierCurve.lineStyle(1);
+  //   quadraticBezierCurve.moveTo(100, 100);
+  //   quadraticBezierCurve.quadraticCurveTo(100, 300, 300, 300);
 
+  //   appRef.current?.stage.addChild(quadraticBezierCurve);
 
-    appRef.current?.stage.addChild(quadraticBezierCurve);
+  //   const bezierCurve = new Graphics();
+  //   bezierCurve.lineStyle(1);
+  //   bezierCurve.moveTo(400, 100);
+  //   bezierCurve.bezierCurveTo(600, 100, 600, 400, 800, 400);
+  //   appRef.current?.stage.addChild(bezierCurve);
 
-    const bezierCurve = new Graphics()
-    bezierCurve.lineStyle(1)
-    bezierCurve.moveTo(400, 100)
-    bezierCurve.bezierCurveTo(600, 100, 600, 400, 800, 400)
-    appRef.current?.stage.addChild(bezierCurve)
-
-    // const cir = new Graphics()
-    // cir.lineStyle(1)
-    // cir.arc(200, 200, 100, Math.PI * 2.4, Math.PI * 6.5, true)
-    // appRef.current?.stage.addChild(cir)
-
-    console.log("appRef.current: ", appRef.current);
-    appRef.current?.render();
-  }, []);
+  //   appRef.current?.render();
+  // }, []);
 
   // useEffect(() => {
   //   // arcTo测试代码
 
-  //   const cir = new Graphics()
-  //     .lineStyle(1, 'red')
+  //   const path = new Graphics()
+  //     .lineStyle(3, "purple")
+  //     .beginFill("pink", 0.6)
   //     .moveTo(100, 100)
-  //     .arcTo(300, 100, 200, 200, 80)
+  //     .lineTo(300, 100)
+  //     .arc(300, 300, 200, Math.PI * 1.5, Math.PI * 2)
+  //     .bezierCurveTo(500, 400, 600, 500, 700, 500)
+  //     .lineTo(600, 300)
+  //     .arcTo(700, 100, 800, 300, 150)
+  //     .quadraticCurveTo(900, 100, 1100, 200)
+  //     .closePath();
 
-  //   appRef.current?.stage.addChild(cir)
+  //   appRef.current?.stage.addChild(path);
   //   console.log("appRef.current: ", appRef.current);
   //   appRef.current?.render();
-  // })
+  // });
+
+  // useEffect(() => {
+  //   const c = new Container();
+  //   const redRect = new Graphics()
+  //     .beginFill("red")
+  //     .drawRect(400, 300, 200, 200)
+  //     .on("click", () => {
+  //       alert('点击了红色的矩形')
+  //     });
+  //   c.addChild(redRect);
+  //   const bluePoly = new Graphics()
+  //     .beginFill("blue", 0.7)
+  //     .moveTo(100, 200)
+  //     .lineTo(400, 0)
+  //     .lineTo(1000, 300)
+  //     .lineTo(900, 600)
+  //     .closePath()
+  //     .on("click", () => {
+  //       alert('点击了蓝色的多边形')
+  //     });
+  //   c.addChild(bluePoly);
+
+  //   const path = new Graphics()
+  //     .lineStyle(3, "purple")
+  //     .beginFill("pink", 0.6)
+  //     .moveTo(100, 100)
+  //     .lineTo(300, 100)
+  //     .arc(300, 300, 200, Math.PI * 1.5, Math.PI * 2)
+  //     .bezierCurveTo(500, 400, 600, 500, 700, 500)
+  //     .lineTo(600, 300)
+  //     .arcTo(700, 100, 800, 300, 150)
+  //     .quadraticCurveTo(900, 100, 1100, 200)
+  //     .closePath()
+  //     .on("click", () => {
+  //       alert('点击了粉色的多边形')
+  //     });
+
+  //   const greenCircle = new Graphics()
+  //     .beginFill("green")
+  //     .drawCircle(200, 400, 200)
+  //     .on("click", () => {
+  //       alert('点击了绿色的圆')
+  //     });
+
+  //   appRef.current.stage.addChild(c);
+  //   appRef.current.stage.addChild(path);
+  //   appRef.current.stage.addChild(greenCircle);
+
+  //   appRef.current?.render();
+  // }, []);
+
+  useEffect(() => {
+    const g = new Graphics()
+      .beginFill("gold")
+      .moveTo(200, 200)
+      .lineTo(400, 100)
+      .lineTo(600, 200)
+      .lineTo(700, 100)
+      .lineTo(600, 500)
+      .closePath();
+    g.cursor = "pointer";
+    g.scale.set(0.3, 0.8);
+    g.position.set(100, 50);
+    appRef.current.stage.addChild(g);
+    console.log("appRef.current: ", appRef.current);
+    appRef.current?.render();
+
+    let dragging = false;
+    let startPoint = new Point(g.x, g.y);
+    let mouseDownPoint = new Point(0, 0);
+    g.addEventListener("mousedown", (e) => {
+      console.log('e: -------', e);
+      dragging = true;
+      mouseDownPoint = e.global.clone();
+      startPoint = new Point(g.x, g.y);
+      console.log('startPoint: ', startPoint);
+    });
+    appRef.current.stage.hitArea = new Rectangle(0, 0, width, height)
+    appRef.current.stage.addEventListener('mousemove', (e) => {
+      if (!dragging) {
+        return
+      }
+      console.log('e:------ ', e);
+
+      const newP = e.global.clone()
+      const diffX = newP.x - mouseDownPoint.x
+      const diffY = newP.y - mouseDownPoint.y
+      g.position.set(startPoint.x + diffX, startPoint.y + diffY)
+      console.log('g: ', g);
+    })
+    appRef.current.stage.addEventListener('mouseup', (e) => {
+      dragging = false
+    })
+  }, []);
 
   return (
     <>

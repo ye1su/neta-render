@@ -1,5 +1,6 @@
 import { DisplayObject } from "./DisplayObject";
 import { CanvasRenderer } from "../renderer/CanvasRender";
+import { Point } from "../math";
 
 export class Container extends DisplayObject {
   public sortDirty = false;
@@ -58,6 +59,10 @@ export class Container extends DisplayObject {
   }
 
   public containsPoint(p: Point) {
-    return false;
+    if (!this.hitArea) {
+      return false
+    }
+
+    return this.hitArea.contains(p)
   }
 }
