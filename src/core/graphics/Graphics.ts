@@ -47,11 +47,10 @@ export class Graphics extends Container {
   }
 
   protected renderCanvas(render: CanvasRenderer) {
-    this.startPoly()
+    this.startPoly();
     const ctx = render.ctx;
-    console.log('ctx: ', ctx);
     const graphicsData = this._geometry.graphicsData;
-    console.log('graphicsData: ', graphicsData);
+    console.log("graphicsData: ===== ", graphicsData, this);
 
     for (let i = 0; i < graphicsData.length; i++) {
       const data = graphicsData[i];
@@ -72,7 +71,9 @@ export class Graphics extends Container {
 
       if (shape instanceof Rectangle) {
         const rectangle = shape;
-        const { x, y, width, height } = rectangle;
+        const { width, height } = rectangle;
+        const x = this.x + rectangle.x;
+        const y = this.y + rectangle.y;
         if (fillStyle.visible) {
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
           ctx.fillRect(x, y, width, height);
@@ -85,8 +86,15 @@ export class Graphics extends Container {
 
       if (shape instanceof Circle) {
         const circle = shape;
-        const { x, y, radius } = circle;
+        const { radius } = circle;
+        const x = this.x + circle.x;
+        const y = this.y + circle.y;
+        ctx.strokeStyle = '#d3d3d3';
+        ctx.lineWidth = 2;
+        console.log('ctx.strokeStyle : ', ctx.strokeStyle );
+
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.stroke();
 
         if (fillStyle.visible) {
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
@@ -574,14 +582,13 @@ export class Graphics extends Container {
   }
 
   public closePath() {
-    this.currentPath.closeStroke = true
-    this.startPoly()
+    this.currentPath.closeStroke = true;
+    this.startPoly();
 
-    return this
+    return this;
   }
 
-
   public containsPoint(p: Point): boolean {
-    return this._geometry.containsPoint(p)
+    return this._geometry.containsPoint(p);
   }
 }

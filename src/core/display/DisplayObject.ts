@@ -32,10 +32,12 @@ export abstract class DisplayObject extends Eventemitter {
   }
 
   get x(): number {
+    
     return this.position.x;
   }
 
   set x(value: number) {
+
     this.transform.position.x = value;
   }
 

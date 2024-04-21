@@ -32,6 +32,24 @@ export class Container extends DisplayObject {
       child.renderCanvasRecursive(render);
     }
   }
+    /**
+   * 递归更新当前元素以及所有子元素的transform
+   */
+    public updateTransform() {
+      this.sortChildren()
+      
+      this.worldAlpha = (this.parent?.worldAlpha || 1) * this.alpha
+  
+      if (this.worldAlpha <= 0 || !this.visible) {
+        return
+      }
+  
+      for (let i = 0, j = this.children.length; i < j; ++i) {
+        const child = this.children[i]
+  
+        child.updateTransform()
+      }
+    }
 
   public addChild(child: Container) {
     child.parent?.removeChild(child); // 将要添加的child从它的父元素的children中移除

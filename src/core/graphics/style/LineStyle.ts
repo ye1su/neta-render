@@ -22,7 +22,7 @@ export class LineStyle extends FillStyle {
   public reset(): void {
     super.reset()
 
-    this.color = '#ffffff'
+    this.color = '#D3D3D3'
     this.width = 0
     this.cap = LineCap.Butt
     this.join = LineJoin.Miter

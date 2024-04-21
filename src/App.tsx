@@ -1,20 +1,33 @@
 import { useEffect, useRef } from "react";
 import "./App.css";
-import { Application, Container, Graphics, RendererType } from "./core";
+import { NetaGraph, Container, Graphics, RendererType } from "./core";
 import { Point } from "./core/math";
 import { Rectangle } from "./core/Shapes";
 
-const width = 1200
-const height = 700
+const width = 1200;
+const height = 700;
 
 function App() {
-  const appRef = useRef<Application>();
+  const appRef = useRef<NetaGraph>();
   useEffect(() => {
-    appRef.current = new Application({
+    appRef.current = new NetaGraph({
       rendererType: RendererType.Canvas,
       el: document.getElementById("canvans")!,
-      backgroundColor: "#ccc",
+      backgroundColor: "#fff",
     });
+    appRef.current.render();
+
+    const model = {
+      id: 'node',
+      label: 'node',
+      address: 'cq',
+      x: 200,
+      y: 150,
+      style: {
+        fill: 'blue',
+      },
+    };
+    appRef.current.addItem('node', model)
     appRef.current.render();
   }, []);
 
@@ -158,49 +171,44 @@ function App() {
   //   appRef.current?.render();
   // }, []);
 
-  useEffect(() => {
-    const g = new Graphics()
-      .beginFill("gold")
-      .moveTo(200, 200)
-      .lineTo(400, 100)
-      .lineTo(600, 200)
-      .lineTo(700, 100)
-      .lineTo(600, 500)
-      .closePath();
-    g.cursor = "pointer";
-    g.scale.set(0.3, 0.8);
-    g.position.set(100, 50);
-    appRef.current.stage.addChild(g);
-    console.log("appRef.current: ", appRef.current);
-    appRef.current?.render();
+  // useEffect(() => {
+  //   const g = new Graphics()
+  //     .beginFill("red")
+  //     .drawRect(100, 50, 100, 100)
+  //   g.cursor = "pointer";
+  //   g.scale.set(0.3, 0.8);
+  //   g.position.set(100, 50);
+  //   appRef.current.stage.addChild(g);
+  //   console.log("appRef.current: ", appRef.current);
+  //   appRef.current?.render();
 
-    let dragging = false;
-    let startPoint = new Point(g.x, g.y);
-    let mouseDownPoint = new Point(0, 0);
-    g.addEventListener("mousedown", (e) => {
-      console.log('e: -------', e);
-      dragging = true;
-      mouseDownPoint = e.global.clone();
-      startPoint = new Point(g.x, g.y);
-      console.log('startPoint: ', startPoint);
-    });
-    appRef.current.stage.hitArea = new Rectangle(0, 0, width, height)
-    appRef.current.stage.addEventListener('mousemove', (e) => {
-      if (!dragging) {
-        return
-      }
-      console.log('e:------ ', e);
+  //   let dragging = false;
+  //   let startPoint = new Point(g.x, g.y);
+  //   let mouseDownPoint = new Point(0, 0);
+  //   g.addEventListener("mousedown", (e) => {
+  //     console.log("e: -------", e);
+  //     dragging = true;
+  //     mouseDownPoint = e.global.clone();
+  //     startPoint = new Point(g.x, g.y);
+  //     console.log("startPoint: ", startPoint);
+  //   });
+  //   appRef.current.stage.hitArea = new Rectangle(0, 0, width, height);
+  //   appRef.current.stage.addEventListener("mousemove", (e) => {
 
-      const newP = e.global.clone()
-      const diffX = newP.x - mouseDownPoint.x
-      const diffY = newP.y - mouseDownPoint.y
-      g.position.set(startPoint.x + diffX, startPoint.y + diffY)
-      console.log('g: ', g);
-    })
-    appRef.current.stage.addEventListener('mouseup', (e) => {
-      dragging = false
-    })
-  }, []);
+  //     if (!dragging) {
+  //       return;
+  //     }
+
+  //     const newP = e.global.clone();
+  //     const diffX = newP.x - mouseDownPoint.x;
+  //     const diffY = newP.y - mouseDownPoint.y;
+  //     g.position.set(startPoint.x + diffX, startPoint.y + diffY);
+  //     appRef.current?.render();
+  //   });
+  //   appRef.current.stage.addEventListener("mouseup", (e) => {
+  //     dragging = false;
+  //   });
+  // }, []);
 
   return (
     <>

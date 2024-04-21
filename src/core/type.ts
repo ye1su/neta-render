@@ -17,3 +17,13 @@ export interface ILineStyleOptions extends IFillStyleOptions {
   cap?: LineCap
   join?: LineJoin
 }
+
+
+export type ItemType = 'node' | 'edge'
+
+export interface NodeModel {
+  id: string;
+  label?: string;
+  x: number,
+  y: number,
+}
