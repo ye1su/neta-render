@@ -2,8 +2,6 @@ import { ObservablePoint, Transform } from "../math";
 import { default as Eventemitter } from "eventemitter3";
 import { Container } from "./Container";
 import { DEG_TO_RAD, RAD_TO_DEG } from "../math/constants";
-import { FederatedEventMap } from "../events";
-import { Shape } from "../Shapes/Shape";
 import { Cursor } from "../events/type";
 
 export abstract class DisplayObject extends Eventemitter {
@@ -13,7 +11,6 @@ export abstract class DisplayObject extends Eventemitter {
   public transform = new Transform();
   protected _zIndex = 0;
   public parent: Container | null = null;
-  public hitArea: Shape | null = null;
   public cursor: Cursor = "auto";
 
   get zIndex(): number {
@@ -32,12 +29,10 @@ export abstract class DisplayObject extends Eventemitter {
   }
 
   get x(): number {
-    
     return this.position.x;
   }
 
   set x(value: number) {
-
     this.transform.position.x = value;
   }
 
@@ -77,30 +72,4 @@ export abstract class DisplayObject extends Eventemitter {
     this.transform.rotation = value * DEG_TO_RAD;
   }
 
-  public addEventListener<K extends keyof FederatedEventMap>(
-    type: K,
-    listener: (e: FederatedEventMap[K]) => any,
-    options?: boolean | AddEventListenerOptions
-  ) {
-    const capture =
-      (typeof options === "boolean" && options) ||
-      (typeof options === "object" && options.capture);
-
-    const realType = capture ? `${type}capture` : type;
-
-    if (typeof options === "object" && options.once) {
-      this.once(realType, listener);
-    } else {
-      this.on(realType, listener);
-    }
-  }
-
-  public removeEventListener<K extends keyof FederatedEventMap>(
-    type: K,
-    listener: (e: FederatedEventMap[K]) => any,
-    capture: boolean
-  ) {
-    const realType = capture ? `${type}capture` : type;
-    this.off(realType, listener);
-  }
 }

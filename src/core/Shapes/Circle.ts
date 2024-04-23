@@ -16,6 +16,11 @@ export class Circle extends Shape {
   }
 
   public contains(p: Point): boolean {
+    console.log('======');
+    console.log('(p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y): ', (p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y));
+    
+    console.log(p, this.x, this.y);
+    
     if (
       (p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y) <
       this.radius * this.radius

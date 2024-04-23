@@ -15,7 +15,7 @@ function App() {
       el: document.getElementById("canvans")!,
       backgroundColor: "#fff",
     });
-    appRef.current.render();
+    // appRef.current.render();
 
     const model = {
       id: 'node',

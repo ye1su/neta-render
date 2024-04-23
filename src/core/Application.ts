@@ -5,10 +5,10 @@ import { Renderer } from "./renderer/Renderer";
 import { IApplicationOptions } from "./type";
 
 export class Application {
-  public readonly  el: HTMLCanvasElement;
+  public readonly el: HTMLCanvasElement;
   public readonly stage = new Container();
   private readonly renderer: Renderer;
-  private eventSystem: EventSystem
+  private eventSystem: EventSystem;
 
   constructor(options: IApplicationOptions) {
     const { el } = options;
@@ -16,8 +16,7 @@ export class Application {
     this.renderer = getRenderer(options);
     this.render();
 
-    this.eventSystem = new EventSystem(this.el, this.stage)
-    // this.start()
+    this.eventSystem = new EventSystem(this.el, this.stage);
   }
 
   public render() {
@@ -26,9 +25,9 @@ export class Application {
 
   private start() {
     const func = () => {
-      this.render()
-      requestAnimationFrame(func)
-    }
-    func()
+      this.render();
+      requestAnimationFrame(func);
+    };
+    func();
   }
 }

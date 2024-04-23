@@ -77,10 +77,6 @@ export class Container extends DisplayObject {
   }
 
   public containsPoint(p: Point) {
-    if (!this.hitArea) {
-      return false
-    }
-
-    return this.hitArea.contains(p)
+    return false
   }
 }
