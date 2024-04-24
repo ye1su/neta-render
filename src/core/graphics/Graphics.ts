@@ -16,10 +16,12 @@ import { LineStyle } from "./style/LineStyle";
 import { getBezierLength, getQuadraticBezierLength } from "./utils";
 
 export class Graphics extends Container {
+  private _render: CanvasRenderer
   private _lineStyle = new LineStyle();
   private _fillStyle = new FillStyle();
   private _geometry = new GraphicsGeometry();
   public currentPath: Polygon | null = null;
+
   constructor() {
     super();
   }
@@ -47,6 +49,7 @@ export class Graphics extends Container {
   }
 
   protected renderCanvas(render: CanvasRenderer) {
+    this._render = render
     this.startPoly();
     const ctx = render.ctx;
     const graphicsData = this._geometry.graphicsData;
@@ -87,11 +90,10 @@ export class Graphics extends Container {
       if (shape instanceof Circle) {
         const circle = shape;
         const { radius } = circle;
-        const x = this.x + circle.x;
-        const y = this.y + circle.y;
-        ctx.strokeStyle = '#d3d3d3';
+        const x = this.x;
+        const y = this.y;
+        ctx.strokeStyle = "#d3d3d3";
         ctx.lineWidth = 2;
-        console.log('ctx.strokeStyle : ', ctx.strokeStyle );
 
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
         ctx.stroke();
@@ -590,5 +592,12 @@ export class Graphics extends Container {
 
   public containsPoint(p: Point): boolean {
     return this._geometry.containsPoint(p);
+  }
+
+  public updatePosition(x: number, y: number) {
+    this._geometry.graphicsData.forEach((item) => {
+      item.shape.setPosition(x, y);
+    });
+    this.position.set(x, y);
   }
 }

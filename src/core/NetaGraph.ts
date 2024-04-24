@@ -25,9 +25,6 @@ export class NetaGraph extends Application {
   addNode(model: NodeModel) {
     const graphic = new Graphics();
     graphicsParse(graphic, model);
-    graphic.on('click', () => {
-      alert('点击了红色的矩形')
-    })
     this.stage.addChild(graphic);
 
   }

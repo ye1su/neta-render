@@ -5,4 +5,5 @@ export abstract class Shape {
   public abstract type: ShapeType;
   constructor() {}
   public abstract contains(point: Point): boolean;
+  public abstract setPosition(x: number, y: number): void
 }

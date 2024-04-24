@@ -16,7 +16,8 @@ export class Application {
     this.renderer = getRenderer(options);
     this.render();
 
-    this.eventSystem = new EventSystem(this.el, this.stage);
+    this.eventSystem = new EventSystem(this.el, this.stage, this.renderer);
+    // this.start()
   }
 
   public render() {
