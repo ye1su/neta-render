@@ -21,6 +21,11 @@ export class RoundedRectangle extends Shape {
     this.radius = radius > r ? r : radius;
   }
 
+  public setPosition(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
   public contains(p: Point): boolean {
     const con1 =
       p.x > this.x &&

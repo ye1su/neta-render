@@ -14,13 +14,12 @@ function App() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("canvans")!,
       backgroundColor: "#fff",
-    });
+    });  
     // appRef.current.render();
 
     const model = {
-      id: 'node',
-      label: 'node',
-      address: 'cq',
+      id: 'node1',
+      label: 'node1',
       x: 200,
       y: 150,
       style: {
@@ -28,7 +27,22 @@ function App() {
       },
     };
     appRef.current.addItem('node', model)
+
+    const rectModel = {
+      id: 'node2',
+      label: 'node2',
+      x: 400,
+      y: 150,
+      type: 'rect'
+    }
+
+    appRef.current.addItem('node', rectModel)
     appRef.current.render();
+
+    return () => {
+      console.log('destroy');
+      appRef.current.destroy()
+    }
   }, []);
 
   // useEffect(() => {

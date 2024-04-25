@@ -18,4 +18,7 @@ export class Renderer {
   public render(container: Container) {
     // nothing
   }
+  public clear() {
+    
+  }
 }

@@ -24,6 +24,11 @@ export class Application {
     this.renderer.render(this.stage);
   }
 
+  public destroy() {
+    this.renderer.clear()
+    this.eventSystem.removeEvents()   
+  }
+
   private start() {
     const func = () => {
       this.render();

@@ -53,7 +53,6 @@ export class Graphics extends Container {
     this.startPoly();
     const ctx = render.ctx;
     const graphicsData = this._geometry.graphicsData;
-    console.log("graphicsData: ===== ", graphicsData, this);
 
     for (let i = 0; i < graphicsData.length; i++) {
       const data = graphicsData[i];
@@ -75,8 +74,19 @@ export class Graphics extends Container {
       if (shape instanceof Rectangle) {
         const rectangle = shape;
         const { width, height } = rectangle;
-        const x = this.x + rectangle.x;
-        const y = this.y + rectangle.y;
+   
+        // console.log('width, height : ', width, height );
+        
+        // const x = this.x + rectangle.x;
+        // const y = this.y + rectangle.y;
+        const x = this.x;
+        const y = this.y;
+
+        ctx.strokeStyle = "#d3d3d3";
+        ctx.lineWidth = 2;
+        console.log('lineStyle: ', lineStyle);
+        
+        ctx.strokeRect(x, y, width, height);
         if (fillStyle.visible) {
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
           ctx.fillRect(x, y, width, height);

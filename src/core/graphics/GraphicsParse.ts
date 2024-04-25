@@ -3,14 +3,14 @@ import { Graphics } from "./Graphics";
 
 export function graphicsParse(graphic: Graphics, json: Record<string, any>) {
   const { type, x, y } = json;
-  // #D3D3D3
-  graphic.beginFill("red").drawCircle(0, 0, 50);
-  // graphic.position.set(x, y);
-  graphic.updatePosition(x, y)
-  graphic.cursor = "pointer";
-  // let dragging = false;
-  // let startPoint = new Point(g.x, g.y);
-  // let mouseDownPoint = new Point(0, 0);
+  
 
 
+  if(type == 'rect') {
+    graphic.beginFill("#fff").drawRect(0 ,0 , 100, 50)
+    graphic.updatePosition(x, y)
+  } else {
+    graphic.beginFill("#fff").drawCircle(0, 0, 50);
+    graphic.updatePosition(x, y)
+  }
 }

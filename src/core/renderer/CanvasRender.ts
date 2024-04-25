@@ -26,4 +26,8 @@ export class CanvasRenderer extends Renderer {
 
     this.ctx.restore();
   }
+
+  public clear() {
+    this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
+  }
 }

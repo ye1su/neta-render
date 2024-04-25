@@ -15,6 +15,12 @@ export class Rectangle extends Shape {
     this.width = width;
     this.height = height;
   }
+
+  public setPosition(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
   public contains(p: Point): boolean {
     if (
       p.x > this.x &&
