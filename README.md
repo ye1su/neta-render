@@ -1,30 +1,19 @@
-# React + TypeScript + Vite
+### 项目名称：neta-render.js
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 简介：
+neta-render.js 是一个轻量级的开源 JavaScript 库，旨在简化在 HTML5 Canvas 上进行渲染和绘制的过程。通过 neta-render.js，您可以轻松地创建复杂的图形、动画和交互式内容，无需深入了解 Canvas API 的复杂性。
 
-Currently, two official plugins are available:
+## 特性：
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+简单易用： 提供简洁的 API，使得在 Canvas 上进行绘制变得更加直观和容易。
+高性能： 优化的渲染引擎，确保流畅的动画和快速的渲染。
+灵活性： 支持丰富的绘制功能，包括基本形状、路径、文本、图像等，并提供了丰富的样式设置选项。
+跨浏览器兼容： 兼容各种主流浏览器，并提供了一致的绘制效果和性能表现。
+开源： 采用 MIT 许可证，您可以自由地使用、修改和分发该库。
+使用示例：
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 链接：
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+GitHub 仓库：https://github.com/qingyyying/neta-render
+neta-render.js 是一个简单而强大的工具，可帮助您快速实现各种 Canvas 渲染需求。无论是创建交互式可视化效果，还是制作精美的动画，CanvasRender.js 都能满足您的需求，并为您的项目带来更加生动和引人注目的视觉体验。
