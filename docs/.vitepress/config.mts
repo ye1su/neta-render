@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "neta-render",
   description: "canvas render",
+  base: '/neta-render/',
   outDir: '../docs-dist',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
