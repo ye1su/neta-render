@@ -1,30 +1,31 @@
-import { LineCap, LineJoin } from '../../enums'
-import { FillStyle } from './FillStyle'
+import { LineCap, LineJoin } from "../../enums";
+import { BaseStyle } from "./BaseStyle";
 
-export class LineStyle extends FillStyle {
-  public width = 0
-  public cap = LineCap.Butt
-  public join = LineJoin.Miter
+export class LineStyle extends BaseStyle {
+  public lineWidth = 1;
+  public stroke = "#D3D3D3";
+  public lineCap = LineCap.Butt;
+  public lineJoin = LineJoin.Miter;
 
   public clone(): LineStyle {
-    const obj = new LineStyle()
+    const obj = new LineStyle();
 
-    obj.color = this.color
-    obj.alpha = this.alpha
-    obj.visible = this.visible
-    obj.width = this.width
-    obj.cap = this.cap
-    obj.join = this.join
+    obj.stroke = this.stroke;
+    obj.alpha = this.alpha;
+    obj.visible = this.visible;
+    obj.lineWidth = this.lineWidth;
+    obj.lineCap = this.lineCap;
+    obj.lineJoin = this.lineJoin;
 
-    return obj
+    return obj;
   }
 
   public reset(): void {
-    super.reset()
+    super.reset();
 
-    this.color = '#D3D3D3'
-    this.width = 0
-    this.cap = LineCap.Butt
-    this.join = LineJoin.Miter
+    this.stroke = "#D3D3D3";
+    this.lineWidth = 1;
+    this.lineCap = LineCap.Butt;
+    this.lineJoin = LineJoin.Miter;
   }
 }

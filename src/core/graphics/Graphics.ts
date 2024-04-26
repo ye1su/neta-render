@@ -9,7 +9,7 @@ import { Shape } from "../Shapes/Shape";
 import { Container } from "../display";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
-import { ILineStyleOptions } from "../type";
+import { ILineStyleOptions, IShapeStyle } from "../type";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
@@ -25,28 +25,6 @@ export class Graphics extends Container {
   constructor() {
     super();
   }
-  public lineStyle(width: number, color?: string, alpha?: number): this;
-  public lineStyle(options: ILineStyleOptions): this;
-  public lineStyle(
-    options: ILineStyleOptions | number,
-    color: string = "0x000000",
-    alpha: number = 1
-  ) {
-    this.startPoly();
-
-    if (typeof options === "object") {
-      Object.assign(this._lineStyle, options);
-    } else {
-      const opts: ILineStyleOptions = { width: options, color, alpha };
-      Object.assign(this._lineStyle, opts);
-    }
-    this._lineStyle.visible = true;
-    return this;
-  }
-
-  public resetLineStyle() {
-    this._lineStyle.reset();
-  }
 
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render
@@ -59,14 +37,14 @@ export class Graphics extends Container {
       const { lineStyle, fillStyle, shape } = data;
 
       if (fillStyle.visible) {
-        ctx.fillStyle = fillStyle.color;
+        ctx.fillStyle = fillStyle.fill;
       }
 
       if (lineStyle.visible) {
-        ctx.lineWidth = lineStyle.width;
-        ctx.lineCap = lineStyle.cap;
-        ctx.lineJoin = lineStyle.join;
-        ctx.strokeStyle = lineStyle.color;
+        ctx.lineWidth = lineStyle.lineWidth;
+        ctx.lineCap = lineStyle.lineCap;
+        ctx.lineJoin = lineStyle.lineJoin;
+        ctx.strokeStyle = lineStyle.stroke;
       }
 
       ctx.beginPath();
@@ -74,19 +52,10 @@ export class Graphics extends Container {
       if (shape instanceof Rectangle) {
         const rectangle = shape;
         const { width, height } = rectangle;
-   
-        // console.log('width, height : ', width, height );
-        
-        // const x = this.x + rectangle.x;
-        // const y = this.y + rectangle.y;
+
         const x = this.x;
         const y = this.y;
 
-        ctx.strokeStyle = "#d3d3d3";
-        ctx.lineWidth = 2;
-        console.log('lineStyle: ', lineStyle);
-        
-        ctx.strokeRect(x, y, width, height);
         if (fillStyle.visible) {
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
           ctx.fillRect(x, y, width, height);
@@ -102,11 +71,9 @@ export class Graphics extends Container {
         const { radius } = circle;
         const x = this.x;
         const y = this.y;
-        ctx.strokeStyle = "#d3d3d3";
-        ctx.lineWidth = 2;
+    
 
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        ctx.stroke();
 
         if (fillStyle.visible) {
           ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
@@ -219,37 +186,6 @@ export class Graphics extends Container {
       }
     }
     this.currentPath = new Polygon();
-  }
-
-  /**
-   * 开始填充模式，接下来绘制的所有路径都将被填充，直到调用了endFill
-   * @param color 填充颜色
-   * @param alpha 不透明度
-   */
-  public beginFill(color = "#000000", alpha = 1) {
-    if (this.currentPath) {
-      this.startPoly();
-    }
-
-    this._fillStyle.color = color;
-    this._fillStyle.alpha = alpha;
-
-    if (this._fillStyle.alpha > 0) {
-      this._fillStyle.visible = true;
-    }
-
-    return this;
-  }
-
-  /**
-   * 结束填充模式
-   */
-  public endFill() {
-    this.startPoly();
-
-    this._fillStyle.reset();
-
-    return this;
   }
 
   /**
@@ -584,6 +520,19 @@ export class Graphics extends Container {
     );
   }
 
+  /**
+   * 停止画线
+   */
+  public closePath() {
+    this.currentPath.closeStroke = true;
+    this.startPoly();
+
+    return this;
+  }
+
+  /**
+   * 清除当前的所有配置
+   */
   public clear() {
     this._geometry.clear();
     this._lineStyle.reset();
@@ -593,21 +542,36 @@ export class Graphics extends Container {
     return this;
   }
 
-  public closePath() {
-    this.currentPath.closeStroke = true;
-    this.startPoly();
-
-    return this;
-  }
-
+  /**
+   * 判断当前节点是否在图形中
+   * @param p 
+   */
   public containsPoint(p: Point): boolean {
     return this._geometry.containsPoint(p);
   }
 
+  /**
+   * 更新地址
+   * @param x 
+   * @param y 
+   */
   public updatePosition(x: number, y: number) {
     this._geometry.graphicsData.forEach((item) => {
       item.shape.setPosition(x, y);
     });
     this.position.set(x, y);
+  }
+
+  public style(styleConfig: IShapeStyle) {
+    for(const styleKey in styleConfig) {
+      if(!styleConfig[styleKey]) continue
+
+      if(['fill'].includes(styleKey)) {
+        this._fillStyle.fill = styleConfig[styleKey]
+        continue
+      }
+
+      this._lineStyle[styleKey] = styleConfig[styleKey]
+    }
   }
 }

@@ -28,15 +28,15 @@ function App() {
     };
     appRef.current.addItem('node', model)
 
-    const rectModel = {
-      id: 'node2',
-      label: 'node2',
-      x: 400,
-      y: 150,
-      type: 'rect'
-    }
+    // const rectModel = {
+    //   id: 'node2',
+    //   label: 'node2',
+    //   x: 400,
+    //   y: 150,
+    //   type: 'rect'
+    // }
 
-    appRef.current.addItem('node', rectModel)
+    // appRef.current.addItem('node', rectModel)
     appRef.current.render();
 
     return () => {

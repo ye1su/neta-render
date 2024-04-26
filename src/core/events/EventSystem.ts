@@ -13,6 +13,8 @@ export class EventSystem {
   public _mouseDownPoint = {
     x: 0,
     y: 0,
+    diffx: 0,
+    diffy: 0
   };
 
   constructor(
@@ -38,12 +40,14 @@ export class EventSystem {
 
   private onPointerDown = (e) => {
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+    console.log('target: ', target);
     if (target) {
-      console.log("target: ", target);
       this._dragging = true;
       this._mouseDownPoint = {
         x: e.offsetX,
         y: e.offsetY,
+        diffx: e.offsetX - target.x,
+        diffy: e.offsetY - target.y,
       };
       // target.emit("click");
     }
@@ -56,8 +60,9 @@ export class EventSystem {
         x: e.offsetX,
         y: e.offsetY,
       };
-      const diffX = movePosition.x - this._mouseDownPoint.x;
-      const diffY = movePosition.y - this._mouseDownPoint.y;
+
+      const diffX = movePosition.x - this._mouseDownPoint.x - this._mouseDownPoint.diffx;
+      const diffY = movePosition.y - this._mouseDownPoint.y - this._mouseDownPoint.diffy;
       (this.hitTarget as Graphics).updatePosition(
         this._mouseDownPoint.x + diffX,
         this._mouseDownPoint.y + diffY

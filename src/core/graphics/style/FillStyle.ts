@@ -1,16 +1,14 @@
-export class FillStyle {
-  public color = '#ffffff'
-  public alpha = 1.0
-  public visible = false
+import { BaseStyle } from "./BaseStyle"
 
-  constructor() {
-    this.reset()
-  }
+export class FillStyle extends BaseStyle {
+  public fill = '#ffffff'
+  public alpha = 1.0
+  public visible = true
 
   public clone(): FillStyle {
     const obj = new FillStyle()
 
-    obj.color = this.color
+    obj.fill = this.fill
     obj.alpha = this.alpha
     obj.visible = this.visible
 
@@ -18,8 +16,9 @@ export class FillStyle {
   }
 
   public reset(): void {
-    this.color = '#ffffff'
+    super.reset()
+    this.fill = '#ffffff'
     this.alpha = 1
-    this.visible = false
+    this.visible = true
   }
 }

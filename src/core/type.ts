@@ -27,3 +27,10 @@ export interface NodeModel {
   x: number,
   y: number,
 }
+
+export interface IShapeStyle {
+  fill?: string
+  stroke?: string;
+  lineWidth?: string
+
+}
