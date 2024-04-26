@@ -41,7 +41,7 @@ function App() {
 
     return () => {
       console.log('destroy');
-      appRef.current.destroy()
+      appRef.current.destroy() 
     }
   }, []);
 
