@@ -41,25 +41,29 @@ export class EventSystem {
   private onPointerDown = (e) => {
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     console.log('target: ', target);
-    if (target) {
-      this._dragging = true;
-      this._mouseDownPoint = {
-        x: e.offsetX,
+    this._mouseDownPoint = { 
+      x: e.offsetX,
         y: e.offsetY,
-        diffx: e.offsetX - target.x,
-        diffy: e.offsetY - target.y,
-      };
+        diffx: 0,
+        diffy: 0,
+    }
+    this._dragging = true;
+
+    if (target) {
+      this._mouseDownPoint.diffx = e.offsetX - target.x
+      this._mouseDownPoint.diffy = e.offsetY - target.y
       // target.emit("click");
     }
   };
 
   private onPointerMove = (e) => {
+    const movePosition = {
+      x: e.offsetX,
+      y: e.offsetY,
+    };
+
     // 拖拽事件
-    if (this._dragging) {
-      const movePosition = {
-        x: e.offsetX,
-        y: e.offsetY,
-      };
+    if (this._dragging && this.hitTarget) {
 
       const diffX = movePosition.x - this._mouseDownPoint.x - this._mouseDownPoint.diffx;
       const diffY = movePosition.y - this._mouseDownPoint.y - this._mouseDownPoint.diffy;
@@ -68,6 +72,13 @@ export class EventSystem {
         this._mouseDownPoint.y + diffY
       );
       this.renderer.render(this.stage);
+    }
+
+    if(this._dragging && !this.hitTarget) {
+      const diffX = movePosition.x - this._mouseDownPoint.x
+      const diffY = movePosition.y - this._mouseDownPoint.y
+      console.log('diffX:diffY ', diffX, diffY);
+
     }
   };
 

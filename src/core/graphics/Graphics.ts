@@ -9,14 +9,14 @@ import { Shape } from "../Shapes/Shape";
 import { Container } from "../display";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
-import { ILineStyleOptions, IShapeStyle } from "../type";
+import { IShapeStyle } from "../type";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
 import { getBezierLength, getQuadraticBezierLength } from "./utils";
 
 export class Graphics extends Container {
-  private _render: CanvasRenderer
+  private _render: CanvasRenderer;
   private _lineStyle = new LineStyle();
   private _fillStyle = new FillStyle();
   private _geometry = new GraphicsGeometry();
@@ -27,7 +27,7 @@ export class Graphics extends Container {
   }
 
   protected renderCanvas(render: CanvasRenderer) {
-    this._render = render
+    this._render = render;
     this.startPoly();
     const ctx = render.ctx;
     const graphicsData = this._geometry.graphicsData;
@@ -69,9 +69,10 @@ export class Graphics extends Container {
       if (shape instanceof Circle) {
         const circle = shape;
         const { radius } = circle;
-        const x = this.x;
-        const y = this.y;
-    
+        const ox = shape?.offsetX;
+        const oy = shape?.offsetY;
+        const x = this.x + ox;
+        const y = this.y + oy;
 
         ctx.arc(x, y, radius, 0, 2 * Math.PI);
 
@@ -544,7 +545,7 @@ export class Graphics extends Container {
 
   /**
    * 判断当前节点是否在图形中
-   * @param p 
+   * @param p
    */
   public containsPoint(p: Point): boolean {
     return this._geometry.containsPoint(p);
@@ -552,8 +553,8 @@ export class Graphics extends Container {
 
   /**
    * 更新地址
-   * @param x 
-   * @param y 
+   * @param x
+   * @param y
    */
   public updatePosition(x: number, y: number) {
     this._geometry.graphicsData.forEach((item) => {
@@ -563,15 +564,15 @@ export class Graphics extends Container {
   }
 
   public style(styleConfig: IShapeStyle) {
-    for(const styleKey in styleConfig) {
-      if(!styleConfig[styleKey]) continue
+    for (const styleKey in styleConfig) {
+      if (!styleConfig[styleKey]) continue;
 
-      if(['fill'].includes(styleKey)) {
-        this._fillStyle.fill = styleConfig[styleKey]
-        continue
+      if (["fill"].includes(styleKey)) {
+        this._fillStyle.fill = styleConfig[styleKey];
+        continue;
       }
 
-      this._lineStyle[styleKey] = styleConfig[styleKey]
+      this._lineStyle[styleKey] = styleConfig[styleKey];
     }
   }
 }

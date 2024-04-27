@@ -20,6 +20,7 @@ function App() {
     const model = {
       id: 'node1',
       label: 'node1',
+      type: 'combo',
       x: 200,
       y: 150,
       style: {
