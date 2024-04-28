@@ -1,3 +1,6 @@
+
+export const BaseShapes = ['rect', 'circle']
+
 export enum RendererType {
   WebGl = 'webgl',
   Canvas = 'canvas'

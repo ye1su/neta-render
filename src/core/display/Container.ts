@@ -5,6 +5,8 @@ import { Point } from "../math";
 export class Container extends DisplayObject {
   public sortDirty = false;
   public readonly children: Container[] = [];
+  // 如果是组合whole为true 则container是个整体
+  public whole = false;
 
   constructor() {
     super();
@@ -15,6 +17,13 @@ export class Container extends DisplayObject {
    */
   protected renderCanvas(render: CanvasRenderer) {
     // nothing
+
+    if (this.whole) {
+      for (let i = 0; i < this.children.length; i++) {
+        const child = this.children[i];
+        child.updatePosition(this.x, this.y);
+      }
+    }
   }
 
   /**
@@ -32,24 +41,24 @@ export class Container extends DisplayObject {
       child.renderCanvasRecursive(render);
     }
   }
-    /**
+  /**
    * 递归更新当前元素以及所有子元素的transform
    */
-    public updateTransform() {
-      this.sortChildren()
-      
-      this.worldAlpha = (this.parent?.worldAlpha || 1) * this.alpha
-  
-      if (this.worldAlpha <= 0 || !this.visible) {
-        return
-      }
-  
-      for (let i = 0, j = this.children.length; i < j; ++i) {
-        const child = this.children[i]
-  
-        child.updateTransform()
-      }
+  public updateTransform() {
+    this.sortChildren();
+
+    this.worldAlpha = (this.parent?.worldAlpha || 1) * this.alpha;
+
+    if (this.worldAlpha <= 0 || !this.visible) {
+      return;
     }
+
+    for (let i = 0, j = this.children.length; i < j; ++i) {
+      const child = this.children[i];
+
+      child.updateTransform();
+    }
+  }
 
   public addChild(child: Container) {
     child.parent?.removeChild(child); // 将要添加的child从它的父元素的children中移除
@@ -75,8 +84,11 @@ export class Container extends DisplayObject {
     this.children.sort((a, b) => a.zIndex - b.zIndex);
     this.sortDirty = false;
   }
+  public updatePosition(x: number, y: number) {
+    this.position.set(x, y);
+  }
 
   public containsPoint(p: Point) {
-    return false
+    return false;
   }
 }

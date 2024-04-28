@@ -12,7 +12,7 @@ import { Renderer } from "./Renderer";
 export class CanvasRenderer extends Renderer {
   public ctx: CanvasRenderingContext2D;
   private background: string | undefined;
-  public matrix = [1, 0, 0, 0, 1, 0, 100, 0, 1];
+  public matrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
   constructor(options: IApplicationOptions) {
     super(options);
@@ -31,7 +31,6 @@ export class CanvasRenderer extends Renderer {
   public render(container: Container) {
     container.updateTransform();
     this.ctx.save();
-    console.log("this.matrix: ", this.matrix);
     const _matrix = this.matrix;
     this.ctx.setTransform(_matrix[0], _matrix[1], _matrix[3], _matrix[4], _matrix[6], _matrix[7]);
 
@@ -45,8 +44,6 @@ export class CanvasRenderer extends Renderer {
     }
 
     container.renderCanvasRecursive(this);
-
-    console.log("======");
 
     this.ctx.restore();
   }

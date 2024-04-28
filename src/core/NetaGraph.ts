@@ -1,4 +1,4 @@
-import { Graphics } from "./index";
+import { Container, Graphics } from "./index";
 import { Application } from "./Application";
 import { IApplicationOptions, ItemType, NodeModel } from "./type";
 import { graphicsParse } from "./graphics/GraphicsParse";
@@ -23,8 +23,7 @@ export class NetaGraph extends Application {
     }
   }
   addNode(model: NodeModel) {
-    const graphic = new Graphics();
-    graphicsParse(graphic, model);
+    const graphic = graphicsParse( model);
     this.stage.addChild(graphic);
 
   }
