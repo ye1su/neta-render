@@ -14,6 +14,16 @@ export class GraphicsGeometry {
   public clear() {
     this.graphicsData = [];
   }
+  public updateShapePosition(x: number, y: number) {
+    this.graphicsData.forEach((item) => {
+      item.shape.setPosition(x, y);
+    });
+  }
+  public updateShapeGlobalTransform(transform) {
+    this.graphicsData.forEach((item) => {
+      item.shape.globalTransform = transform
+    });
+  }
   /**
    * @param p 待检测点
    * @returns {boolean} 待检测点是否落在某一个子图形内

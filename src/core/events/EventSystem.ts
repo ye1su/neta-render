@@ -1,15 +1,15 @@
 import { Container } from "../display";
 import { Graphics } from "../graphics/Graphics";
 import { Point } from "../math";
-import { Renderer } from "../renderer";
+import { CanvasRenderer } from "../renderer/CanvasRender";
 
 export class EventSystem {
   // canvas元素
-  private canvasEle: HTMLCanvasElement; 
+  private canvasEle: HTMLCanvasElement;
   // 数据结构
   private stage: Container;
   // 渲染器
-  private renderer: Renderer;
+  private _renderer: CanvasRenderer;
   // 寻找目标节点
   public hasFoundTarget: boolean = false;
   public hitTarget: Graphics | Container | null = null;
@@ -26,11 +26,11 @@ export class EventSystem {
   constructor(
     canvasEle: HTMLCanvasElement,
     stage: Container,
-    renderer: Renderer
+    renderer: CanvasRenderer
   ) {
     this.canvasEle = canvasEle;
     this.stage = stage;
-    this.renderer = renderer;
+    this._renderer = renderer;
     this.addEvents();
   }
   private addEvents = () => {
@@ -46,15 +46,16 @@ export class EventSystem {
 
   private onPointerDown = (e) => {
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
-    console.log("target: ", target);
+    // 获取当前点击的相关信息
     this._mouseDownPoint = {
       x: e.offsetX,
       y: e.offsetY,
       diffx: 0,
       diffy: 0,
     };
+    // 拖拽开始时存取当前矩阵快照
     this._dragging = true;
-
+    this._renderer.cloneMatrix()
     if (target) {
       this._mouseDownPoint.diffx = e.offsetX - target.x;
       this._mouseDownPoint.diffy = e.offsetY - target.y;
@@ -68,8 +69,9 @@ export class EventSystem {
       y: e.offsetY,
     };
 
-    // 拖拽事件
+    // 拖拽节点事件
     if (this._dragging && this.hitTarget) {
+      // 相对当前位置的偏移量
       const diffX =
         movePosition.x - this._mouseDownPoint.x - this._mouseDownPoint.diffx;
       const diffY =
@@ -77,21 +79,24 @@ export class EventSystem {
 
       const whole = this.hitTarget?.parent?.whole;
 
-      if(whole) {
-        this.hitTarget = this.hitTarget.parent
+      // 如果为组合节点则指向parent
+      if (whole) {
+        this.hitTarget = this.hitTarget.parent;
       }
 
+      // 更新拖拽的的节点位置
       this.hitTarget.updatePosition(
         this._mouseDownPoint.x + diffX,
         this._mouseDownPoint.y + diffY
       );
-      this.renderer.render(this.stage);
+      this._renderer.render(this.stage);
     }
 
+    // 拖拽画布
     if (this._dragging && !this.hitTarget) {
       const diffX = movePosition.x - this._mouseDownPoint.x;
       const diffY = movePosition.y - this._mouseDownPoint.y;
-      // console.log("diffX:diffY ", diffX, diffY);
+      this._renderer.updateCanvasTranslate(diffX, diffY)
     }
   };
 

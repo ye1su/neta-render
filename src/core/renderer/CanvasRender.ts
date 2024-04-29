@@ -12,7 +12,11 @@ import { Renderer } from "./Renderer";
 export class CanvasRenderer extends Renderer {
   public ctx: CanvasRenderingContext2D;
   private background: string | undefined;
+  private _container: Container;
+  // 当前矩阵
   public matrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+  // 克隆矩阵
+  public _cloneMatrix = this.matrix;
 
   constructor(options: IApplicationOptions) {
     super(options);
@@ -24,15 +28,37 @@ export class CanvasRenderer extends Renderer {
   get translate() {
     return {
       x: this.matrix[6],
-      y:  this.matrix[7],
-    }
+      y: this.matrix[7],
+    };
+  }
+
+  // 取当前矩阵快照
+  public cloneMatrix() {
+    this._cloneMatrix = JSON.parse(JSON.stringify(this.matrix));
+  }
+
+  // 更新translate
+  public updateCanvasTranslate(ox: number, oy: number) {
+    const _x = this._cloneMatrix[6];
+    const _y = this._cloneMatrix[7];
+    this.matrix[6] = _x + ox;
+    this.matrix[7] = _y + oy;
+    this.render(this._container);
   }
 
   public render(container: Container) {
+    this._container = container;
     container.updateTransform();
     this.ctx.save();
     const _matrix = this.matrix;
-    this.ctx.setTransform(_matrix[0], _matrix[1], _matrix[3], _matrix[4], _matrix[6], _matrix[7]);
+    this.ctx.setTransform(
+      _matrix[0],
+      _matrix[1],
+      _matrix[3],
+      _matrix[4],
+      _matrix[6],
+      _matrix[7]
+    );
 
     // this.ctx.setTransform(this.matrix);
 
@@ -51,5 +77,4 @@ export class CanvasRenderer extends Renderer {
   public clear() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
   }
-
 }

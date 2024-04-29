@@ -27,8 +27,9 @@ export class Rectangle extends Shape {
   }
 
   public contains(p: Point): boolean {
-    const _x = this.x + this.offsetX
-    const _y = this.y + this.offsetY
+    const { translate } = this.globalTransform;
+    const _x = this.x + this.offsetX + translate.x;
+    const _y = this.y + this.offsetY + translate.y;
 
     if (
       p.x > _x &&

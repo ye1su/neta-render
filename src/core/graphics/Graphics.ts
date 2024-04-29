@@ -28,6 +28,8 @@ export class Graphics extends Container {
 
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
+    const { matrix, translate } = this._render;
+    this._geometry.updateShapeGlobalTransform({ matrix, translate });
     this.startPoly();
     const ctx = render.ctx;
     const graphicsData = this._geometry.graphicsData;
@@ -557,9 +559,7 @@ export class Graphics extends Container {
    * @param y
    */
   public updatePosition(x: number, y: number) {
-    this._geometry.graphicsData.forEach((item) => {
-      item.shape.setPosition(x, y);
-    });
+    this._geometry.updateShapePosition(x, y);
     this.position.set(x, y);
   }
 

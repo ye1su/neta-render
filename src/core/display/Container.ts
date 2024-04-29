@@ -18,6 +18,7 @@ export class Container extends DisplayObject {
   protected renderCanvas(render: CanvasRenderer) {
     // nothing
 
+    // 如果为whole 则更新子节点的所有position
     if (this.whole) {
       for (let i = 0; i < this.children.length; i++) {
         const child = this.children[i];
