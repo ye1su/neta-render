@@ -10,6 +10,7 @@ import { Renderer } from "./Renderer";
 // ];
 
 export class CanvasRenderer extends Renderer {
+  public readonly viewer: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
   private background: string | undefined;
   private _container: Container;
@@ -22,7 +23,15 @@ export class CanvasRenderer extends Renderer {
     super(options);
     const { backgroundColor } = options;
     this.background = backgroundColor;
-    this.ctx = this.el.getContext("2d") as CanvasRenderingContext2D;
+
+    // 创建canvas函数
+    const _canvas = document.createElement("canvas");
+    _canvas.width = this.screen.width;
+    _canvas.height = this.screen.height;
+    this.el.appendChild(_canvas)
+    this.viewer = _canvas;
+
+    this.ctx =this.viewer.getContext("2d") as CanvasRenderingContext2D;
   }
 
   get translate() {
@@ -76,5 +85,6 @@ export class CanvasRenderer extends Renderer {
 
   public clear() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
+    this.el.removeChild(this.viewer);  
   }
 }

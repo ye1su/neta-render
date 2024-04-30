@@ -4,30 +4,27 @@ import { NetaGraph, Container, Graphics, RendererType } from "./core";
 import { Point } from "./core/math";
 import { Rectangle } from "./core/Shapes";
 
-const width = 1200;
-const height = 700;
-
 function App() {
   const appRef = useRef<NetaGraph>();
   useEffect(() => {
     appRef.current = new NetaGraph({
       rendererType: RendererType.Canvas,
-      el: document.getElementById("canvans")!,
+      el: document.getElementById("dom")!,
       backgroundColor: "#fff",
-    });  
+    });
     // appRef.current.render();
 
     const model = {
-      id: 'node1',
-      label: 'node1',
-      type: 'combo',
+      id: "node1",
+      label: "node1",
+      type: "combo",
       x: 200,
       y: 150,
       style: {
-        fill: 'blue',
+        fill: "blue",
       },
     };
-    appRef.current.addItem('node', model)
+    appRef.current.addItem("node", model);
 
     // const rectModel = {
     //   id: 'node2',
@@ -41,9 +38,9 @@ function App() {
     appRef.current.render();
 
     return () => {
-      console.log('destroy');
-      appRef.current.destroy() 
-    }
+      console.log("destroy");
+      appRef.current.destroy();
+    };
   }, []);
 
   // useEffect(() => {
@@ -227,12 +224,23 @@ function App() {
 
   return (
     <>
-      <canvas
-        id="canvans"
-        width="1200"
-        height="800"
-        style={{ border: "1px solid" }}
-      ></canvas>
+      <div className="ruler">
+        <div className="cm">
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>
+          <div className="mm"></div>1
+        </div>
+      </div>
+      <div
+        id="dom"
+        style={{ border: "1px solid", width: 800, height: 600 }}
+      ></div>
     </>
   );
 }

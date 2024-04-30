@@ -24,11 +24,10 @@ export class EventSystem {
   };
 
   constructor(
-    canvasEle: HTMLCanvasElement,
     stage: Container,
     renderer: CanvasRenderer
   ) {
-    this.canvasEle = canvasEle;
+    this.canvasEle = renderer.viewer;
     this.stage = stage;
     this._renderer = renderer;
     this.addEvents();

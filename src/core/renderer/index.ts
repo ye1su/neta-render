@@ -4,6 +4,8 @@ import { CanvasRenderer } from "./CanvasRender";
 import { WebGlRenderer } from "./WebGlRenderer";
 
 export * from "./Renderer";
+export * from './CanvasRender'
+export * from './WebGlRenderer'
 
 export function getRenderer(options: IApplicationOptions) {
   const { rendererType: renderType } = options;

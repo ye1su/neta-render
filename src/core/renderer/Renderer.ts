@@ -7,8 +7,8 @@ export class Renderer {
   constructor(options: IApplicationOptions) {
     const { el } = options;
     this.el = el;
-    this.screen.width = el.width;
-    this.screen.height = el.height;
+    this.screen.width = parseInt(el.style.width);
+    this.screen.height = parseInt(el.style.height);
   }
 
   public resizeView(width: number, height: number) {

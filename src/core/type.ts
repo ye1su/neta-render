@@ -1,7 +1,7 @@
 import { RendererType } from "./enums";
 
 export interface IApplicationOptions {
-  el: HTMLCanvasElement;
+  el: HTMLDivElement;
   rendererType?: RendererType;
   backgroundColor?: string
 }

@@ -1,33 +1,36 @@
 import { Container } from "./display";
 import { EventSystem } from "./events";
 import { getRenderer } from "./renderer";
-import { Renderer } from "./renderer/Renderer";
+import { WebGlRenderer, CanvasRenderer } from "./renderer";
 import { IApplicationOptions } from "./type";
 
 export class Application {
-  public readonly el: HTMLCanvasElement;
+  public readonly el: HTMLDivElement;
   public readonly stage = new Container();
-  private readonly renderer: Renderer;
+  private readonly renderer: CanvasRenderer | WebGlRenderer;
   private eventSystem: EventSystem;
 
   constructor(options: IApplicationOptions) {
     const { el } = options;
     this.el = el;
-    this.renderer = getRenderer(options);
+
+    this.renderer = getRenderer({ ...options });
     this.render();
 
-    this.eventSystem = new EventSystem(this.el, this.stage, this.renderer);
+    if (this.renderer instanceof CanvasRenderer) {
+      this.eventSystem = new EventSystem(this.stage, this.renderer);
+    }
     // this.start()
   }
 
   public render() {
     this.renderer.render(this.stage);
-    console.log('this.stage: ', this.stage);
+    console.log("this.stage: ", this.stage);
   }
 
   public destroy() {
-    this.renderer.clear()
-    this.eventSystem.removeEvents()   
+    this.renderer.clear();
+    this.eventSystem.removeEvents();
   }
 
   private start() {
