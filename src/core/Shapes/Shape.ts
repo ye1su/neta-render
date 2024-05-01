@@ -1,6 +1,6 @@
 import { ShapeType } from "../enums";
 import { Point } from "../math/Point";
-import { GlobalTransform } from "../types/shapes";
+import { GlobalTransform } from "../types";
 
 export abstract class Shape {
   public globalTransform: GlobalTransform

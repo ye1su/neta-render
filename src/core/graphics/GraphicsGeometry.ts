@@ -1,4 +1,4 @@
-import { Shape } from "../shapes/Shape";
+import { Shape } from "../shapes";
 import { Point } from "../math";
 import { GraphicsData } from "./GraphicsData";
 import { FillStyle } from "./style/FillStyle";

@@ -1,11 +1,11 @@
 import {
+  Shape,
   Circle,
   Ellipse,
   Polygon,
   Rectangle,
   RoundedRectangle,
 } from "../shapes";
-import { Shape } from "../shapes/Shape";
 import { Container } from "../display";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
