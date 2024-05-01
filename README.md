@@ -16,4 +16,3 @@ neta-render.js 是一个轻量级的开源 JavaScript 库，旨在简化在 HTML
 ## 链接：
 
 GitHub 仓库：https://github.com/qingyyying/neta-render
-neta-render.js 是一个简单而强大的工具，可帮助您快速实现各种 Canvas 渲染需求。无论是创建交互式可视化效果，还是制作精美的动画，CanvasRender.js 都能满足您的需求，并为您的项目带来更加生动和引人注目的视觉体验。
