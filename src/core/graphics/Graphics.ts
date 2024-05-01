@@ -4,12 +4,12 @@ import {
   Polygon,
   Rectangle,
   RoundedRectangle,
-} from "../Shapes";
-import { Shape } from "../Shapes/Shape";
+} from "../shapes";
+import { Shape } from "../shapes/Shape";
 import { Container } from "../display";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
-import { IShapeStyle } from "../type";
+import { IShapeStyle } from "../types/graphics";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
@@ -28,8 +28,8 @@ export class Graphics extends Container {
 
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
-    const { matrix, translate } = this._render;
-    this._geometry.updateShapeGlobalTransform({ matrix, translate });
+    const { matrix, translate, scale } = this._render;
+    this._geometry.updateShapeGlobalTransform({ matrix, translate, scale });
     this.startPoly();
     const ctx = render.ctx;
     const graphicsData = this._geometry.graphicsData;

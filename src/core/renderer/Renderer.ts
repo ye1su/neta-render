@@ -1,5 +1,5 @@
-import { Rectangle } from "../Shapes";
-import { IApplicationOptions } from "../type";
+import { Rectangle } from "../shapes";
+import { IApplicationOptions } from "../types";
 
 export class Renderer {
   public el: HTMLCanvasElement;

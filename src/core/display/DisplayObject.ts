@@ -2,7 +2,7 @@ import { ObservablePoint, Transform } from "../math";
 import { default as Eventemitter } from "eventemitter3";
 import { Container } from "./Container";
 import { DEG_TO_RAD, RAD_TO_DEG } from "../math/constants";
-import { Cursor } from "../events/type";
+import { Cursor } from "../types/events";
 
 export abstract class DisplayObject extends Eventemitter {
   public alpha = 1;

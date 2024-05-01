@@ -2,7 +2,7 @@ import { Container } from "./display";
 import { EventSystem } from "./events";
 import { getRenderer } from "./renderer";
 import { WebGlRenderer, CanvasRenderer } from "./renderer";
-import { IApplicationOptions } from "./type";
+import { IApplicationOptions } from "./types";
 
 export class Application {
   public readonly el: HTMLDivElement;

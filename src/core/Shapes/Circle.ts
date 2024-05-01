@@ -26,9 +26,11 @@ export class Circle extends Shape {
   }
 
   public contains(p: Point): boolean {
-    const { translate } = this.globalTransform;
-    const _x = this.x + this.offsetX + translate.x;
-    const _y = this.y + this.offsetY + translate.y;
+    const _x = this.x + this.offsetX;
+    const _y = this.y + this.offsetY;
+
+    this.transformPoint(p)
+
     if (
       (p.x - _x) * (p.x - _x) + (p.y - _y) * (p.y - _y) <
       this.radius * this.radius

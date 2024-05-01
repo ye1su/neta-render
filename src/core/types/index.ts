@@ -1,4 +1,4 @@
-import { RendererType } from "./enums";
+import { RendererType } from "../enums";
 
 export interface IApplicationOptions {
   el: HTMLDivElement;
@@ -16,9 +16,3 @@ export interface NodeModel {
   y: number,
 }
 
-export interface IShapeStyle {
-  fill?: string
-  stroke?: string;
-  lineWidth?: string
-
-}

@@ -1,8 +1,9 @@
-import { Shape } from "../Shapes/Shape";
+import { Shape } from "../shapes/Shape";
 import { Point } from "../math";
 import { GraphicsData } from "./GraphicsData";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
+import { GlobalTransform } from "../types/shapes";
 
 export class GraphicsGeometry {
   public graphicsData: GraphicsData[] = [];
@@ -19,7 +20,7 @@ export class GraphicsGeometry {
       item.shape.setPosition(x, y);
     });
   }
-  public updateShapeGlobalTransform(transform) {
+  public updateShapeGlobalTransform(transform: GlobalTransform) {
     this.graphicsData.forEach((item) => {
       item.shape.globalTransform = transform
     });

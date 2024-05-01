@@ -1,6 +1,6 @@
 import { Container, Graphics } from "./index";
 import { Application } from "./Application";
-import { IApplicationOptions, ItemType, NodeModel } from "./type";
+import { IApplicationOptions, ItemType, NodeModel } from "./types";
 import { graphicsParse } from "./graphics/GraphicsParse";
 
 export class NetaGraph extends Application {

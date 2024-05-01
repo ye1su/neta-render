@@ -1,4 +1,4 @@
-import { Shape } from "../Shapes/Shape";
+import { Shape } from "../shapes/Shape";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
 

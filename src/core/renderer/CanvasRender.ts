@@ -1,5 +1,5 @@
 import { Container } from "../display";
-import { IApplicationOptions } from "../type";
+import { IApplicationOptions } from "../types";
 import { Renderer } from "./Renderer";
 
 // 创建变换矩阵
@@ -15,7 +15,7 @@ export class CanvasRenderer extends Renderer {
   private background: string | undefined;
   private _container: Container;
   // 当前矩阵
-  public matrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+  public matrix = [1.4, 0, 0, 0, 1.4, 0, 100, 100, 1];
   // 克隆矩阵
   public _cloneMatrix = this.matrix;
 
@@ -39,6 +39,10 @@ export class CanvasRenderer extends Renderer {
       x: this.matrix[6],
       y: this.matrix[7],
     };
+  }
+
+  get scale() {
+    return this.matrix[0]
   }
 
   // 取当前矩阵快照

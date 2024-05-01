@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import "./App.css";
 import { NetaGraph, Container, Graphics, RendererType } from "./core";
 import { Point } from "./core/math";
-import { Rectangle } from "./core/Shapes";
+import { Rectangle } from "./core/shapes";
 
 function App() {
   const appRef = useRef<NetaGraph>();

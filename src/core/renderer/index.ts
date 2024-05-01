@@ -1,5 +1,5 @@
 import { RendererType } from "../enums";
-import { IApplicationOptions } from "../type";
+import { IApplicationOptions } from "../types";
 import { CanvasRenderer } from "./CanvasRender";
 import { WebGlRenderer } from "./WebGlRenderer";
 
