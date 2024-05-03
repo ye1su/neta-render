@@ -15,7 +15,7 @@ export class CanvasRenderer extends Renderer {
   private background: string | undefined;
   private _container: Container;
   // 当前矩阵
-  public matrix = [1.4, 0, 0, 0, 1.4, 0, 100, 100, 1];
+  public matrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
   // 克隆矩阵
   public _cloneMatrix = this.matrix;
 

@@ -12,6 +12,7 @@ export abstract class DisplayObject extends Eventemitter {
   protected _zIndex = 0;
   public parent: Container | null = null;
   public cursor: Cursor = "auto";
+  
 
   get zIndex(): number {
     return this._zIndex;
@@ -44,32 +45,32 @@ export abstract class DisplayObject extends Eventemitter {
     this.transform.position.y = value;
   }
 
-  get scale(): ObservablePoint {
-    return this.transform.scale;
-  }
+  // get scale(): ObservablePoint {
+  //   return this.transform.scale;
+  // }
 
-  get pivot(): ObservablePoint {
-    return this.transform.pivot;
-  }
+  // get pivot(): ObservablePoint {
+  //   return this.transform.pivot;
+  // }
 
-  get skew(): ObservablePoint {
-    return this.transform.skew;
-  }
+  // get skew(): ObservablePoint {
+  //   return this.transform.skew;
+  // }
 
-  get rotation(): number {
-    return this.transform.rotation;
-  }
+  // get rotation(): number {
+  //   return this.transform.rotation;
+  // }
 
-  set rotation(value: number) {
-    this.transform.rotation = value;
-  }
+  // set rotation(value: number) {
+  //   this.transform.rotation = value;
+  // }
 
-  get angle(): number {
-    return this.transform.rotation * RAD_TO_DEG;
-  }
+  // get angle(): number {
+  //   return this.transform.rotation * RAD_TO_DEG;
+  // }
 
-  set angle(value: number) {
-    this.transform.rotation = value * DEG_TO_RAD;
-  }
+  // set angle(value: number) {
+  //   this.transform.rotation = value * DEG_TO_RAD;
+  // }
 
 }

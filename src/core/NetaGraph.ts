@@ -1,30 +1,36 @@
-import { Container, Graphics } from "./index";
 import { Application } from "./Application";
-import { IApplicationOptions, ItemType, NodeModel } from "./types";
-import { graphicsParse } from "./graphics/GraphicsParse";
+import { EdgeModel, IApplicationOptions, ItemType, NodeModel } from "./types";
+import {
+  graphicsLineParse,
+  graphicsShapeParse,
+} from "./graphics/GraphicsParse";
+import { Graphics } from ".";
 
 export class NetaGraph extends Application {
   constructor(options: IApplicationOptions) {
     super(options);
-    // this.stage.hitArea = new Rectangle(0, 0, 1200, 800);
-
-    // this.stage.addEventListener("mousedown", (e) => {
-    //   console.log("e: -------", e);
- 
-    // });
-    // this.stage.addEventListener("mousemove", (e) => {
-    //   // console.log('e:------ ', e);
-    // });
   }
 
-  addItem(type: ItemType, model: NodeModel) {
+  addItem(type: ItemType, model: NodeModel | EdgeModel) {
     if (type == "node") {
-      this.addNode(model);
+      this.addNode(model as NodeModel);
+    }
+    if (type == "edge") {
+      this.addEdge(model as EdgeModel);
     }
   }
   addNode(model: NodeModel) {
-    const graphic = graphicsParse( model);
+    const graphic = graphicsShapeParse(model);
     this.stage.addChild(graphic);
+  }
+  addEdge(model: EdgeModel) {
+    // const quadraticBezierCurve = new Graphics();
+    // quadraticBezierCurve.moveTo(100, 100);
+    // quadraticBezierCurve.quadraticCurveTo(100, 300, 300, 300);
 
+    // this.stage.addChild(quadraticBezierCurve);
+
+    const graphic = graphicsLineParse(model);
+    this.stage.addChild(graphic);
   }
 }

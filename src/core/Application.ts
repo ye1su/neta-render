@@ -20,12 +20,14 @@ export class Application {
     if (this.renderer instanceof CanvasRenderer) {
       this.eventSystem = new EventSystem(this.stage, this.renderer);
     }
+
     // this.start()
   }
 
   public render() {
     this.renderer.render(this.stage);
-    console.log("this.stage: ", this.stage);
+    console.log('this.stage: ', this.stage);
+
   }
 
   public destroy() {

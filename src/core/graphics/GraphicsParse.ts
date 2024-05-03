@@ -2,9 +2,10 @@ import { Container } from "../display";
 import { BaseShapes } from "../enums";
 import { Point } from "../math";
 import { Graphics } from "./Graphics";
+import { GraphicsOfLine } from "./GraphicsOfLine";
 
-export function graphicsParse(json: Record<string, any>) {
-  const { type, x, y } = json;
+export function graphicsShapeParse(json: Record<string, any>) {
+  const { type, x, y, wdith, height } = json;
 
   let graphic: Container | Graphics;
 
@@ -14,7 +15,7 @@ export function graphicsParse(json: Record<string, any>) {
   } else if (BaseShapes.includes(type)) {
     graphic = new Graphics();
     if (type == "rect") {
-      graphic.drawRect(0, 0, 100, 50);
+      graphic.drawRect(0, 0, wdith, height);
     }
   } else {
     graphic = new Container();
@@ -32,4 +33,13 @@ export function graphicsParse(json: Record<string, any>) {
   graphic.updatePosition(x, y);
 
   return graphic;
+}
+
+export function graphicsLineParse(json: Record<string, any>) {
+  const { source, target } = json;
+  
+  const line = new GraphicsOfLine()
+  line.drawStraight(source, target)
+
+  return line
 }

@@ -17,23 +17,38 @@ function App() {
     const model = {
       id: "node1",
       label: "node1",
-      type: "combo",
+      type: "rect",
       x: 200,
       y: 150,
+      wdith: 100,
+      height: 100,
       style: {
         fill: "blue",
       },
     };
     appRef.current.addItem("node", model);
+    const model2 = {
+      id: "node2",
+      label: "node12",
+      type: "rect",
+      x: 400,
+      y: 150,
+      wdith: 100,
+      height: 100,
+      style: {
+        fill: "blue",
+      },
+    };
+    appRef.current.addItem("node", model2);
 
-    // const rectModel = {
-    //   id: 'node2',
-    //   label: 'node2',
-    //   x: 400,
-    //   y: 150,
-    //   type: 'rect'
-    // }
-
+    const edge1 = {
+      id: 'edge1',
+      label: 'edge',
+      source: 'node1',
+      target: 'node2',
+      type: 'rect'
+    }
+    appRef.current.addItem("edge", edge1);
     // appRef.current.addItem('node', rectModel)
     appRef.current.render();
 

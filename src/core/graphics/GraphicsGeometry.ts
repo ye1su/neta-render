@@ -4,11 +4,16 @@ import { GraphicsData } from "./GraphicsData";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
 import { GlobalTransform } from "../types/shapes";
+import { Line } from "../lines";
 
 export class GraphicsGeometry {
   public graphicsData: GraphicsData[] = [];
   constructor() {}
-  public drawShape(shape: Shape, fillStyle: FillStyle, lineStyle: LineStyle) {
+  public drawShape(
+    shape: Shape | Line,
+    fillStyle: FillStyle,
+    lineStyle: LineStyle
+  ) {
     const data = new GraphicsData(shape, fillStyle, lineStyle);
     this.graphicsData.push(data);
   }
@@ -17,12 +22,14 @@ export class GraphicsGeometry {
   }
   public updateShapePosition(x: number, y: number) {
     this.graphicsData.forEach((item) => {
+      if (!(item.shape instanceof Shape)) return;
       item.shape.setPosition(x, y);
     });
   }
   public updateShapeGlobalTransform(transform: GlobalTransform) {
     this.graphicsData.forEach((item) => {
-      item.shape.globalTransform = transform
+      if (!(item.shape instanceof Shape)) return;
+      item.shape.globalTransform = transform;
     });
   }
   /**

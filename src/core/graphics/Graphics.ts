@@ -182,6 +182,7 @@ export class Graphics extends Container {
    * 清空已有的path，开始新的path
    */
   protected startPoly() {
+
     if (this.currentPath) {
       const len = this.currentPath.points.length;
       if (len > 2) {
@@ -245,6 +246,12 @@ export class Graphics extends Container {
     return this.drawShape(poly);
   }
 
+  /**
+   * 曲线转化用
+   * @param x 
+   * @param y 
+   * @returns 
+   */
   public moveTo(x: number, y: number) {
     this.startPoly();
 
@@ -254,6 +261,12 @@ export class Graphics extends Container {
     return this;
   }
 
+  /**
+   * 曲线转化用
+   * @param x 
+   * @param y 
+   * @returns 
+   */
   public lineTo(x: number, y: number) {
     if (this.currentPath.points.length === 0) {
       this.moveTo(x, y);
