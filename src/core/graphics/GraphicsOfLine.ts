@@ -1,4 +1,5 @@
 import { Container } from "../display";
+import { ItmeType } from "../enums";
 import { Line, Straight } from "../lines";
 import { CanvasRenderer } from "../renderer";
 import { Polygon } from "../shapes";
@@ -15,9 +16,13 @@ export class GraphicsOfLine extends Container {
 
   constructor() {
     super();
+    this.type = ItmeType.Line;
   }
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
+    const graphicsList = this.parent.children.filter(
+      (item) => item.type == ItmeType.Graphics
+    );
 
     const graphicsData = this._geometry.graphicsData;
     const ctx = render.ctx;
@@ -26,7 +31,14 @@ export class GraphicsOfLine extends Container {
       const data = graphicsData[i];
 
       const { lineStyle, fillStyle, shape } = data;
-      const { _polygon } = shape as Line;
+      
+      // 修改线的数据
+      const { _polygon, targetId, sourceId} = shape as Line;
+      (shape as Line).target = graphicsList.find((item) => item.id == targetId);
+      (shape as Line).source = graphicsList.find((item) => item.id == sourceId);
+      // 修改points
+      const { source: _source, target: _target } = shape as Line;
+      _polygon.points = [_source.x, _source.y, _target.x, _target.y];
 
       if (fillStyle.visible) {
         ctx.fillStyle = fillStyle.fill;
@@ -41,8 +53,7 @@ export class GraphicsOfLine extends Container {
 
       ctx.beginPath();
 
-
-
+      // 渲染线上绘制的多边形
       const { points } = _polygon;
 
       ctx.moveTo(points[0], points[1]);
@@ -63,6 +74,9 @@ export class GraphicsOfLine extends Container {
     }
   }
 
+  /**
+   * 绘制图形
+   */
   protected drawShape(shape: Line) {
     this._geometry.drawShape(
       shape,
@@ -72,8 +86,12 @@ export class GraphicsOfLine extends Container {
     return this;
   }
 
-  public drawStraight(points: number[]): this {
-    const polygon = new Polygon(points);
-    return this.drawShape(new Straight(polygon));
+  /**
+   * 画直线
+   */
+  public drawStraight(sourceId: string, targetId: string): this {
+    // const polygon = new Polygon(points);
+
+    return this.drawShape(new Straight(sourceId, targetId));
   }
 }

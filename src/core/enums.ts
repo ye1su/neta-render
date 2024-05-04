@@ -1,5 +1,10 @@
 export const BaseShapes = ["rect", "circle"];
 
+export enum ItmeType {
+  Line = 'line',
+  Graphics = 'graphics'
+}
+
 export enum RendererType {
   WebGl = "webgl",
   Canvas = "canvas",

@@ -30,7 +30,7 @@ export class NetaGraph extends Application {
 
     // this.stage.addChild(quadraticBezierCurve);
 
-    const graphic = graphicsLineParse(model, this.stage);
+    const graphic = graphicsLineParse(model);
     this.stage.addChild(graphic);
   }
 }

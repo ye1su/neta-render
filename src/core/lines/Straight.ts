@@ -7,9 +7,11 @@ export class Straight extends Line {
 
   public readonly type = LineType.Straight;
 
-  constructor(polygon: Polygon) {
+  constructor(source: string, target: string) {
     super();
-    this._polygon = polygon
+    this.sourceId = source
+    this.targetId = target
+    this._polygon = new Polygon([])
   }
 
   public contains(p: Point): boolean {

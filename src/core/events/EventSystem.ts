@@ -55,7 +55,6 @@ export class EventSystem {
     // 拖拽开始时存取当前矩阵快照
     this._dragging = true;
     this._renderer.cloneMatrix()
-    console.log('target: ', target);
 
     if (target) {
       this._mouseDownPoint.diffx = e.offsetX - target.x;

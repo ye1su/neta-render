@@ -35,19 +35,13 @@ export function graphicsShapeParse(json: Record<string, any>) {
   return graphic;
 }
 
-export function graphicsLineParse(json: Record<string, any>, _stage: Container) {
-  console.log('_stage: ', _stage.children);
+export function graphicsLineParse(json: Record<string, any>) {
   const { id, source, target } = json;
-
-  const targetGraphics = _stage.children.find(item => item.id == target)
-  const sourceGraphics = _stage.children.find(item => item.id == source)
-
-  const points = [sourceGraphics.x , sourceGraphics.y, targetGraphics.x, targetGraphics.y]
 
   const line = new GraphicsOfLine();
   line.id = id;
 
-  line.drawStraight(points);
+  line.drawStraight(source, target)
 
   return line;
 }

@@ -14,6 +14,7 @@ import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
 import { getBezierLength, getQuadraticBezierLength } from "./utils";
+import { ItmeType } from "../enums";
 
 export class Graphics extends Container {
   private _render: CanvasRenderer;
@@ -24,6 +25,7 @@ export class Graphics extends Container {
 
   constructor() {
     super();
+    this.type = ItmeType.Graphics;
   }
 
   protected renderCanvas(render: CanvasRenderer) {
@@ -182,7 +184,6 @@ export class Graphics extends Container {
    * 清空已有的path，开始新的path
    */
   protected startPoly() {
-
     if (this.currentPath) {
       const len = this.currentPath.points.length;
       if (len > 2) {
@@ -248,9 +249,9 @@ export class Graphics extends Container {
 
   /**
    * 曲线转化用
-   * @param x 
-   * @param y 
-   * @returns 
+   * @param x
+   * @param y
+   * @returns
    */
   public moveTo(x: number, y: number) {
     this.startPoly();
@@ -263,9 +264,9 @@ export class Graphics extends Container {
 
   /**
    * 曲线转化用
-   * @param x 
-   * @param y 
-   * @returns 
+   * @param x
+   * @param y
+   * @returns
    */
   public lineTo(x: number, y: number) {
     if (this.currentPath.points.length === 0) {

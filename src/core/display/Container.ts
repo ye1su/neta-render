@@ -3,6 +3,7 @@ import { CanvasRenderer } from "../renderer/CanvasRender";
 import { Point } from "../math";
 
 export class Container extends DisplayObject {
+  public type;
   public sortDirty = false;
   public readonly children: Container[] = [];
   // 如果是组合whole为true 则container是个整体
