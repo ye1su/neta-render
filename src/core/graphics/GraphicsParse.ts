@@ -5,7 +5,7 @@ import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
 
 export function graphicsShapeParse(json: Record<string, any>) {
-  const { type, x, y, wdith, height } = json;
+  const { id, type, x, y, wdith, height } = json;
 
   let graphic: Container | Graphics;
 
@@ -29,17 +29,25 @@ export function graphicsShapeParse(json: Record<string, any>) {
       graphic.addChild(g2);
     }
   }
-
+  graphic.id = id;
   graphic.updatePosition(x, y);
 
   return graphic;
 }
 
-export function graphicsLineParse(json: Record<string, any>) {
-  const { source, target } = json;
-  
-  const line = new GraphicsOfLine()
-  line.drawStraight(source, target)
+export function graphicsLineParse(json: Record<string, any>, _stage: Container) {
+  console.log('_stage: ', _stage.children);
+  const { id, source, target } = json;
 
-  return line
+  const targetGraphics = _stage.children.find(item => item.id == target)
+  const sourceGraphics = _stage.children.find(item => item.id == source)
+
+  const points = [sourceGraphics.x , sourceGraphics.y, targetGraphics.x, targetGraphics.y]
+
+  const line = new GraphicsOfLine();
+  line.id = id;
+
+  line.drawStraight(points);
+
+  return line;
 }

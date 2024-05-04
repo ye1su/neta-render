@@ -72,9 +72,8 @@ export class GraphicsOfLine extends Container {
     return this;
   }
 
-  public drawStraight(source: string, target: string): this {
-    console.log(this.currentPath, "====");
-    const polygon = new Polygon([100, 50, 500, 40]);
+  public drawStraight(points: number[]): this {
+    const polygon = new Polygon(points);
     return this.drawShape(new Straight(polygon));
   }
 }

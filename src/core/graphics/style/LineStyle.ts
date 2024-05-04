@@ -3,7 +3,7 @@ import { BaseStyle } from "./BaseStyle";
 
 export class LineStyle extends BaseStyle {
   public lineWidth = 1;
-  public stroke = "#D3D3D3";
+  public stroke = "#000";
   public lineCap = LineCap.Butt;
   public lineJoin = LineJoin.Miter;
 
@@ -23,7 +23,7 @@ export class LineStyle extends BaseStyle {
   public reset(): void {
     super.reset();
 
-    this.stroke = "#D3D3D3";
+    this.stroke = "#000";
     this.lineWidth = 1;
     this.lineCap = LineCap.Butt;
     this.lineJoin = LineJoin.Miter;

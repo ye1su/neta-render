@@ -5,6 +5,7 @@ import { DEG_TO_RAD, RAD_TO_DEG } from "../math/constants";
 import { Cursor } from "../types/events";
 
 export abstract class DisplayObject extends Eventemitter {
+  public id: string
   public alpha = 1;
   public worldAlpha = 1;
   public visible = true;
