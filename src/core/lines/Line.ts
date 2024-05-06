@@ -1,6 +1,5 @@
 import { Container } from "../display";
 import { LineType } from "../enums";
-import { Graphics } from "../graphics/Graphics";
 import { Point } from "../math/Point";
 import { Polygon } from "../shapes";
 

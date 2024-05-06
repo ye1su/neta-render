@@ -20,6 +20,8 @@ export enum ShapeType {
 
 export enum LineType {
   Straight = "Straight",
+  QuadraticCurve = 'QuadraticCurve',
+  BezierCurve = 'BezierCurve'
 }
 
 export enum LineCap {

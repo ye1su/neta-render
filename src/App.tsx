@@ -46,7 +46,8 @@ function App() {
       label: 'edge',
       source: 'node1',
       target: 'node2',
-      type: 'rect'
+      type: 'QuadraticCurve',
+      anchorPoints: [100, 300]
     }
     appRef.current.addItem("edge", edge1);
     // appRef.current.addItem('node', rectModel)

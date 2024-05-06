@@ -1,5 +1,5 @@
 import { Container } from "../display";
-import { BaseShapes } from "../enums";
+import { BaseShapes, LineType } from "../enums";
 import { Point } from "../math";
 import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
@@ -36,12 +36,19 @@ export function graphicsShapeParse(json: Record<string, any>) {
 }
 
 export function graphicsLineParse(json: Record<string, any>) {
-  const { id, source, target } = json;
+  const { id, type, source, target } = json;
 
   const line = new GraphicsOfLine();
   line.id = id;
 
-  line.drawStraight(source, target)
+  if (!type) {
+    line.drawStraight(source, target);
+  }
+
+  if (type == LineType.QuadraticCurve) {
+    const { anchorPoints } = json;
+    line.drawQuadraticCurve(source, target, { anchorPoints });
+  }
 
   return line;
 }

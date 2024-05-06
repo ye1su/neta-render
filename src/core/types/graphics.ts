@@ -3,3 +3,11 @@ export interface IShapeStyle {
   stroke?: string;
   lineWidth?: string
 }
+
+export interface QuadraticCurveConfig {
+  anchorPoints: number[]
+}
+
+export interface BezierCurveConfig {
+  anchorPoints: number[][]
+}

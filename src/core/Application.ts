@@ -26,7 +26,7 @@ export class Application {
 
   public render() {
     this.renderer.render(this.stage);
-    console.log('this.stage: ', this.stage);
+    // console.log('this.stage: ', this.stage);
 
   }
 
