@@ -1,5 +1,6 @@
 import { Container } from "../display";
 import { IApplicationOptions } from "../types";
+import { fixFactor } from "../utils";
 import { Renderer } from "./Renderer";
 
 // 创建变换矩阵
@@ -26,12 +27,17 @@ export class CanvasRenderer extends Renderer {
 
     // 创建canvas函数
     const _canvas = document.createElement("canvas");
-    _canvas.width = this.screen.width;
-    _canvas.height = this.screen.height;
-    this.el.appendChild(_canvas)
+
+    _canvas.setAttribute("width", fixFactor(this.screen.width) + "");
+    _canvas.setAttribute("height", fixFactor(this.screen.height) + "");
+
+    _canvas.style.width = this.screen.width + "px";
+    _canvas.style.height = this.screen.height + "px";
+
+    this.el.appendChild(_canvas);
     this.viewer = _canvas;
 
-    this.ctx =this.viewer.getContext("2d") as CanvasRenderingContext2D;
+    this.ctx = this.viewer.getContext("2d") as CanvasRenderingContext2D;
   }
 
   get translate() {
@@ -42,7 +48,7 @@ export class CanvasRenderer extends Renderer {
   }
 
   get scale() {
-    return this.matrix[0]
+    return this.matrix[0];
   }
 
   // 取当前矩阵快照
@@ -73,13 +79,23 @@ export class CanvasRenderer extends Renderer {
       _matrix[7]
     );
 
-    // this.ctx.setTransform(this.matrix);
+    console.log("_matrix: ", _matrix);
 
-    this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
+    this.ctx.clearRect(
+      0,
+      0,
+      fixFactor(this.screen.width),
+      fixFactor(this.screen.height)
+    );
 
     if (this.background) {
       this.ctx.fillStyle = this.background;
-      this.ctx.fillRect(0, 0, this.screen.width, this.screen.height);
+      this.ctx.fillRect(
+        _matrix[6],
+        _matrix[7],
+        this.screen.width,
+        this.screen.height
+      );
     }
 
     container.renderCanvasRecursive(this);
@@ -89,6 +105,6 @@ export class CanvasRenderer extends Renderer {
 
   public clear() {
     this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
-    this.el.removeChild(this.viewer);  
+    this.el.removeChild(this.viewer);
   }
 }

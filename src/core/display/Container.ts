@@ -87,7 +87,7 @@ export class Container extends DisplayObject {
     this.sortDirty = false;
   }
   public updatePosition(x: number, y: number) {
-    this.position.set(x, y);
+    this.position.set(x , y );
   }
 
   public containsPoint(p: Point) {

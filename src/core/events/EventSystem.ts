@@ -23,10 +23,7 @@ export class EventSystem {
     diffy: 0,
   };
 
-  constructor(
-    stage: Container,
-    renderer: CanvasRenderer
-  ) {
+  constructor(stage: Container, renderer: CanvasRenderer) {
     this.canvasEle = renderer.viewer;
     this.stage = stage;
     this._renderer = renderer;
@@ -43,7 +40,11 @@ export class EventSystem {
     this.canvasEle.removeEventListener("pointerup", this.onPointerup);
   };
 
-  private onPointerDown = (e) => {
+  private onPointerDown = (event) => {
+    const e = Object.assign({}, event, {
+      offsetX: event.offsetX * 2,
+      offsetY: event.offsetY * 2,
+    });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     // 获取当前点击的相关信息
     this._mouseDownPoint = {
@@ -54,7 +55,7 @@ export class EventSystem {
     };
     // 拖拽开始时存取当前矩阵快照
     this._dragging = true;
-    this._renderer.cloneMatrix()
+    this._renderer.cloneMatrix();
 
     if (target) {
       this._mouseDownPoint.diffx = e.offsetX - target.x;
@@ -63,7 +64,11 @@ export class EventSystem {
     }
   };
 
-  private onPointerMove = (e) => {
+  private onPointerMove = (event) => {
+    const e = Object.assign({}, event, {
+      offsetX: event.offsetX * 2,
+      offsetY: event.offsetY * 2,
+    });
     const movePosition = {
       x: e.offsetX,
       y: e.offsetY,
@@ -96,7 +101,7 @@ export class EventSystem {
     if (this._dragging && !this.hitTarget) {
       const diffX = movePosition.x - this._mouseDownPoint.x;
       const diffY = movePosition.y - this._mouseDownPoint.y;
-      this._renderer.updateCanvasTranslate(diffX, diffY)
+      this._renderer.updateCanvasTranslate(diffX, diffY);
     }
   };
 

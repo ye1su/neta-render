@@ -2,7 +2,7 @@ import { LineCap, LineJoin } from "../../enums";
 import { BaseStyle } from "./BaseStyle";
 
 export class LineStyle extends BaseStyle {
-  public lineWidth = 1;
+  public lineWidth = 0.8;
   public stroke = "#000";
   public lineCap = LineCap.Butt;
   public lineJoin = LineJoin.Miter;
@@ -24,7 +24,7 @@ export class LineStyle extends BaseStyle {
     super.reset();
 
     this.stroke = "#000";
-    this.lineWidth = 1;
+    this.lineWidth = 0.8;
     this.lineCap = LineCap.Butt;
     this.lineJoin = LineJoin.Miter;
   }

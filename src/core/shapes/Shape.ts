@@ -11,7 +11,9 @@ export abstract class Shape {
   public transformPoint(p: Point) {
     const { translate, scale } = this.globalTransform;
     p = p.clone()
-    p.x = p.x - translate.x
+    // p.x = p.x * 2
+    // p.y = p.y * 2
+    p.x = p.x - translate.x 
     p.y = p.y - translate.y
     p.x = p.x / scale
     p.y = p.y / scale

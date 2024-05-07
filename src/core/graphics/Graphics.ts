@@ -286,7 +286,6 @@ export class Graphics extends Container {
     return this;
   }
 
-
   /**
    * 画圆弧
    * @param cx 圆弧对应的圆的中心点的x坐标

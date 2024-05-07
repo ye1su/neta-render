@@ -1,11 +1,17 @@
 import { Container } from "../display";
 import { BaseShapes, LineType } from "../enums";
-import { Point } from "../math";
+import { fixFactor } from "../utils";
 import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
 
 export function graphicsShapeParse(json: Record<string, any>) {
+
+  json.x = fixFactor(json.x)
+  json.y = fixFactor(json.y)
+  json.wdith = fixFactor(json.wdith)
+  json.height = fixFactor(json.height)
   const { id, type, x, y, wdith, height } = json;
+
 
   let graphic: Container | Graphics;
 
@@ -30,7 +36,7 @@ export function graphicsShapeParse(json: Record<string, any>) {
     }
   }
   graphic.id = id;
-  graphic.updatePosition(x, y);
+  graphic.updatePosition(x , y );
 
   return graphic;
 }
