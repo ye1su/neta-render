@@ -15,5 +15,6 @@ export abstract class Shape {
     p.y = p.y - translate.y
     p.x = p.x / scale
     p.y = p.y / scale
+    return p
   }
 }

@@ -26,19 +26,17 @@ export class Rectangle extends Shape {
     this.y = y;
   }
 
-  public contains(p: Point): boolean {
+  public contains(point: Point): boolean {
     const _x = this.x + this.offsetX;
     const _y = this.y + this.offsetY;
 
-    this.transformPoint(p)
+    const p = this.transformPoint(point);
 
     if (
       p.x > _x &&
       p.x < _x + this.width &&
       p.y > _y &&
       p.y < _y + this.height
-  
-      
     ) {
       return true;
     } else {

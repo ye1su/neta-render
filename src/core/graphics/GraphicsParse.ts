@@ -50,5 +50,10 @@ export function graphicsLineParse(json: Record<string, any>) {
     line.drawQuadraticCurve(source, target, { anchorPoints });
   }
 
+  if (type == LineType.BezierCurve) {
+    const { anchorPoints } = json;
+    line.drawBezierCurve(source, target, { anchorPoints });
+  }
+
   return line;
 }

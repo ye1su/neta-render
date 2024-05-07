@@ -19,6 +19,7 @@ export class Application {
 
     if (this.renderer instanceof CanvasRenderer) {
       this.eventSystem = new EventSystem(this.stage, this.renderer);
+      console.log('this.stage: ', this.stage);
     }
 
     // this.start()

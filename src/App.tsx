@@ -46,8 +46,8 @@ function App() {
       label: 'edge',
       source: 'node1',
       target: 'node2',
-      type: 'QuadraticCurve',
-      anchorPoints: [100, 300]
+      type: 'BezierCurve',
+      anchorPoints: [[100, 300],[200, 100]]
     }
     appRef.current.addItem("edge", edge1);
     // appRef.current.addItem('node', rectModel)

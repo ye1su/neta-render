@@ -24,12 +24,6 @@ export class NetaGraph extends Application {
     this.stage.addChild(graphic);
   }
   addEdge(model: EdgeModel) {
-    // const quadraticBezierCurve = new Graphics();
-    // quadraticBezierCurve.moveTo(100, 100);
-    // quadraticBezierCurve.quadraticCurveTo(100, 300, 300, 300);
-
-    // this.stage.addChild(quadraticBezierCurve);
-
     const graphic = graphicsLineParse(model);
     this.stage.addChild(graphic);
   }
