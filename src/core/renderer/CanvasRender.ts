@@ -33,7 +33,7 @@ export class CanvasRenderer extends Renderer {
 
     _canvas.style.width = this.screen.width + "px";
     _canvas.style.height = this.screen.height + "px";
-
+    _canvas.style.backgroundColor = this.background
     this.el.appendChild(_canvas);
     this.viewer = _canvas;
 
@@ -79,24 +79,13 @@ export class CanvasRenderer extends Renderer {
       _matrix[7]
     );
 
-    console.log("_matrix: ", _matrix);
 
     this.ctx.clearRect(
-      0,
-      0,
+      -_matrix[6],
+      -_matrix[7],
       fixFactor(this.screen.width),
       fixFactor(this.screen.height)
     );
-
-    if (this.background) {
-      this.ctx.fillStyle = this.background;
-      this.ctx.fillRect(
-        _matrix[6],
-        _matrix[7],
-        this.screen.width,
-        this.screen.height
-      );
-    }
 
     container.renderCanvasRecursive(this);
 
@@ -104,7 +93,6 @@ export class CanvasRenderer extends Renderer {
   }
 
   public clear() {
-    this.ctx.clearRect(0, 0, this.screen.width, this.screen.height);
     this.el.removeChild(this.viewer);
   }
 }
