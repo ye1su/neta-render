@@ -5,6 +5,7 @@ import {
   Polygon,
   Rectangle,
   RoundedRectangle,
+  Text,
 } from "../shapes";
 import { Container } from "../display";
 import { Point } from "../math";
@@ -13,7 +14,6 @@ import { IShapeStyle } from "../types/graphics";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
-import { getBezierLength, getQuadraticBezierLength } from "./utils";
 import { ItmeType } from "../enums";
 
 export class Graphics extends Container {
@@ -34,139 +34,149 @@ export class Graphics extends Container {
     this._geometry.updateShapeGlobalTransform({ matrix, translate, scale });
     this.startPoly();
     const ctx = render.ctx;
-    const graphicsData = this._geometry.graphicsData;
+    const data = this._geometry.graphicsData;
 
-    for (let i = 0; i < graphicsData.length; i++) {
-      const data = graphicsData[i];
-      const { lineStyle, fillStyle, shape } = data;
+    const { lineStyle, fillStyle, shape } = data;
+
+    if (fillStyle.visible) {
+      ctx.fillStyle = fillStyle.fill;
+    }
+
+    if (lineStyle.visible) {
+      ctx.lineWidth = lineStyle.lineWidth;
+      ctx.lineCap = lineStyle.lineCap;
+      ctx.lineJoin = lineStyle.lineJoin;
+      ctx.strokeStyle = lineStyle.stroke;
+    }
+
+    ctx.beginPath();
+
+    if (shape instanceof Rectangle) {
+      const rectangle = shape;
+      const { width, height } = rectangle;
+
+      const x = this.x;
+      const y = this.y;
 
       if (fillStyle.visible) {
-        ctx.fillStyle = fillStyle.fill;
+        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        ctx.fillRect(x, y, width, height);
+      }
+      if (lineStyle.visible) {
+        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+        ctx.strokeRect(x, y, width, height);
+      }
+    }
+
+    if (shape instanceof Circle) {
+      const circle = shape;
+      const { radius } = circle;
+      const ox = shape?.offsetX;
+      const oy = shape?.offsetY;
+      const x = this.x + ox;
+      const y = this.y + oy;
+
+      ctx.arc(x, y, radius, 0, 2 * Math.PI);
+
+      if (fillStyle.visible) {
+        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        ctx.fill();
+      }
+      if (lineStyle.visible) {
+        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+        ctx.stroke();
+      }
+    }
+
+    if (shape instanceof Text) {
+      const { text } = shape;
+      const ox = shape?.offsetX;
+      const oy = shape?.offsetY;
+      const x = this.x + ox;
+      const y = this.y + oy;
+      ctx.font = "32px Arial";
+      ctx.fillStyle = "#000";
+
+      // 绘制文字
+      ctx.fillText(text, x, y);
+    }
+
+    if (shape instanceof Ellipse) {
+      const ellipse = shape;
+      const { x, y, radiusX, radiusY } = ellipse;
+
+      ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2);
+
+      if (fillStyle.visible) {
+        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        ctx.fill();
       }
 
       if (lineStyle.visible) {
-        ctx.lineWidth = lineStyle.lineWidth;
-        ctx.lineCap = lineStyle.lineCap;
-        ctx.lineJoin = lineStyle.lineJoin;
-        ctx.strokeStyle = lineStyle.stroke;
+        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+        ctx.stroke();
       }
+    }
 
-      ctx.beginPath();
+    if (shape instanceof RoundedRectangle) {
+      const roundedRectangle = shape;
+      const { x, y, width, height, radius } = roundedRectangle;
 
-      if (shape instanceof Rectangle) {
-        const rectangle = shape;
-        const { width, height } = rectangle;
+      ctx.moveTo(x + radius, y);
+      ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
+      ctx.lineTo(x, y + height - radius);
+      ctx.arc(
+        x + radius,
+        y + height - radius,
+        radius,
+        Math.PI,
+        Math.PI / 2,
+        true
+      );
+      ctx.lineTo(x + width - radius, y + height);
+      ctx.arc(
+        x + width - radius,
+        y + height - radius,
+        radius,
+        Math.PI / 2,
+        0,
+        true
+      );
+      ctx.lineTo(x + width, y + radius);
+      ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
+      ctx.closePath();
 
-        const x = this.x;
-        const y = this.y;
-
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-          ctx.fillRect(x, y, width, height);
-        }
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-          ctx.strokeRect(x, y, width, height);
-        }
+      if (fillStyle.visible) {
+        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        ctx.fill();
       }
-
-      if (shape instanceof Circle) {
-        const circle = shape;
-        const { radius } = circle;
-        const ox = shape?.offsetX;
-        const oy = shape?.offsetY;
-        const x = this.x + ox;
-        const y = this.y + oy;
-
-        ctx.arc(x, y, radius, 0, 2 * Math.PI);
-
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-          ctx.fill();
-        }
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-          ctx.stroke();
-        }
+      if (lineStyle.visible) {
+        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+        ctx.stroke();
       }
+    }
 
-      if (shape instanceof Ellipse) {
-        const ellipse = shape;
-        const { x, y, radiusX, radiusY } = ellipse;
+    if (shape instanceof Polygon) {
+      const polygon = shape;
 
-        ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2);
+      const { points, closeStroke } = polygon;
 
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-          ctx.fill();
-        }
+      ctx.moveTo(points[0], points[1]);
 
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-          ctx.stroke();
-        }
+      for (let i = 2; i < points.length; i += 2) {
+        ctx.lineTo(points[i], points[i + 1]);
       }
-
-      if (shape instanceof RoundedRectangle) {
-        const roundedRectangle = shape;
-        const { x, y, width, height, radius } = roundedRectangle;
-
-        ctx.moveTo(x + radius, y);
-        ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
-        ctx.lineTo(x, y + height - radius);
-        ctx.arc(
-          x + radius,
-          y + height - radius,
-          radius,
-          Math.PI,
-          Math.PI / 2,
-          true
-        );
-        ctx.lineTo(x + width - radius, y + height);
-        ctx.arc(
-          x + width - radius,
-          y + height - radius,
-          radius,
-          Math.PI / 2,
-          0,
-          true
-        );
-        ctx.lineTo(x + width, y + radius);
-        ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
+      if (closeStroke) {
         ctx.closePath();
-
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-          ctx.fill();
-        }
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-          ctx.stroke();
-        }
       }
 
-      if (shape instanceof Polygon) {
-        const polygon = shape;
-
-        const { points, closeStroke } = polygon;
-
-        ctx.moveTo(points[0], points[1]);
-
-        for (let i = 2; i < points.length; i += 2) {
-          ctx.lineTo(points[i], points[i + 1]);
-        }
-        if (closeStroke) {
-          ctx.closePath();
-        }
-
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-          ctx.fill();
-        }
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-          ctx.stroke();
-        }
+      if (fillStyle.visible) {
+        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        ctx.fill();
+      }
+      if (lineStyle.visible) {
+        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+        ctx.stroke();
       }
     }
   }
@@ -191,6 +201,17 @@ export class Graphics extends Container {
       }
     }
     this.currentPath = new Polygon();
+  }
+
+  /**
+   * 画矩形
+   * @param x x坐标
+   * @param y y坐标
+   * @param width 宽度
+   * @param height 高度
+   */
+  public drawText(x: number, y: number, text: string): this {
+    return this.drawShape(new Text(x, y, text));
   }
 
   /**

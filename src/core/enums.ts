@@ -16,6 +16,7 @@ export enum ShapeType {
   Circle = "Circle",
   Ellipse = "Ellipse",
   RoundedRectangle = "RoundedRectangle",
+  Text = 'Text'
 }
 
 export enum LineType {

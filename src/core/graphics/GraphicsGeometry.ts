@@ -7,7 +7,7 @@ import { GlobalTransform } from "../types/shapes";
 import { Line } from "../lines";
 
 export class GraphicsGeometry {
-  public graphicsData: GraphicsData[] = [];
+  public graphicsData: GraphicsData;
   constructor() {}
   public drawShape(
     shape: Shape | Line,
@@ -15,38 +15,32 @@ export class GraphicsGeometry {
     lineStyle: LineStyle
   ) {
     const data = new GraphicsData(shape, fillStyle, lineStyle);
-    this.graphicsData.push(data);
+    // this.graphicsData.push(data);
+    this.graphicsData = data;
   }
   public clear() {
-    this.graphicsData = [];
+    this.graphicsData = null;
   }
   public updateShapePosition(x: number, y: number) {
-    this.graphicsData.forEach((item) => {
-      if (!(item.shape instanceof Shape)) return;
-      item.shape.setPosition(x, y);
-    });
+    if (!(this.graphicsData.shape instanceof Shape)) return;
+    this.graphicsData.shape.setPosition(x, y);
   }
   public updateShapeGlobalTransform(transform: GlobalTransform) {
-    this.graphicsData.forEach((item) => {
-      if (!(item.shape instanceof Shape)) return;
-      item.shape.globalTransform = transform;
-    });
+    if (!(this.graphicsData.shape instanceof Shape)) return;
+    this.graphicsData.shape.globalTransform = transform;
   }
   /**
    * @param p 待检测点
    * @returns {boolean} 待检测点是否落在某一个子图形内
    */
   public containsPoint(p: Point): boolean {
-    for (let i = 0; i < this.graphicsData.length; i++) {
-      const { shape, fillStyle } = this.graphicsData[i];
-      if (!fillStyle.visible) {
-        continue;
-      }
-      if (shape.contains(p)) {
-        return true;
-      }
+    const { shape, fillStyle } = this.graphicsData
+    if (!fillStyle.visible) {
+      return false
     }
-
+    if (shape.contains(p)) {
+      return true;
+    }
     return false;
   }
 }
