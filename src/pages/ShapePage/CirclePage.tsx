@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { NetaGraph, RendererType } from "../../core";
 
-export function TextPage() {
+export function CirclePage() {
   const appRef = useRef<NetaGraph>();
   useEffect(() => {
     appRef.current = new NetaGraph({
@@ -13,11 +13,10 @@ export function TextPage() {
     const model = {
       id: "node1",
       label: "node1",
-      type: "rect",
+      type: "circle",
       x: 200,
       y: 150,
-      wdith: 100,
-      height: 100,
+      radius: 50,
       style: {
         fill: "blue",
       },

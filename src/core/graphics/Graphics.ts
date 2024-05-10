@@ -94,7 +94,8 @@ export class Graphics extends Container {
       const oy = shape?.offsetY;
       const x = this.x + ox;
       const y = this.y + oy;
-      ctx.font = "32px Arial";
+      const _fontSize = 32
+      ctx.font = `${_fontSize}px Arial`;
       ctx.fillStyle = "#000";
 
       // 绘制文字

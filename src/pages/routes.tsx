@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import { RectanglePage } from "./ShapePage/RectanglePage.tsx";
 import App from "../App.tsx";
+import { CirclePage } from "./ShapePage/CirclePage.tsx";
+import { RectanglePage } from "./ShapePage/RectanglePage.tsx";
+import { StraightPage } from "./EdgePage/StraightPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -13,6 +15,23 @@ export const router = createBrowserRouter([
         options: {
           name: "长方体",
           group: 'Shape'
+        }
+      },
+      {
+        path: "/circle",
+        element: <CirclePage />,
+        options: {
+          name: "圆形",
+          group: 'Shape'
+        }
+      },
+
+      {
+        path: "/straight",
+        element: <StraightPage />,
+        options: {
+          name: "直线",
+          group: 'Edge'
         }
       },
 

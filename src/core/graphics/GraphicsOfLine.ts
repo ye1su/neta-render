@@ -22,91 +22,87 @@ export class GraphicsOfLine extends Container {
   }
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
-    const graphicsList = this.parent.children.filter(
-      (item) => item.type == ItmeType.Graphics
-    );
 
-    const graphicsData = this._geometry.graphicsData;
+    const graphicsList = this.parent.children.filter((item) => item.whole);
+
+    const data = this._geometry.graphicsData;
+
     const ctx = render.ctx;
 
-    for (let i = 0; i < graphicsData.length; i++) {
-      const data = graphicsData[i];
+    const { lineStyle, fillStyle, shape } = data;
 
-      const { lineStyle, fillStyle, shape } = data;
+    // 修改线的数据
+    const { _polygon, targetId, sourceId } = shape as Line;
+    (shape as Line).target = graphicsList.find((item) => item.id == targetId);
+    (shape as Line).source = graphicsList.find((item) => item.id == sourceId);
+    // 修改points
+    const { source: _source, target: _target } = shape as Line;
+    _polygon.points = [_source.x, _source.y, _target.x, _target.y];
 
-      // 修改线的数据
-      const { _polygon, targetId, sourceId } = shape as Line;
-      (shape as Line).target = graphicsList.find((item) => item.id == targetId);
-      (shape as Line).source = graphicsList.find((item) => item.id == sourceId);
-      // 修改points
-      const { source: _source, target: _target } = shape as Line;
-      _polygon.points = [_source.x, _source.y, _target.x, _target.y];
+    // draw 2
+    if (shape.type == LineType.QuadraticCurve) {
+      const { anchorPoints } = (shape as QuadraticCurve).config;
+      this.currentPath = new Polygon();
+      this.moveTo(_source.x, _source.y);
+      this.quadraticCurveTo(
+        anchorPoints[0],
+        anchorPoints[1],
+        _target.x,
+        _target.y
+      );
+      _polygon.points = this.currentPath.points;
+      this.currentPath = null;
+    }
 
-      // draw 2 
-      if (shape.type == LineType.QuadraticCurve) {
-        const { anchorPoints } = (shape as QuadraticCurve).config;
-        this.currentPath = new Polygon();
-        this.moveTo(_source.x, _source.y);
-        this.quadraticCurveTo(
-          anchorPoints[0],
-          anchorPoints[1],
-          _target.x,
-          _target.y
-        );
-        _polygon.points = this.currentPath.points;
-        this.currentPath = null;
-      }
+    // draw 3
+    if (shape.type == LineType.BezierCurve) {
+      const { anchorPoints } = (shape as QuadraticCurve).config;
+      this.currentPath = new Polygon();
+      this.moveTo(_source.x, _source.y);
 
-      // draw 3
-      if (shape.type == LineType.BezierCurve) {
-        const { anchorPoints } = (shape as QuadraticCurve).config;
-        this.currentPath = new Polygon();
-        this.moveTo(_source.x, _source.y);
+      this.bezierCurveTo(
+        anchorPoints[0][0],
+        anchorPoints[0][1],
+        anchorPoints[1][0],
+        anchorPoints[1][1],
+        _target.x,
+        _target.y
+      );
+      _polygon.points = this.currentPath.points;
+      this.currentPath = null;
+    }
 
-        this.bezierCurveTo(
-          anchorPoints[0][0],
-          anchorPoints[0][1],
-          anchorPoints[1][0],
-          anchorPoints[1][1],
-          _target.x,
-          _target.y
-        );
-        _polygon.points = this.currentPath.points;
-        this.currentPath = null;
-      }
+    if (fillStyle.visible) {
+      ctx.fillStyle = fillStyle.fill;
+    }
 
-      if (fillStyle.visible) {
-        ctx.fillStyle = fillStyle.fill;
-      }
+    if (lineStyle.visible) {
+      ctx.lineWidth = lineStyle.lineWidth;
+      ctx.lineCap = lineStyle.lineCap;
+      ctx.lineJoin = lineStyle.lineJoin;
+      ctx.strokeStyle = lineStyle.stroke;
+    }
 
-      if (lineStyle.visible) {
-        ctx.lineWidth = lineStyle.lineWidth;
-        ctx.lineCap = lineStyle.lineCap;
-        ctx.lineJoin = lineStyle.lineJoin;
-        ctx.strokeStyle = lineStyle.stroke;
-      }
+    ctx.beginPath();
 
-      ctx.beginPath();
+    // 渲染线上绘制的多边形
+    const { points } = _polygon;
 
-      // 渲染线上绘制的多边形
-      const { points } = _polygon;
+    ctx.moveTo(points[0], points[1]);
 
-      ctx.moveTo(points[0], points[1]);
+    for (let i = 2; i < points.length; i += 2) {
+      ctx.lineTo(points[i], points[i + 1]);
+    }
+    // ctx.closePath();
 
-      for (let i = 2; i < points.length; i += 2) {
-        ctx.lineTo(points[i], points[i + 1]);
-      }
-      // ctx.closePath();
-
-      if (fillStyle.visible) {
-        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-        ctx.fillStyle = "rgba(0, 0, 0, 0)";
-        ctx.fill();
-      }
-      if (lineStyle.visible) {
-        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-        ctx.stroke();
-      }
+    if (fillStyle.visible) {
+      ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+      ctx.fillStyle = "rgba(0, 0, 0, 0)";
+      ctx.fill();
+    }
+    if (lineStyle.visible) {
+      ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+      ctx.stroke();
     }
   }
 

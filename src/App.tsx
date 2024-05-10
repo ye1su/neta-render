@@ -21,6 +21,9 @@ const App = () => {
         ...route.options,
       });
     });
+
+    console.log('navMap: ', navMap);
+
     const Ele = Object.values(navMap).map((item) => {
       return (
         <Nav.Menu
@@ -33,7 +36,7 @@ const App = () => {
           {item.children.map((info) => {
             return (
               <Nav.Item
-                key={item.key}
+                key={info.path}
                 eventKey={info.path}
                 onSelect={handleClick}
               >
