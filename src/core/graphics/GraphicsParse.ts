@@ -47,6 +47,20 @@ export function graphicsShapeParse(json: Record<string, any>) {
 
     graphic.addChild(image);
   }
+
+  if(type == "ellipse") {
+    const { radiusX, radiusY } = json;
+    const ellipse = new Graphics()
+    ellipse.drawEllipse(0, 0, radiusX, radiusY );
+
+    const text = new Graphics();
+    const textStart = getCenterX(json.label, 0, fixFactor(BASE_FONT_SIZE));
+    text.drawText(textStart, 0 + BASE_FONT_SIZE, json.label);
+
+    graphic.addChild(ellipse);
+    graphic.addChild(text);
+  }
+
   graphic.whole = true;
 
   graphic.id = id;
