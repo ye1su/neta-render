@@ -3,6 +3,7 @@ import App from "../App.tsx";
 import { CirclePage } from "./ShapePage/CirclePage.tsx";
 import { RectanglePage } from "./ShapePage/RectanglePage.tsx";
 import { StraightPage } from "./EdgePage/StraightPage.tsx";
+import { ImagePage } from "./ShapePage/ImagePage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,14 @@ export const router = createBrowserRouter([
         element: <CirclePage />,
         options: {
           name: "圆形",
+          group: 'Shape'
+        }
+      },
+      {
+        path: "/image",
+        element: <ImagePage />,
+        options: {
+          name: "图片",
           group: 'Shape'
         }
       },

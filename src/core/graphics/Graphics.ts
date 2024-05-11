@@ -6,6 +6,7 @@ import {
   Rectangle,
   RoundedRectangle,
   Text,
+  Image as ImageShpe,
 } from "../shapes";
 import { Container } from "../display";
 import { Point } from "../math";
@@ -54,9 +55,7 @@ export class Graphics extends Container {
     if (shape instanceof Rectangle) {
       const rectangle = shape;
       const { width, height } = rectangle;
-
-      const x = this.x;
-      const y = this.y;
+      const { x, y } = shape.getXy();
 
       if (fillStyle.visible) {
         ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
@@ -71,10 +70,7 @@ export class Graphics extends Container {
     if (shape instanceof Circle) {
       const circle = shape;
       const { radius } = circle;
-      const ox = shape?.offsetX;
-      const oy = shape?.offsetY;
-      const x = this.x + ox;
-      const y = this.y + oy;
+      const { x, y } = shape.getXy();
 
       ctx.arc(x, y, radius, 0, 2 * Math.PI);
 
@@ -90,16 +86,25 @@ export class Graphics extends Container {
 
     if (shape instanceof Text) {
       const { text } = shape;
-      const ox = shape?.offsetX;
-      const oy = shape?.offsetY;
-      const x = this.x + ox;
-      const y = this.y + oy;
-      const _fontSize = 32
+      const { x, y } = shape.getXy();
+
+      const _fontSize = 32;
       ctx.font = `${_fontSize}px Arial`;
       ctx.fillStyle = "#000";
 
       // 绘制文字
       ctx.fillText(text, x, y);
+    }
+
+    if (shape instanceof ImageShpe) {
+      const { src, width, height } = shape;
+      const { x, y } = shape.getXy();
+      const img = new Image();
+      img.src = src;
+
+      img.onload = function () {
+        ctx.drawImage(img, x, y, width, height);
+      };
     }
 
     if (shape instanceof Ellipse) {
@@ -205,11 +210,10 @@ export class Graphics extends Container {
   }
 
   /**
-   * 画矩形
+   * 画文字
    * @param x x坐标
    * @param y y坐标
-   * @param width 宽度
-   * @param height 高度
+   * @param text 文字内容
    */
   public drawText(x: number, y: number, text: string): this {
     return this.drawShape(new Text(x, y, text));
@@ -234,6 +238,22 @@ export class Graphics extends Container {
    */
   public drawCircle(x: number, y: number, radius: number) {
     return this.drawShape(new Circle(x, y, radius));
+  }
+
+  /**
+   * 画圆
+   * @param x 圆心X坐标
+   * @param y 圆心Y坐标
+   * @param radius 半径
+   */
+  public drawImage(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    src: string
+  ) {
+    return this.drawShape(new ImageShpe(x, y, width, height, src));
   }
 
   public drawEllipse(x: number, y: number, radiusX: number, radiusY: number) {

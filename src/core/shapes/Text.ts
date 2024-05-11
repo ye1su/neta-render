@@ -25,6 +25,13 @@ export class Text extends Shape {
     this.y = y;
   }
 
+  getXy() {
+    return {
+      x: this.x + this.offsetX,
+      y: this.y + this.offsetY,
+    };
+  }
+
   public contains(point: Point): boolean {
     return false;
   }

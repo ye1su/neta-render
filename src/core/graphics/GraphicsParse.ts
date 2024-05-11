@@ -9,8 +9,8 @@ export function graphicsShapeParse(json: Record<string, any>) {
   json.y = fixFactor(json.y);
   json.wdith = fixFactor(json.wdith);
   json.height = fixFactor(json.height);
-  json.radius = fixFactor(json.radius)
-  const { id, type, x, y, wdith, height, radius } = json;
+  json.radius = fixFactor(json.radius);
+  const { id, type, x, y, wdith, height } = json;
 
   const graphic = new Container();
   if (type == "rect") {
@@ -24,26 +24,30 @@ export function graphicsShapeParse(json: Record<string, any>) {
     );
     text.drawText(textStart, height / 2 + BASE_FONT_SIZE, json.label);
 
-    graphic.whole = true;
     graphic.addChild(rect);
     graphic.addChild(text);
   }
   if (type == "circle") {
+    const { radius } = json;
     const circle = new Graphics();
     circle.drawCircle(0, 0, radius);
 
     const text = new Graphics();
-    const textStart = getCenterX(
-      json.label,
-      0,
-      fixFactor(BASE_FONT_SIZE)
-    );
+    const textStart = getCenterX(json.label, 0, fixFactor(BASE_FONT_SIZE));
     text.drawText(textStart, 0 + BASE_FONT_SIZE, json.label);
 
-    graphic.whole = true;
     graphic.addChild(circle);
     graphic.addChild(text);
   }
+
+  if (type == "image") {
+    const { src } = json;
+    const image = new Graphics();
+    image.drawImage(0, 0, wdith, height, src);
+
+    graphic.addChild(image);
+  }
+  graphic.whole = true;
 
   graphic.id = id;
   graphic.updatePosition(x, y);
@@ -57,9 +61,8 @@ export function graphicsLineParse(json: Record<string, any>) {
   const line = new GraphicsOfLine();
   line.id = id;
 
-  if(type == LineType.Straight) {
+  if (type == LineType.Straight) {
     line.drawStraight(source, target);
-
   }
 
   // if (type == LineType.QuadraticCurve) {

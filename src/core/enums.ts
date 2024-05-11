@@ -1,8 +1,8 @@
 export const BaseShapes = ["rect", "circle"];
 
 export enum ItmeType {
-  Line = 'line',
-  Graphics = 'graphics'
+  Line = "line",
+  Graphics = "graphics",
 }
 
 export enum RendererType {
@@ -16,13 +16,14 @@ export enum ShapeType {
   Circle = "Circle",
   Ellipse = "Ellipse",
   RoundedRectangle = "RoundedRectangle",
-  Text = 'Text'
+  Text = "Text",
+  Image = "Image",
 }
 
 export enum LineType {
   Straight = "Straight",
-  QuadraticCurve = 'QuadraticCurve',
-  BezierCurve = 'BezierCurve'
+  QuadraticCurve = "QuadraticCurve",
+  BezierCurve = "BezierCurve",
 }
 
 export enum LineCap {

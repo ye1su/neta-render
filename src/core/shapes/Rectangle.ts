@@ -26,6 +26,13 @@ export class Rectangle extends Shape {
     this.y = y;
   }
 
+  getXy() {
+    return {
+      x: this.x + this.offsetX,
+      y: this.y + this.offsetY,
+    };
+  }
+
   public contains(point: Point): boolean {
     const _x = this.x + this.offsetX;
     const _y = this.y + this.offsetY;
