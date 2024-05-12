@@ -1,5 +1,11 @@
 import { Application } from "./Application";
-import { EdgeModel, IApplicationOptions, ItemType, NodeModel } from "./types";
+import {
+  EdgeModel,
+  IApplicationOptions,
+  ItemType,
+  Model,
+  NodeModel,
+} from "./types";
 import {
   graphicsLineParse,
   graphicsShapeParse,
@@ -11,6 +17,17 @@ export class NetaGraph extends Application {
     super(options);
   }
 
+  read(model: Model) {
+    const {nodes, edges} = model
+    nodes.forEach(node => {
+      this.addNode(node)
+    })
+    edges.forEach(edge => {
+      this.addEdge(edge)
+    })
+    this.render()
+  }
+
   addItem(type: ItemType, model: NodeModel | EdgeModel) {
     if (type == "node") {
       this.addNode(model as NodeModel);
@@ -19,12 +36,13 @@ export class NetaGraph extends Application {
       this.addEdge(model as EdgeModel);
     }
   }
+
   addNode(model: NodeModel) {
     const graphic = graphicsShapeParse(model);
     this.stage.addChild(graphic);
   }
   addEdge(model: EdgeModel) {
-    console.log('model: ', model);
+    console.log("model: ", model);
     const graphic = graphicsLineParse(model);
     this.stage.addChild(graphic);
   }

@@ -17,6 +17,10 @@ export interface GlobalTransform {
   };
   scale: number;
 }
+export interface Model {
+  nodes: NodeModel[];
+  edges: EdgeModel[]
+}
 
 
 export interface BaseModel {

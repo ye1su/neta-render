@@ -70,13 +70,17 @@ export function graphicsShapeParse(json: Record<string, any>) {
 }
 
 export function graphicsLineParse(json: Record<string, any>) {
-  const { id, type, source, target } = json;
+  const { id, type, source, target, anchorPoints } = json;
 
   const line = new GraphicsOfLine();
   line.id = id;
 
   if (type == LineType.Straight) {
     line.drawStraight(source, target);
+  }
+
+  if (type == LineType.Orthogonal) {
+    line.drawOrthogonal(source, target, { anchorPoints });
   }
 
   // if (type == LineType.QuadraticCurve) {

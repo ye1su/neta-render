@@ -1,13 +1,23 @@
 import { Container } from "../display";
 import { getBezierLength, getQuadraticBezierLength } from "./utils";
 import { ItmeType, LineType } from "../enums";
-import { BezierCurve, Line, QuadraticCurve, Straight } from "../lines";
+import {
+  BezierCurve,
+  Line,
+  Orthogonal,
+  QuadraticCurve,
+  Straight,
+} from "../lines";
 import { CanvasRenderer } from "../renderer";
 import { Polygon } from "../shapes";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
-import { BezierCurveConfig, QuadraticCurveConfig } from "../types/graphics";
+import {
+  BezierCurveConfig,
+  OrthogonalConfig,
+  QuadraticCurveConfig,
+} from "../types/graphics";
 
 export class GraphicsOfLine extends Container {
   private _render: CanvasRenderer;
@@ -38,6 +48,36 @@ export class GraphicsOfLine extends Container {
     // 修改points
     const { source: _source, target: _target } = shape as Line;
     _polygon.points = [_source.x, _source.y, _target.x, _target.y];
+
+    if (shape.type == LineType.Orthogonal) {
+      const { anchorPoints } = (shape as Orthogonal).config;
+
+      // 收集途径的点
+      const _points = [[_source.x, _source.y]];
+      if (Array.isArray(anchorPoints)) {
+        anchorPoints.forEach((itemPoint) => {
+          _points.push(itemPoint);
+        });
+      }
+      _points.push([_target.x, _target.y])
+
+      // 进行正交转换
+      const polygonPoints = []
+      _points.forEach((item, index) => {
+        if(index != 0 ) {
+          // [_source.x, _target.y]
+          const pre = _points[index - 1]
+          polygonPoints.push(pre[0])
+          polygonPoints.push(item[1])
+        }
+
+        polygonPoints.push(item[0])
+        polygonPoints.push(item[1])
+
+      })
+
+      _polygon.points = polygonPoints;
+    }
 
     // draw 2
     if (shape.type == LineType.QuadraticCurve) {
@@ -123,6 +163,16 @@ export class GraphicsOfLine extends Container {
    */
   public drawStraight(sourceId: string, targetId: string): this {
     return this.drawShape(new Straight(sourceId, targetId));
+  }
+  /**
+   * take part 正交线
+   */
+  public drawOrthogonal(
+    sourceId: string,
+    targetId: string,
+    config?: OrthogonalConfig
+  ) {
+    return this.drawShape(new Orthogonal(sourceId, targetId, config));
   }
 
   /**

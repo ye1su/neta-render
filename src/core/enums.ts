@@ -22,6 +22,7 @@ export enum ShapeType {
 
 export enum LineType {
   Straight = "Straight",
+  Orthogonal = "Orthogonal",
   QuadraticCurve = "QuadraticCurve",
   BezierCurve = "BezierCurve",
 }
