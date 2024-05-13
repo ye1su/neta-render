@@ -9,13 +9,16 @@ export function graphicsShapeParse(json: Record<string, any>) {
   json.y = fixFactor(json.y);
   json.wdith = fixFactor(json.wdith);
   json.height = fixFactor(json.height);
-  json.radius = fixFactor(json.radius);
+  json.radius = json.radius && fixFactor(json.radius);
+  json.points =
+    Array.isArray(json.points) && json.points.map((item) => fixFactor(item));
   const { id, type, x, y, wdith, height } = json;
 
   const graphic = new Container();
   if (type == "rect") {
+    const { radius } = json;
     const rect = new Graphics();
-    rect.drawRect(0, 0, wdith, height);
+    rect.drawRect(0, 0, wdith, height, radius);
     const text = new Graphics();
     const textStart = getCenterX(
       json.label,
@@ -48,10 +51,10 @@ export function graphicsShapeParse(json: Record<string, any>) {
     graphic.addChild(image);
   }
 
-  if(type == "ellipse") {
+  if (type == "ellipse") {
     const { radiusX, radiusY } = json;
-    const ellipse = new Graphics()
-    ellipse.drawEllipse(0, 0, radiusX, radiusY );
+    const ellipse = new Graphics();
+    ellipse.drawEllipse(0, 0, radiusX, radiusY);
 
     const text = new Graphics();
     const textStart = getCenterX(json.label, 0, fixFactor(BASE_FONT_SIZE));
@@ -59,6 +62,13 @@ export function graphicsShapeParse(json: Record<string, any>) {
 
     graphic.addChild(ellipse);
     graphic.addChild(text);
+  }
+
+  if (type == "polygon") {
+    const { points } = json;
+    const polygon = new Graphics();
+    polygon.drawPolygon(0, 0, points);
+    graphic.addChild(polygon);
   }
 
   graphic.whole = true;

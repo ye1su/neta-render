@@ -4,7 +4,6 @@ import {
   Ellipse,
   Polygon,
   Rectangle,
-  RoundedRectangle,
   Text,
   Image as ImageShpe,
 } from "../shapes";
@@ -54,16 +53,52 @@ export class Graphics extends Container {
 
     if (shape instanceof Rectangle) {
       const rectangle = shape;
-      const { width, height } = rectangle;
+      const { width, height, radius } = rectangle;
       const { x, y } = shape.getXy();
 
-      if (fillStyle.visible) {
-        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-        ctx.fillRect(x, y, width, height);
+      if (!radius) {
+        if (fillStyle.visible) {
+          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+          ctx.fillRect(x, y, width, height);
+        }
+        if (lineStyle.visible) {
+          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+          ctx.strokeRect(x, y, width, height);
+        }
       }
-      if (lineStyle.visible) {
-        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-        ctx.strokeRect(x, y, width, height);
+      if (radius) {
+        ctx.moveTo(x + radius, y);
+        ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
+        ctx.lineTo(x, y + height - radius);
+        ctx.arc(
+          x + radius,
+          y + height - radius,
+          radius,
+          Math.PI,
+          Math.PI / 2,
+          true
+        );
+        ctx.lineTo(x + width - radius, y + height);
+        ctx.arc(
+          x + width - radius,
+          y + height - radius,
+          radius,
+          Math.PI / 2,
+          0,
+          true
+        );
+        ctx.lineTo(x + width, y + radius);
+        ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
+        ctx.closePath();
+
+        if (fillStyle.visible) {
+          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+          ctx.fill();
+        }
+        if (lineStyle.visible) {
+          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
+          ctx.stroke();
+        }
       }
     }
 
@@ -118,44 +153,6 @@ export class Graphics extends Container {
         ctx.fill();
       }
 
-      if (lineStyle.visible) {
-        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
-        ctx.stroke();
-      }
-    }
-
-    if (shape instanceof RoundedRectangle) {
-      const roundedRectangle = shape;
-      const { x, y, width, height, radius } = roundedRectangle;
-
-      ctx.moveTo(x + radius, y);
-      ctx.arc(x + radius, y + radius, radius, Math.PI * 1.5, Math.PI, true);
-      ctx.lineTo(x, y + height - radius);
-      ctx.arc(
-        x + radius,
-        y + height - radius,
-        radius,
-        Math.PI,
-        Math.PI / 2,
-        true
-      );
-      ctx.lineTo(x + width - radius, y + height);
-      ctx.arc(
-        x + width - radius,
-        y + height - radius,
-        radius,
-        Math.PI / 2,
-        0,
-        true
-      );
-      ctx.lineTo(x + width, y + radius);
-      ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
-      ctx.closePath();
-
-      if (fillStyle.visible) {
-        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
-        ctx.fill();
-      }
       if (lineStyle.visible) {
         ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
         ctx.stroke();
@@ -226,8 +223,14 @@ export class Graphics extends Container {
    * @param width 宽度
    * @param height 高度
    */
-  public drawRect(x: number, y: number, width: number, height: number): this {
-    return this.drawShape(new Rectangle(x, y, width, height));
+  public drawRect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius?: number
+  ): this {
+    return this.drawShape(new Rectangle(x, y, width, height, radius));
   }
 
   /**
@@ -261,29 +264,11 @@ export class Graphics extends Container {
   }
 
   /**
-   * 画圆角矩形
-   * @param x x坐标
-   * @param y y坐标
-   * @param width 宽度
-   * @param height 高度
-   * @param radius 圆角半径
-   */
-  public drawRoundedRect(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    radius: number
-  ) {
-    return this.drawShape(new RoundedRectangle(x, y, width, height, radius));
-  }
-
-  /**
    * 画多边形
    * @param points 多边形顶点坐标数组，每2个元素算一组(x,y)
    */
-  public drawPolygon(points: number[]) {
-    const poly = new Polygon(points);
+  public drawPolygon(x: number, y: number, points: number[]) {
+    const poly = new Polygon(x, y, points);
     poly.closeStroke = true;
 
     return this.drawShape(poly);

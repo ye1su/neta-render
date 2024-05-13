@@ -6,6 +6,7 @@ import { StraightPage } from "./EdgePage/StraightPage.tsx";
 import { ImagePage } from "./ShapePage/ImagePage.tsx";
 import { EllipsePage } from "./ShapePage/EllipsePage.tsx";
 import { OrthogonalPage } from "./EdgePage/OrthogonalPage.tsx";
+import { PolygonPage } from "./ShapePage/PolygonPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -43,8 +44,14 @@ export const router = createBrowserRouter([
           name: "椭圆",
           group: 'Shape'
         }
-      },
-
+      },{
+        path: "/polygon",
+        element: <PolygonPage />,
+        options: {
+          name: "自定义多边形",
+          group: 'Shape'
+        }
+      }, 
       {
         path: "/straight",
         element: <StraightPage />,
