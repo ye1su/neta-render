@@ -4,6 +4,15 @@ export interface IShapeStyle {
   lineWidth?: string
 }
 
+export interface BBox {
+  minX: number;
+	minY: number;
+	maxX: number;
+	maxY: number;
+	centerX: number;
+	centerY: number;
+}
+
 // 二次贝塞尔曲线的config
 export interface QuadraticCurveConfig {
   anchorPoints: number[]

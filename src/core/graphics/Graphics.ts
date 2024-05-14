@@ -20,12 +20,30 @@ export class Graphics extends Container {
   private _render: CanvasRenderer;
   private _lineStyle = new LineStyle();
   private _fillStyle = new FillStyle();
-  private _geometry = new GraphicsGeometry();
+  private _geometry = new GraphicsGeometry<Shape>();
   public currentPath: Polygon | null = null;
 
   constructor() {
     super();
     this.type = ItmeType.Graphics;
+  }
+
+  public getBBox() {
+    const { shape } = this._geometry.graphicsData;
+
+    if (shape instanceof Rectangle) {
+      const box = {
+        minX: shape.x,
+        minY: shape.y,
+        maxX: shape.x + shape.width,
+        maxY: shape.y + shape.height,
+        centerX: 0,
+        centerY: 0,
+      };
+      box.centerX = (box.maxX + box.minX) / 2;
+      box.centerY = (box.maxY + box.minY) / 2;
+      return box;
+    }
   }
 
   protected renderCanvas(render: CanvasRenderer) {

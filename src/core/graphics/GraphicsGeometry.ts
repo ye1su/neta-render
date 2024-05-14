@@ -1,4 +1,4 @@
-import { Shape } from "../shapes";
+import { Rectangle, Shape } from "../shapes";
 import { Point } from "../math";
 import { GraphicsData } from "./GraphicsData";
 import { FillStyle } from "./style/FillStyle";
@@ -6,11 +6,11 @@ import { LineStyle } from "./style/LineStyle";
 import { GlobalTransform } from "../types/shapes";
 import { Line } from "../lines";
 
-export class GraphicsGeometry {
-  public graphicsData: GraphicsData;
+export class GraphicsGeometry<T extends Shape | Line> {
+  public graphicsData: GraphicsData<T>;
   constructor() {}
   public drawShape(
-    shape: Shape | Line,
+    shape: T,
     fillStyle: FillStyle,
     lineStyle: LineStyle
   ) {
