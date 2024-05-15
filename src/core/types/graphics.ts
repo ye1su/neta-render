@@ -1,3 +1,5 @@
+import { Point } from "../math";
+
 export interface IShapeStyle {
   fill?: string
   stroke?: string;
@@ -11,6 +13,12 @@ export interface BBox {
 	maxY: number;
 	centerX: number;
 	centerY: number;
+}
+
+// 锚点类型
+export interface AnchorPort {
+  id: number;
+  point: Point
 }
 
 // 二次贝塞尔曲线的config

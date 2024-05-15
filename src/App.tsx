@@ -22,7 +22,6 @@ const App = () => {
       });
     });
 
-    console.log('navMap: ', navMap);
 
     const Ele = Object.values(navMap).map((item) => {
       return (

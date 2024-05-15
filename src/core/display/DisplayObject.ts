@@ -13,6 +13,7 @@ export abstract class DisplayObject extends Eventemitter {
   protected _zIndex = 0;
   public parent: Container | null = null;
   public cursor: Cursor = "auto";
+  public type = null
   
 
   get zIndex(): number {

@@ -3,6 +3,7 @@ export const BaseShapes = ["rect", "circle"];
 export enum ItmeType {
   Line = "line",
   Graphics = "graphics",
+  Container = "container"
 }
 
 export enum RendererType {

@@ -45,27 +45,33 @@ export class GraphicsOfLine extends Container {
     const { _polygon, targetId, sourceId } = shape as Line;
     (shape as Line).target = graphicsList.find((item) => item.id == targetId);
     (shape as Line).source = graphicsList.find((item) => item.id == sourceId);
+
     // 修改points
     const { source: _source, target: _target } = shape as Line;
-    _polygon.points = [_source.x, _source.y, _target.x, _target.y];
 
+    const sourceAnchor = _source.anchorPoint
+    const targetAnchor = _target.anchorPoint
+    _polygon.points = [sourceAnchor.x, sourceAnchor.y, targetAnchor.x, targetAnchor.y];
+
+
+    // draw 正交线
     if (shape.type == LineType.Orthogonal) {
       const { anchorPoints } = (shape as Orthogonal).config;
 
       // 收集途径的点
-      const _points = [[_source.x, _source.y]];
+      const _points = [[sourceAnchor.x, sourceAnchor.y]];
       if (Array.isArray(anchorPoints)) {
         anchorPoints.forEach((itemPoint) => {
           _points.push(itemPoint);
         });
       }
-      _points.push([_target.x, _target.y])
+      _points.push([targetAnchor.x, targetAnchor.y])
 
       // 进行正交转换
       const polygonPoints = []
       _points.forEach((item, index) => {
         if(index != 0 ) {
-          // [_source.x, _target.y]
+          // [sourceAnchor.x, targetAnchor.y]
           const pre = _points[index - 1]
           polygonPoints.push(pre[0])
           polygonPoints.push(item[1])
@@ -79,34 +85,34 @@ export class GraphicsOfLine extends Container {
       _polygon.points = polygonPoints;
     }
 
-    // draw 2
+    // draw 贝塞尔
     if (shape.type == LineType.QuadraticCurve) {
       const { anchorPoints } = (shape as QuadraticCurve).config;
       this.currentPath = new Polygon();
-      this.moveTo(_source.x, _source.y);
+      this.moveTo(sourceAnchor.x, sourceAnchor.y);
       this.quadraticCurveTo(
         anchorPoints[0],
         anchorPoints[1],
-        _target.x,
-        _target.y
+        targetAnchor.x,
+        targetAnchor.y
       );
       _polygon.points = this.currentPath.points;
       this.currentPath = null;
     }
 
-    // draw 3
+    // draw 2次贝塞尔
     if (shape.type == LineType.BezierCurve) {
       const { anchorPoints } = (shape as QuadraticCurve).config;
       this.currentPath = new Polygon();
-      this.moveTo(_source.x, _source.y);
+      this.moveTo(sourceAnchor.x, sourceAnchor.y);
 
       this.bezierCurveTo(
         anchorPoints[0][0],
         anchorPoints[0][1],
         anchorPoints[1][0],
         anchorPoints[1][1],
-        _target.x,
-        _target.y
+        targetAnchor.x,
+        targetAnchor.y
       );
       _polygon.points = this.currentPath.points;
       this.currentPath = null;

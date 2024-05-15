@@ -1,11 +1,17 @@
 import { CanvasRenderer } from "../renderer";
-import { BBox } from "../types/graphics";
+import { AnchorPort, BBox } from "../types/graphics";
 import { Point } from "./Point";
 
 export class Anchor {
-  public ports = [];
+  public visible = false
+  public ports: AnchorPort[]= [];
   public bbox: BBox;
+  public anchorIndex: number = 0
   constructor() {}
+
+  get anchorPort() {
+    return this.ports.find(port => port.id === this.anchorIndex)
+  }
 
   updateContainerBBox(bbox: BBox) {
     this.bbox = bbox;
@@ -26,8 +32,13 @@ export class Anchor {
         point,
       };
     });
+
+    this.anchorIndex = 4
   }
+
+
   render(render: CanvasRenderer) {
+    if(!this.visible) return
     const ctx = render.ctx;
     this.ports.forEach((port) => {
       const { point } = port;

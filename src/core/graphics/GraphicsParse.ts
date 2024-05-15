@@ -83,6 +83,7 @@ export function graphicsLineParse(json: Record<string, any>) {
   const { id, type, source, target, anchorPoints } = json;
 
   const line = new GraphicsOfLine();
+  line.zIndex = -1
   line.id = id;
 
   if (type == LineType.Straight) {

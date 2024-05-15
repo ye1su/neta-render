@@ -14,7 +14,8 @@ import { IShapeStyle } from "../types/graphics";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
-import { ItmeType } from "../enums";
+import { ItmeType, ShapeType } from "../enums";
+import { getPolygonSurround } from "../utils";
 
 export class Graphics extends Container {
   private _render: CanvasRenderer;
@@ -31,7 +32,7 @@ export class Graphics extends Container {
   public getBBox() {
     const { shape } = this._geometry.graphicsData;
 
-    if (shape instanceof Rectangle) {
+    if (shape instanceof Rectangle || shape instanceof ImageShpe) {
       const box = {
         minX: shape.x,
         minY: shape.y,
@@ -43,6 +44,40 @@ export class Graphics extends Container {
       box.centerX = (box.maxX + box.minX) / 2;
       box.centerY = (box.maxY + box.minY) / 2;
       return box;
+    }
+
+    if (shape instanceof Circle) {
+      const { radius } = shape;
+      const box = {
+        minX: shape.x - radius,
+        minY: shape.y - radius,
+        maxX: shape.x + radius,
+        maxY: shape.y + radius,
+        centerX: shape.x,
+        centerY: shape.y,
+      };
+      return box;
+    }
+
+    if (shape instanceof Ellipse) {
+      const { radiusX, radiusY } = shape;
+      const box = {
+        minX: shape.x - radiusX,
+        minY: shape.y - radiusY,
+        maxX: shape.x + radiusX,
+        maxY: shape.y + radiusY,
+        centerX: shape.x,
+        centerY: shape.y,
+      };
+      return box;
+    }
+
+    if (shape instanceof Polygon) {
+      const { points } = shape;
+      if (!Array.isArray(points)) return;
+
+      const surround = getPolygonSurround(points)
+      return surround
     }
   }
 

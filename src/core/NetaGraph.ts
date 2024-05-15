@@ -42,7 +42,6 @@ export class NetaGraph extends Application {
     this.stage.addChild(graphic);
   }
   addEdge(model: EdgeModel) {
-    console.log("model: ", model);
     const graphic = graphicsLineParse(model);
     this.stage.addChild(graphic);
   }

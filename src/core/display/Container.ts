@@ -1,9 +1,11 @@
 import { DisplayObject } from "./DisplayObject";
 import { CanvasRenderer } from "../renderer/CanvasRender";
 import { Anchor, Point } from "../math";
-import { isObject } from "lodash-es";
+import { getContainerSurround } from "../utils";
+import { ItmeType } from "../enums";
 
 export class Container extends DisplayObject {
+  public type = ItmeType.Container;
   public sortDirty = false;
   public readonly children: Container[] = [];
   // 锚点
@@ -42,7 +44,18 @@ export class Container extends DisplayObject {
     if (!this.visible) {
       return;
     }
-    this.renderCanvas(render);
+
+    // 如果container 需要提前更新位置
+    if (this.type !== ItmeType.Container) {
+      this.renderCanvas(render);
+    }
+
+    // 提前更新container的位置
+    this.children
+      .filter((child) => child.type == ItmeType.Container)
+      .forEach((child) => {
+        child.renderCanvas(render);
+      });
 
     for (let i = 0; i < this.children.length; i++) {
       const child = this.children[i];
@@ -52,6 +65,7 @@ export class Container extends DisplayObject {
     // 渲染锚点
     this.anchor.render(render);
   }
+
   /**
    * 递归更新当前元素以及所有子元素的transform
    */
@@ -71,6 +85,10 @@ export class Container extends DisplayObject {
     }
   }
 
+  /**
+   * 新增某个child
+   * @param child
+   */
   public addChild(child: Container) {
     child.parent?.removeChild(child); // 将要添加的child从它的父元素的children中移除
 
@@ -78,6 +96,10 @@ export class Container extends DisplayObject {
     child.parent = this; // 将要添加的child的parent指向this
     this.sortDirty = true;
   }
+
+  /**
+   * 移除某个children
+   */
   public removeChild(child: Container) {
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i] === child) {
@@ -87,6 +109,10 @@ export class Container extends DisplayObject {
       }
     }
   }
+
+  /**
+   * 排序children
+   */
   public sortChildren() {
     if (!this.sortDirty) {
       return;
@@ -108,38 +134,20 @@ export class Container extends DisplayObject {
    * @returns BBox
    */
   public getBBox() {
-    const box = {
-      minX: 99999,
-      minY: 99999,
-      maxX: -99999,
-      maxY: -99999,
-      centerX: 0,
-      centerY: 0,
-    };
-    this.children.forEach((shape) => {
-      const shapeBox = shape.getBBox();
-      if (isObject(shapeBox)) {
-        if (shapeBox.minX < box.minX) {
-          box.minX = shapeBox.minX;
-        }
-        if (shapeBox.minY < box.minY) {
-          box.minY = shapeBox.minY;
-        }
-        if (shapeBox.maxX > box.maxX) {
-          box.maxX = shapeBox.maxX;
-        }
-        if (shapeBox.maxY > box.maxY) {
-          box.maxY = shapeBox.maxY;
-        }
-      }
-    });
-    box.centerX = (box.maxX + box.minX) / 2;
-    box.centerY = (box.maxY + box.minY) / 2;
-
-    return box;
+    const shapeBoxList = this.children
+      .map((shape) => shape.getBBox())
+      .filter((item) => item != undefined);
+    return getContainerSurround(shapeBoxList);
   }
 
   public containsPoint(p: Point) {
     return false;
+  }
+
+  /**
+   * 获取锚点位置
+   */
+  get anchorPoint() {
+    return this.anchor.anchorPort.point;
   }
 }
