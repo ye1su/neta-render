@@ -7,6 +7,7 @@ import { ImagePage } from "./ShapePage/ImagePage.tsx";
 import { EllipsePage } from "./ShapePage/EllipsePage.tsx";
 import { OrthogonalPage } from "./EdgePage/OrthogonalPage.tsx";
 import { PolygonPage } from "./ShapePage/PolygonPage.tsx";
+import ForcePage from "./LayoutPage/ForcePage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +67,14 @@ export const router = createBrowserRouter([
         options: {
           name: "正交线",
           group: 'Edge'
+        }
+      },
+      {
+        path: "/force",
+        element: <ForcePage />,
+        options: {
+          name: "力导图",
+          group: 'Layout'
         }
       },
 

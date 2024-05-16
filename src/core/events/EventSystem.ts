@@ -33,6 +33,10 @@ export class EventSystem {
     this.canvasEle.addEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.addEventListener("pointermove", this.onPointerMove);
     this.canvasEle.addEventListener("pointerup", this.onPointerup);
+    this.stage.on('afterlayout', () => {
+      console.log('------');
+      
+    })
   };
   public removeEvents = () => {
     this.canvasEle.removeEventListener("pointerdown", this.onPointerDown);

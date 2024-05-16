@@ -18,6 +18,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
+    "d3-force": "^3.0.0",
     "eventemitter3": "^5.0.1",
     "less": "^4.2.0",
     "lodash-es": "^4.17.21",
@@ -27,6 +28,7 @@
     "rsuite": "^5.60.1"
   },
   "devDependencies": {
+    "@types/d3-force": "^3.0.9",
     "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

@@ -7,11 +7,19 @@ import { GraphicsOfLine } from "./GraphicsOfLine";
 export function graphicsShapeParse(json: Record<string, any>) {
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
-  json.wdith = fixFactor(json.wdith);
-  json.height = fixFactor(json.height);
-  json.radius = json.radius && fixFactor(json.radius);
-  json.points =
-    Array.isArray(json.points) && json.points.map((item) => fixFactor(item));
+  if(json.wdith) {
+    json.wdith = fixFactor(json.wdith);
+  }
+  if(json.height ) {
+    json.height = fixFactor(json.height);
+  }
+
+  if(json.radius) {
+    json.radius = fixFactor(json.radius);
+  }
+  if(Array.isArray(json.points)) {
+    json.points = json.points.map((item) => fixFactor(item));
+  }
   const { id, type, x, y, wdith, height } = json;
 
   const graphic = new Container();
