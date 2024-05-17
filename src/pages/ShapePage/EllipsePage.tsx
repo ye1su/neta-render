@@ -31,7 +31,7 @@ export function EllipsePage() {
   return (
     <div
       id="dom"
-      style={{ border: "1px solid", width: 800, height: 600 }}
+      style={{   width: 800, height: 600 }}
     ></div>
   );
 }

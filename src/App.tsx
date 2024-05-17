@@ -1,16 +1,11 @@
 import React, { useMemo } from "react";
-import { Container, Sidebar, Sidenav, Nav, Panel } from "rsuite";
-import "rsuite/dist/rsuite.min.css";
-import { Outlet } from "react-router-dom";
-import { router } from "./pages/routes";
-import { useNavigate } from "react-router-dom";
+import { List, Divider } from "antd";
+import { BASE_URL, routes } from "./pages/routes";
 
 const App = () => {
-  const navigate = useNavigate();
-
   const NavEle = useMemo(() => {
-    const navMap = {};
-    const _routes = router.routes[0].children;
+    const navMap: Record<string, any> = {};
+    const _routes = routes.slice(1);
     _routes.forEach((route) => {
       const { group } = route.options;
       if (!navMap[group]) {
@@ -22,73 +17,45 @@ const App = () => {
       });
     });
 
+    return navMap;
+  }, []);
 
-    const Ele = Object.values(navMap).map((item) => {
-      return (
-        <Nav.Menu
-          key={item.key}
-          eventKey={item.key}
-          trigger="hover"
-          title={item.key}
-          placement="rightStart"
-        >
-          {item.children.map((info) => {
-            return (
-              <Nav.Item
-                key={info.path}
-                eventKey={info.path}
-                onSelect={handleClick}
-              >
-                {info.name}
-              </Nav.Item>
-            );
-          })}
-        </Nav.Menu>
-      );
-    });
-
-    return (
-      <Panel header="导航栏">
-        <Nav>{Ele}</Nav>
-      </Panel>
-    );
-  }, [router.routes]);
-
-  function handleClick(eventkey) {
-    navigate(eventkey);
+  function handleClick(info) {
+    if (location.origin.indexOf(BASE_URL) > -1) {
+      const path = info.path.replace(/neta-render/, "");
+      window.open(`${location.origin}/${path}`);
+    } else {
+      window.open(`${location.origin}/${info.path}`);
+    }
   }
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Container style={{ width: "100%", height: "100%" }}>
-        <Sidebar
-          style={{ display: "flex", flexDirection: "column" }}
-          width={260}
-          collapsible
-        >
-          <Sidenav
-            defaultOpenKeys={["Shape"]}
-            appearance="inverse"
-            expanded={true}
-          >
-            <Sidenav.Body
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgb(52, 152, 255)",
-              }}
-            >
-              {NavEle}
-            </Sidenav.Body>
-          </Sidenav>
-        </Sidebar>
-
-        <Container>
-          <Panel header="测试区">
-            <Outlet />
-          </Panel>
-        </Container>
-      </Container>
+    <div style={{ padding: "20px" }}>
+      {Object.keys(NavEle).map((eleKey) => {
+        return (
+          <List
+            key={eleKey}
+            header={
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {eleKey}
+              </div>
+            }
+            bordered
+            dataSource={NavEle[eleKey].children}
+            renderItem={(item) => (
+              <List.Item style={{ display: "flex", justifyContent: "center" }}>
+                <a onClick={() => handleClick(item)}>{item.name}</a>
+              </List.Item>
+            )}
+          />
+        );
+      })}
     </div>
   );
 };

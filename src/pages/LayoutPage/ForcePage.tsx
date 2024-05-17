@@ -1,7 +1,6 @@
-import React from 'react'
+import React from "react";
 import { useEffect, useRef } from "react";
 import { NetaGraph, RendererType } from "../../core";
-
 
 function ForcePage() {
   const appRef = useRef<NetaGraph>();
@@ -20,7 +19,7 @@ function ForcePage() {
           type: "circle",
           x: 200,
           y: 150,
-          radius: 40
+          radius: 40,
         },
         {
           id: "node2",
@@ -28,7 +27,7 @@ function ForcePage() {
           type: "circle",
           x: 400,
           y: 300,
-          radius: 40
+          radius: 40,
         },
 
         {
@@ -37,7 +36,7 @@ function ForcePage() {
           type: "circle",
           x: 600,
           y: 400,
-          radius: 40
+          radius: 40,
         },
       ],
       edges: [
@@ -58,7 +57,6 @@ function ForcePage() {
       ],
     };
 
-
     appRef.current.read(model);
     appRef.current.render();
 
@@ -70,12 +68,9 @@ function ForcePage() {
 
   return (
     <>
-      <div
-        id="dom"
-        style={{ border: "1px solid", width: 800, height: 600 }}
-      ></div>
+      <div id="dom" style={{ width: 800, height: 600 }}></div>
     </>
   );
 }
 
-export default ForcePage
+export default ForcePage;

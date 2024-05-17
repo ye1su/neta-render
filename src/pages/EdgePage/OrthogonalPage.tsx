@@ -48,13 +48,10 @@ export function OrthogonalPage() {
           source: "node1",
           target: "node2",
           type: "Orthogonal",
-          anchorPoints: [
-            [300, 400],
-          ],
+          anchorPoints: [[300, 400]],
         },
       ],
     };
-
 
     appRef.current.read(model);
 
@@ -66,10 +63,7 @@ export function OrthogonalPage() {
 
   return (
     <>
-      <div
-        id="dom"
-        style={{ border: "1px solid", width: 800, height: 600 }}
-      ></div>
+      <div id="dom" style={{ width: 800, height: 600 }}></div>
     </>
   );
 }
