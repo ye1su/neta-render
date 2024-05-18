@@ -1,13 +1,12 @@
 import { RendererType } from "../enums";
 
+
+// Application 的如惨
 export interface IApplicationOptions {
   el: HTMLDivElement;
   rendererType?: RendererType;
   backgroundColor?: string
 }
-
-
-export type ItemType = 'node' | 'edge'
 
 export interface GlobalTransform {
   matrix: number[];
@@ -17,6 +16,20 @@ export interface GlobalTransform {
   };
   scale: number;
 }
+
+
+export interface NetaGraphOptions extends IApplicationOptions {
+  layout?: LayoutConfig
+}
+
+export interface LayoutConfig {
+  type: string
+}
+
+// itemType
+export type ItemType = 'node' | 'edge'
+
+
 export interface Model {
   nodes: NodeModel[];
   edges: EdgeModel[]

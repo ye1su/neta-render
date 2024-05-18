@@ -22,21 +22,19 @@ export class EventSystem {
     diffx: 0,
     diffy: 0,
   };
+  private emit;
 
-  constructor(stage: Container, renderer: CanvasRenderer) {
+  constructor(stage: Container, renderer: CanvasRenderer, emit) {
     this.canvasEle = renderer.viewer;
     this.stage = stage;
     this._renderer = renderer;
+    this.emit = emit;
     this.addEvents();
   }
   private addEvents = () => {
     this.canvasEle.addEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.addEventListener("pointermove", this.onPointerMove);
     this.canvasEle.addEventListener("pointerup", this.onPointerup);
-    this.stage.on('afterlayout', () => {
-      console.log('------');
-      
-    })
   };
   public removeEvents = () => {
     this.canvasEle.removeEventListener("pointerdown", this.onPointerDown);
@@ -64,7 +62,8 @@ export class EventSystem {
     if (target) {
       this._mouseDownPoint.diffx = e.offsetX - target.x;
       this._mouseDownPoint.diffy = e.offsetY - target.y;
-      // target.emit("click");
+      this.emit('graphics:click', event, target);
+      this.emit('graphics:mousedown', event, target);
     }
   };
 

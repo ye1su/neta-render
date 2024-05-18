@@ -32,7 +32,7 @@ export function OrthogonalPage() {
         },
 
         {
-          id: "node2",
+          id: "node3",
           label: "node12",
           type: "rect",
           x: 600,

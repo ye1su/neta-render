@@ -109,7 +109,14 @@ export class Container extends DisplayObject {
       }
     }
   }
-
+  /**
+   * 清空children
+   */
+  public clearChildren() {
+    for (let i = 0; i < this.children.length; i++) {
+      this.children.splice(i, 1);
+    }
+  }
   /**
    * 排序children
    */

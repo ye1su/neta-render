@@ -9,6 +9,9 @@ function ForcePage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
+      layout: {
+        type: 'force'
+      }
     });
 
     const model = {
