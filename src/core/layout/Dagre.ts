@@ -55,8 +55,6 @@ class Dagre extends Layer {
       });
     });
 
-    console.log(this.nodes, this.edges, "+++++");
-    console.log("this.event.stage: ", this.event);
     this.event.stage.clearChildren();
     this.event.graph.data({ nodes: this.nodes, edges: this.edges });
   }

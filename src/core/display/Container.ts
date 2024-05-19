@@ -3,6 +3,7 @@ import { CanvasRenderer } from "../renderer/CanvasRender";
 import { Anchor, Point } from "../math";
 import { getContainerSurround } from "../utils";
 import { ItmeType } from "../enums";
+import { BBox } from "../types/graphics";
 
 export class Container extends DisplayObject {
   public type = ItmeType.Container;
@@ -140,7 +141,7 @@ export class Container extends DisplayObject {
    * 获取container 的包围框
    * @returns BBox
    */
-  public getBBox() {
+  public getBBox(): BBox {
     const shapeBoxList = this.children
       .map((shape) => shape.getBBox())
       .filter((item) => item != undefined);

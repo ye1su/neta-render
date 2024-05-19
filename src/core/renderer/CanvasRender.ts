@@ -70,7 +70,6 @@ export class CanvasRenderer extends Renderer {
 
     container.updateTransform();
 
-
     this.ctx.save();
     const _matrix = this.matrix;
     this.ctx.setTransform(
@@ -85,15 +84,14 @@ export class CanvasRenderer extends Renderer {
     this.ctx.clearRect(
       -_matrix[6],
       -_matrix[7],
-      fixFactor(this.screen.width),
-      fixFactor(this.screen.height)
+      this.width,
+      this.height
     );
 
     container.renderCanvasRecursive(this);
 
     this.ctx.restore();
   }
-
 
   public clear() {
     this.el.removeChild(this.viewer);
