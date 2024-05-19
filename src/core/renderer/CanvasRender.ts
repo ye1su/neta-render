@@ -33,7 +33,7 @@ export class CanvasRenderer extends Renderer {
 
     _canvas.style.width = this.screen.width + "px";
     _canvas.style.height = this.screen.height + "px";
-    _canvas.style.backgroundColor = this.background
+    _canvas.style.backgroundColor = this.background;
     this.el.appendChild(_canvas);
     this.viewer = _canvas;
 
@@ -67,7 +67,10 @@ export class CanvasRenderer extends Renderer {
 
   public render(container: Container) {
     this._container = container;
+
     container.updateTransform();
+
+
     this.ctx.save();
     const _matrix = this.matrix;
     this.ctx.setTransform(
@@ -78,7 +81,6 @@ export class CanvasRenderer extends Renderer {
       _matrix[6],
       _matrix[7]
     );
-
 
     this.ctx.clearRect(
       -_matrix[6],
@@ -91,6 +93,7 @@ export class CanvasRenderer extends Renderer {
 
     this.ctx.restore();
   }
+
 
   public clear() {
     this.el.removeChild(this.viewer);

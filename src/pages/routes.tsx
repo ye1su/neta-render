@@ -9,6 +9,7 @@ import { EllipsePage } from "./ShapePage/EllipsePage.tsx";
 import { OrthogonalPage } from "./EdgePage/OrthogonalPage.tsx";
 import { PolygonPage } from "./ShapePage/PolygonPage.tsx";
 import ForcePage from "./LayoutPage/ForcePage.tsx";
+import DagrePage from "./LayoutPage/Dagre.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -83,6 +84,14 @@ export const routes = [
       group: "Layout",
     },
   },
+  {
+    path: `${BASE_URL}/dagre`,
+    element: <DagrePage />,
+    options: {
+      name: "关系图",
+      group: "Layout",
+    },
+  }
 ].map((item) => {
   if (!item.options) {
     return item;

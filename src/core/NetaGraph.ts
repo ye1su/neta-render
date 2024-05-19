@@ -10,9 +10,10 @@ import {
   graphicsLineParse,
   graphicsShapeParse,
 } from "./graphics/GraphicsParse";
-import { Force } from "./layout";
+import { Force, Dagre } from "./layout";
 import { Application } from "./Application";
 import { LayoutType } from "./enums";
+import { cloneDeep } from "lodash-es";
 
 export class NetaGraph extends Application {
   public model: Model;
@@ -23,44 +24,45 @@ export class NetaGraph extends Application {
     if (options.layout) {
       this.layout(options.layout);
     }
-    this.mount()
+    // this.init();
   }
 
-  mount() {
-    console.log('===');
+  init() {
+    console.log("===");
     this.on("graphics:click", (event, target) => {
       // console.log("event: ", event, target);
     });
     this.on("graphics:mousedown", (event, target) => {
-      console.log("event: ", event, target);
+      // console.log("event: ", event, target);
     });
   }
 
   layoutRender(nodes, edges) {
+    const evnetParmas = {
+      stage: this.stage,
+      graph: this,
+    };
     if (this.layoutConfig?.type == LayoutType.Force) {
-      const force = new Force(nodes, edges, null, {
-        afterLayout: (layoutInfo) => {
-          layoutInfo.nodes.forEach((node) => {
-            const targetNode = this.stage.children.find((n) => n.id == node.id);
-            if (targetNode) {
-              targetNode.updatePosition(node.x, node.y);
-            }
-          });
-          this.render();
-        },
-      });
+      const force = new Force(nodes, edges, null, evnetParmas);
       force.layout();
       return;
     }
+
+    if (this.layoutConfig?.type == LayoutType.Dagre) {
+      const dagre = new Dagre(nodes, edges, null, evnetParmas);
+      dagre.layout();
+      return;
+    }
+
     this.render();
   }
 
-  public layout(config: LayoutConfig) {
+  layout(config: LayoutConfig) {
     this.layoutConfig = config;
   }
 
-  read(model: Model) {
-    this.model = model;
+  data(model: Model) {
+    this.model = cloneDeep(model);
 
     const { nodes, edges } = model;
     this.stage.clearChildren();
@@ -70,6 +72,11 @@ export class NetaGraph extends Application {
     edges.forEach((edge) => {
       this.addEdge(edge);
     });
+  }
+
+  read(model: Model) {
+    this.data(model)
+    const { nodes, edges } = this.model;
     // this.render();
     this.layoutRender(nodes, edges);
   }

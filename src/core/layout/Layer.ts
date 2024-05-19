@@ -12,9 +12,4 @@ export class Layer {
     this.event = event
   }
 
-  afterLayout() {
-    this.event?.afterLayout && this.event?.afterLayout({
-      nodes: this.nodes
-    })
-  }
 }

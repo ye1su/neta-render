@@ -62,8 +62,7 @@ export class EventSystem {
     if (target) {
       this._mouseDownPoint.diffx = e.offsetX - target.x;
       this._mouseDownPoint.diffy = e.offsetY - target.y;
-      this.emit('graphics:click', event, target);
-      this.emit('graphics:mousedown', event, target);
+      this.emit('graphics:pointerdown', event, target);
     }
   };
 
@@ -110,6 +109,7 @@ export class EventSystem {
 
   private onPointerup = (e) => {
     this._dragging = false;
+    this.emit('graphics:pointerup', e);
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {
