@@ -41,7 +41,7 @@ export class Application extends Eventemitter {
   }
 
   /**
-   * 使当前画布居中显示
+   * 平移图到中心将对齐到画布中心，但不缩放
    */
   public fitCenter() {
     const containerBox = this.stage.getBBox();
@@ -51,14 +51,49 @@ export class Application extends Eventemitter {
     };
     const containerCenter = {
       x: containerBox.centerX,
-      y: containerBox.centerY
-    }
+      y: containerBox.centerY,
+    };
 
     const shift = {
       x: canvasCenter.x - containerCenter.x,
-      y: canvasCenter.y - containerCenter.y
-    }
-    this.renderer.updateCanvasTranslate(shift.x, shift.y)
+      y: canvasCenter.y - containerCenter.y,
+    };
+    this.renderer.updateCanvasTranslate(shift.x, shift.y);
+  }
+
+  /**
+   * 让画布内容适应视口
+   */
+  public fitView() {
+    const containerBox = this.stage.getBBox();
+    const canvasCenter = {
+      x: this.renderer.width / 2,
+      y: this.renderer.height / 2,
+    };
+
+    const containerCenter = {
+      x: containerBox.centerX,
+      y: containerBox.centerY,
+    };
+
+    const boxW = containerBox.maxX - containerBox.minX;
+    const boxH = containerBox.maxY - containerBox.minY;
+
+    const scaleInfo = {
+      w: this.renderer.width / boxW,
+      h: this.renderer.height / boxH,
+    };
+
+    const scaleNum = Math.min(scaleInfo.w, scaleInfo.h);
+
+    this.renderer.updateCanvasScale(scaleNum);
+    containerCenter.x = containerCenter.x * scaleNum;
+    containerCenter.y = containerCenter.y * scaleNum;
+    const shift = {
+      x: canvasCenter.x - containerCenter.x,
+      y: canvasCenter.y - containerCenter.y,
+    };
+    this.renderer.updateCanvasTranslate(shift.x, shift.y);
   }
 
   // 逐帧渲染

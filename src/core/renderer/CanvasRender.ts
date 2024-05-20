@@ -65,6 +65,12 @@ export class CanvasRenderer extends Renderer {
     this.render(this._container);
   }
 
+  public updateCanvasScale(scale: number) {
+    this.matrix[0] = scale;
+    this.matrix[4] = scale;
+    this.render(this._container);
+  }
+
   public render(container: Container) {
     this._container = container;
 

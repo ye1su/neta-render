@@ -30,8 +30,9 @@ export class Graphics extends Container {
   }
 
   public getBBox() {
+    if(!this._render) return
     const { shape } = this._geometry.graphicsData;
-
+    
     if (shape instanceof Rectangle || shape instanceof ImageShpe) {
       const box = {
         minX: shape.x,
