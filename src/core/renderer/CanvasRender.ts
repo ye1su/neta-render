@@ -65,12 +65,30 @@ export class CanvasRenderer extends Renderer {
     this.render(this._container);
   }
 
+  // 更新scale
   public updateCanvasScale(scale: number) {
     this.matrix[0] = scale;
     this.matrix[4] = scale;
     this.render(this._container);
   }
 
+  // 把原有坐标转换成缩放平移后的位置
+  public getPointByTransform(x: number, y: number) {
+    return {
+      x: x * this.scale + this.translate.x,
+      y: y * this.scale + this.translate.y,
+    }
+  }
+
+  public getTransformByPoint(x: number, y: number) {
+
+    return {
+      x: (x - this.translate.x) / this.scale,
+      y: (y - this.translate.y) / this.scale
+    }
+  }
+
+  // 渲染
   public render(container: Container) {
     this._container = container;
 
@@ -99,6 +117,7 @@ export class CanvasRenderer extends Renderer {
     this.ctx.restore();
   }
 
+  // 清除child
   public clear() {
     this.el.removeChild(this.viewer);
   }

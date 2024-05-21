@@ -7,25 +7,27 @@ import { GraphicsOfLine } from "./GraphicsOfLine";
 export function graphicsShapeParse(json: Record<string, any>) {
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
-  if(json.wdith) {
+  if (json.wdith) {
     json.wdith = fixFactor(json.wdith);
   }
-  if(json.height ) {
+  if (json.height) {
     json.height = fixFactor(json.height);
   }
 
-  if(json.radius) {
+  if (json.radius) {
     json.radius = fixFactor(json.radius);
   }
-  if(Array.isArray(json.points)) {
+  if (Array.isArray(json.points)) {
     json.points = json.points.map((item) => fixFactor(item));
   }
-  const { id, type, x, y, wdith, height } = json;
+  const { id, type, x, y, wdith, height, style } = json;
 
   const graphic = new Container();
   if (type == "rect") {
     const { radius } = json;
     const rect = new Graphics();
+    console.log("rect: ", rect);
+    rect.style(style);
     rect.drawRect(0, 0, wdith, height, radius);
     const text = new Graphics();
     const textStart = getCenterX(
@@ -91,7 +93,7 @@ export function graphicsLineParse(json: Record<string, any>) {
   const { id, type, source, target, anchorPoints } = json;
 
   const line = new GraphicsOfLine();
-  line.zIndex = -1
+  line.zIndex = -1;
   line.id = id;
 
   if (type == LineType.Straight) {

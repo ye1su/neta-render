@@ -60,9 +60,14 @@ export class EventSystem {
     this._renderer.cloneMatrix();
 
     if (target) {
-      this._mouseDownPoint.diffx = e.offsetX - target.x;
-      this._mouseDownPoint.diffy = e.offsetY - target.y;
-      this.emit('graphics:pointerdown', event, target);
+      const tansferTarget = this._renderer.getPointByTransform(
+        target.x,
+        target.y
+      );
+      // 记录点击节点在图形的位置
+      this._mouseDownPoint.diffx = e.offsetX - tansferTarget.x;
+      this._mouseDownPoint.diffy = e.offsetY - tansferTarget.y;
+      this.emit("graphics:pointerdown", event, target);
     }
   };
 
@@ -91,11 +96,18 @@ export class EventSystem {
         this.hitTarget = this.hitTarget.parent;
       }
 
+      // 根据画布缩放平移动
+      const realPoint = this._renderer.getTransformByPoint(
+        this._mouseDownPoint.x + diffX,
+        this._mouseDownPoint.y + diffY
+      );
+
       // 更新拖拽的的节点位置
       this.hitTarget.updatePosition(
         this._mouseDownPoint.x + diffX,
         this._mouseDownPoint.y + diffY
       );
+      this.hitTarget.updatePosition(realPoint.x, realPoint.y);
       this._renderer.render(this.stage);
     }
 
@@ -109,7 +121,7 @@ export class EventSystem {
 
   private onPointerup = (e) => {
     this._dragging = false;
-    this.emit('graphics:pointerup', e);
+    this.emit("graphics:pointerup", e);
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {

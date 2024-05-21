@@ -143,8 +143,11 @@ export class Container extends DisplayObject {
    */
   public getBBox(): BBox {
     const shapeBoxList = this.children
-      .map((shape) => shape.getBBox())
+      .map((shape) => {
+        return shape.getBBox();
+      })
       .filter((item) => item != undefined);
+
     return getContainerSurround(shapeBoxList);
   }
 

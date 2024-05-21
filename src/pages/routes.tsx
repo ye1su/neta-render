@@ -10,6 +10,7 @@ import { OrthogonalPage } from "./EdgePage/OrthogonalPage.tsx";
 import { PolygonPage } from "./ShapePage/PolygonPage.tsx";
 import ForcePage from "./LayoutPage/ForcePage.tsx";
 import DagrePage from "./LayoutPage/Dagre.tsx";
+import { StylePage } from "./ShapePage/StylePage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -61,6 +62,14 @@ export const routes = [
     },
   },
   {
+    path: `${BASE_URL}/shapestyle`,
+    element: <StylePage />,
+    options: {
+      name: "节点样式",
+      group: "Shape",
+    },
+  },
+  {
     path: `${BASE_URL}/straight`,
     element: <StraightPage />,
     options: {
@@ -91,7 +100,7 @@ export const routes = [
       name: "关系图",
       group: "Layout",
     },
-  }
+  },
 ].map((item) => {
   if (!item.options) {
     return item;

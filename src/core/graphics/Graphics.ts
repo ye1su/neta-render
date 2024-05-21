@@ -15,7 +15,7 @@ import { GraphicsGeometry } from "./GraphicsGeometry";
 import { FillStyle } from "./style/FillStyle";
 import { LineStyle } from "./style/LineStyle";
 import { ItmeType, ShapeType } from "../enums";
-import { getPolygonSurround } from "../utils";
+import { fixFactor, getPolygonSurround } from "../utils";
 
 export class Graphics extends Container {
   private _render: CanvasRenderer;
@@ -30,7 +30,6 @@ export class Graphics extends Container {
   }
 
   public getBBox() {
-    if(!this._render) return
     const { shape } = this._geometry.graphicsData;
     
     if (shape instanceof Rectangle || shape instanceof ImageShpe) {
@@ -44,6 +43,7 @@ export class Graphics extends Container {
       };
       box.centerX = (box.maxX + box.minX) / 2;
       box.centerY = (box.maxY + box.minY) / 2;
+
       return box;
     }
 
@@ -57,6 +57,7 @@ export class Graphics extends Container {
         centerX: shape.x,
         centerY: shape.y,
       };
+
       return box;
     }
 
@@ -97,10 +98,19 @@ export class Graphics extends Container {
     }
 
     if (lineStyle.visible) {
+      console.log('lineStyle: ', lineStyle);
       ctx.lineWidth = lineStyle.lineWidth;
       ctx.lineCap = lineStyle.lineCap;
       ctx.lineJoin = lineStyle.lineJoin;
       ctx.strokeStyle = lineStyle.stroke;
+      console.log('lineStyle.lineDash: ', lineStyle.lineDash);
+
+      // 设置虚线
+      if(Array.isArray(lineStyle.lineDash)) {
+        ctx.setLineDash(lineStyle.lineDash)
+      } else {
+        ctx.setLineDash([]);
+      }
     }
 
     ctx.beginPath();
@@ -543,9 +553,13 @@ export class Graphics extends Container {
     this.position.set(x, y);
   }
 
-  public style(styleConfig: IShapeStyle) {
+  public style(styleConfig: IShapeStyle = {}) {
+    console.log('styleConfig: ', styleConfig);
     for (const styleKey in styleConfig) {
-      if (!styleConfig[styleKey]) continue;
+      console.log('styleKey: ', styleKey);
+      if(typeof styleConfig[styleKey] == 'number') {
+        styleConfig[styleKey] = fixFactor(styleConfig[styleKey])
+      }
 
       if (["fill"].includes(styleKey)) {
         this._fillStyle.fill = styleConfig[styleKey];

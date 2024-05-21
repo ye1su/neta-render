@@ -63,7 +63,7 @@ function DagrePage() {
     appRef.current.read(model);
     appRef.current.render();
 
-    appRef.current.fitCenter()
+    appRef.current.fitView()
 
     return () => {
       console.log("destroy");
