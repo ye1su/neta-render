@@ -12,15 +12,13 @@ import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
 import { IShapeStyle } from "../types/graphics";
 import { GraphicsGeometry } from "./GraphicsGeometry";
-import { FillStyle } from "./style/FillStyle";
-import { LineStyle } from "./style/LineStyle";
+import { ShapeStyle } from "./style";
 import { ItmeType, ShapeType } from "../enums";
 import { fixFactor, getPolygonSurround } from "../utils";
 
 export class Graphics extends Container {
   private _render: CanvasRenderer;
-  private _lineStyle = new LineStyle();
-  private _fillStyle = new FillStyle();
+  private _shapeStyle = new ShapeStyle();
   private _geometry = new GraphicsGeometry<Shape>();
   public currentPath: Polygon | null = null;
 
@@ -31,7 +29,7 @@ export class Graphics extends Container {
 
   public getBBox() {
     const { shape } = this._geometry.graphicsData;
-    
+
     if (shape instanceof Rectangle || shape instanceof ImageShpe) {
       const box = {
         minX: shape.x,
@@ -78,8 +76,8 @@ export class Graphics extends Container {
       const { points } = shape;
       if (!Array.isArray(points)) return;
 
-      const surround = getPolygonSurround(points)
-      return surround
+      const surround = getPolygonSurround(points);
+      return surround;
     }
   }
 
@@ -91,23 +89,30 @@ export class Graphics extends Container {
     const ctx = render.ctx;
     const data = this._geometry.graphicsData;
 
-    const { lineStyle, fillStyle, shape } = data;
+    const { shapeStyle, shape } = data;
 
-    if (fillStyle.visible) {
-      ctx.fillStyle = fillStyle.fill;
-    }
+    if (shapeStyle.visible) {
 
-    if (lineStyle.visible) {
-      console.log('lineStyle: ', lineStyle);
-      ctx.lineWidth = lineStyle.lineWidth;
-      ctx.lineCap = lineStyle.lineCap;
-      ctx.lineJoin = lineStyle.lineJoin;
-      ctx.strokeStyle = lineStyle.stroke;
-      console.log('lineStyle.lineDash: ', lineStyle.lineDash);
+      // 设置颜色
+      ctx.fillStyle = shapeStyle.fill;
+
+      // 设置阴影
+      ctx.shadowColor = shapeStyle.shadowColor;
+      ctx.shadowBlur = shapeStyle.shadowBlur;
+      console.log('shapeStyle: ', shapeStyle);
+
+      ctx.shadowOffsetX = shapeStyle.shadowOffsetX
+      ctx.shadowOffsetY = shapeStyle.shadowOffsetY
+
+      // 设置line
+      ctx.lineWidth = shapeStyle.lineWidth;
+      ctx.lineCap = shapeStyle.lineCap;
+      ctx.lineJoin = shapeStyle.lineJoin;
+      ctx.strokeStyle = shapeStyle.stroke;
 
       // 设置虚线
-      if(Array.isArray(lineStyle.lineDash)) {
-        ctx.setLineDash(lineStyle.lineDash)
+      if (Array.isArray(shapeStyle.lineDash)) {
+        ctx.setLineDash(shapeStyle.lineDash);
       } else {
         ctx.setLineDash([]);
       }
@@ -121,12 +126,9 @@ export class Graphics extends Container {
       const { x, y } = shape.getXy();
 
       if (!radius) {
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        if (shapeStyle.visible) {
+          ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
           ctx.fillRect(x, y, width, height);
-        }
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
           ctx.strokeRect(x, y, width, height);
         }
       }
@@ -155,12 +157,9 @@ export class Graphics extends Container {
         ctx.arc(x + width - radius, y + radius, radius, 0, Math.PI * 1.5, true);
         ctx.closePath();
 
-        if (fillStyle.visible) {
-          ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+        if (shapeStyle.visible) {
+          ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
           ctx.fill();
-        }
-        if (lineStyle.visible) {
-          ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
           ctx.stroke();
         }
       }
@@ -173,12 +172,9 @@ export class Graphics extends Container {
 
       ctx.arc(x, y, radius, 0, 2 * Math.PI);
 
-      if (fillStyle.visible) {
-        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+      if (shapeStyle.visible) {
+        ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
         ctx.fill();
-      }
-      if (lineStyle.visible) {
-        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
         ctx.stroke();
       }
     }
@@ -212,13 +208,9 @@ export class Graphics extends Container {
 
       ctx.ellipse(x, y, radiusX, radiusY, 0, 0, Math.PI * 2);
 
-      if (fillStyle.visible) {
-        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+      if (shapeStyle.visible) {
+        ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
         ctx.fill();
-      }
-
-      if (lineStyle.visible) {
-        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
         ctx.stroke();
       }
     }
@@ -237,23 +229,16 @@ export class Graphics extends Container {
         ctx.closePath();
       }
 
-      if (fillStyle.visible) {
-        ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+      if (shapeStyle.visible) {
+        ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
         ctx.fill();
-      }
-      if (lineStyle.visible) {
-        ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
         ctx.stroke();
       }
     }
   }
 
   protected drawShape(shape: Shape) {
-    this._geometry.drawShape(
-      shape,
-      this._fillStyle.clone(),
-      this._lineStyle.clone()
-    );
+    this._geometry.drawShape(shape, this._shapeStyle.clone());
     return this;
   }
 
@@ -528,8 +513,7 @@ export class Graphics extends Container {
    */
   public clear() {
     this._geometry.clear();
-    this._lineStyle.reset();
-    this._fillStyle.reset();
+    this._shapeStyle.reset();
     this.currentPath = new Polygon();
 
     return this;
@@ -554,19 +538,11 @@ export class Graphics extends Container {
   }
 
   public style(styleConfig: IShapeStyle = {}) {
-    console.log('styleConfig: ', styleConfig);
     for (const styleKey in styleConfig) {
-      console.log('styleKey: ', styleKey);
-      if(typeof styleConfig[styleKey] == 'number') {
-        styleConfig[styleKey] = fixFactor(styleConfig[styleKey])
+      if (typeof styleConfig[styleKey] == "number") {
+        styleConfig[styleKey] = fixFactor(styleConfig[styleKey]);
       }
-
-      if (["fill"].includes(styleKey)) {
-        this._fillStyle.fill = styleConfig[styleKey];
-        continue;
-      }
-
-      this._lineStyle[styleKey] = styleConfig[styleKey];
+      this._shapeStyle[styleKey] = styleConfig[styleKey];
     }
   }
 }

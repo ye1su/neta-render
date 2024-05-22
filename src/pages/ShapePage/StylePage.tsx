@@ -21,8 +21,12 @@ export function StylePage() {
       style: {
         fill: "#0DDE67",
         stroke: 'rgb(18, 150, 231)',
-        lineWidth: 6,
-        lineDash: [10, 5]
+        lineWidth: 1,
+        // lineDash: [10, 5],
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+        shadowBlur: 4,
+        shadowOffsetX: 6,
+        shadowOffsetY: 6
       },
     };
 

@@ -1,8 +1,7 @@
 import { Rectangle, Shape } from "../shapes";
 import { Point } from "../math";
 import { GraphicsData } from "./GraphicsData";
-import { FillStyle } from "./style/FillStyle";
-import { LineStyle } from "./style/LineStyle";
+import { ShapeStyle } from "./style";
 import { GlobalTransform } from "../types/shapes";
 import { Line } from "../lines";
 
@@ -11,10 +10,9 @@ export class GraphicsGeometry<T extends Shape | Line> {
   constructor() {}
   public drawShape(
     shape: T,
-    fillStyle: FillStyle,
-    lineStyle: LineStyle
+    shapeStyle: ShapeStyle,
   ) {
-    const data = new GraphicsData(shape, fillStyle, lineStyle);
+    const data = new GraphicsData(shape, shapeStyle);
     // this.graphicsData.push(data);
     this.graphicsData = data;
   }
@@ -34,8 +32,8 @@ export class GraphicsGeometry<T extends Shape | Line> {
    * @returns {boolean} 待检测点是否落在某一个子图形内
    */
   public containsPoint(p: Point): boolean {
-    const { shape, fillStyle } = this.graphicsData
-    if (!fillStyle.visible) {
+    const { shape, shapeStyle } = this.graphicsData
+    if (!shapeStyle.visible) {
       return false
     }
     if (shape.contains(p)) {

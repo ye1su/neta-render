@@ -11,8 +11,7 @@ import {
 import { CanvasRenderer } from "../renderer";
 import { Polygon } from "../shapes";
 import { GraphicsGeometry } from "./GraphicsGeometry";
-import { FillStyle } from "./style/FillStyle";
-import { LineStyle } from "./style/LineStyle";
+import { ShapeStyle } from "./style";
 import {
   BezierCurveConfig,
   OrthogonalConfig,
@@ -21,8 +20,7 @@ import {
 
 export class GraphicsOfLine extends Container {
   private _render: CanvasRenderer;
-  private _lineStyle = new LineStyle();
-  private _fillStyle = new FillStyle();
+  private _shapeStyle = new ShapeStyle();
   private _geometry = new GraphicsGeometry();
   public currentPath: Polygon | null = null;
 
@@ -39,7 +37,7 @@ export class GraphicsOfLine extends Container {
 
     const ctx = render.ctx;
 
-    const { lineStyle, fillStyle, shape } = data;
+    const { shapeStyle, shape } = data;
 
     // 修改线的数据
     const { _polygon, targetId, sourceId } = shape as Line;
@@ -118,15 +116,12 @@ export class GraphicsOfLine extends Container {
       this.currentPath = null;
     }
 
-    if (fillStyle.visible) {
-      ctx.fillStyle = fillStyle.fill;
-    }
-
-    if (lineStyle.visible) {
-      ctx.lineWidth = lineStyle.lineWidth;
-      ctx.lineCap = lineStyle.lineCap;
-      ctx.lineJoin = lineStyle.lineJoin;
-      ctx.strokeStyle = lineStyle.stroke;
+    if (shapeStyle.visible) {
+      ctx.fillStyle = shapeStyle.fill;
+      ctx.lineWidth = shapeStyle.lineWidth;
+      ctx.lineCap = shapeStyle.lineCap;
+      ctx.lineJoin = shapeStyle.lineJoin;
+      ctx.strokeStyle = shapeStyle.stroke;
     }
 
     ctx.beginPath();
@@ -141,14 +136,12 @@ export class GraphicsOfLine extends Container {
     }
     // ctx.closePath();
 
-    if (fillStyle.visible) {
-      ctx.globalAlpha = fillStyle.alpha * this.worldAlpha;
+    if (shapeStyle.visible) {
+      ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
       ctx.fillStyle = "rgba(0, 0, 0, 0)";
       ctx.fill();
-    }
-    if (lineStyle.visible) {
-      ctx.globalAlpha = lineStyle.alpha * this.worldAlpha;
       ctx.stroke();
+
     }
   }
 
@@ -158,8 +151,7 @@ export class GraphicsOfLine extends Container {
   protected drawShape(shape: Line) {
     this._geometry.drawShape(
       shape,
-      this._fillStyle.clone(),
-      this._lineStyle.clone()
+      this._shapeStyle.clone(),
     );
     return this;
   }
