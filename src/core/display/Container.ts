@@ -161,4 +161,5 @@ export class Container extends DisplayObject {
   get anchorPoint() {
     return this.anchor.anchorPort.point;
   }
+
 }

@@ -4,6 +4,19 @@ import { BASE_FONT_SIZE, fixFactor, getCenterX } from "../utils";
 import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
 
+export function addShape(type: string, config: Record<string, any>) {
+  const graphic = new Container();
+  const { id, x, y, wdith, height, style } = config;
+  if (type == "rect") {
+  }
+  if (type == "circle") {
+    const { src } = config;
+    const image = new Graphics();
+    image.style(style);
+    image.drawImage(0, 0, wdith, height, src);
+  }
+}
+
 export function graphicsShapeParse(json: Record<string, any>) {
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
@@ -26,9 +39,9 @@ export function graphicsShapeParse(json: Record<string, any>) {
   if (type == "rect") {
     const { radius } = json;
     const rect = new Graphics();
-    console.log("rect: ", rect);
     rect.style(style);
     rect.drawRect(0, 0, wdith, height, radius);
+
     const text = new Graphics();
     const textStart = getCenterX(
       json.label,
@@ -43,6 +56,7 @@ export function graphicsShapeParse(json: Record<string, any>) {
   if (type == "circle") {
     const { radius } = json;
     const circle = new Graphics();
+    circle.style(style);
     circle.drawCircle(0, 0, radius);
 
     const text = new Graphics();
@@ -56,6 +70,7 @@ export function graphicsShapeParse(json: Record<string, any>) {
   if (type == "image") {
     const { src } = json;
     const image = new Graphics();
+    image.style(style);
     image.drawImage(0, 0, wdith, height, src);
 
     graphic.addChild(image);
@@ -64,6 +79,7 @@ export function graphicsShapeParse(json: Record<string, any>) {
   if (type == "ellipse") {
     const { radiusX, radiusY } = json;
     const ellipse = new Graphics();
+    ellipse.style(style);
     ellipse.drawEllipse(0, 0, radiusX, radiusY);
 
     const text = new Graphics();
@@ -77,7 +93,9 @@ export function graphicsShapeParse(json: Record<string, any>) {
   if (type == "polygon") {
     const { points } = json;
     const polygon = new Graphics();
+    polygon.style(style);
     polygon.drawPolygon(0, 0, points);
+
     graphic.addChild(polygon);
   }
 

@@ -5,6 +5,7 @@ import {
   Model,
   NetaGraphOptions,
   NodeModel,
+  RegisterMap,
 } from "./types";
 import {
   graphicsLineParse,
@@ -17,6 +18,7 @@ import { cloneDeep } from "lodash-es";
 
 export class NetaGraph extends Application {
   public model: Model;
+  public registerList: RegisterMap[] = null
   public layoutConfig: LayoutConfig = undefined;
 
   constructor(options: NetaGraphOptions) {
@@ -24,6 +26,7 @@ export class NetaGraph extends Application {
     if (options.layout) {
       this.layout(options.layout);
     }
+    this.registerList = options.register
     // this.init();
   }
 
@@ -91,6 +94,8 @@ export class NetaGraph extends Application {
   }
 
   addNode(model: NodeModel) {
+    console.log(this, '===');
+    
     const graphic = graphicsShapeParse(model);
     this.stage.addChild(graphic);
   }
@@ -98,4 +103,6 @@ export class NetaGraph extends Application {
     const graphic = graphicsLineParse(model);
     this.stage.addChild(graphic);
   }
+
+
 }

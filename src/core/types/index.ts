@@ -20,8 +20,10 @@ export interface GlobalTransform {
 
 export interface NetaGraphOptions extends IApplicationOptions {
   layout?: LayoutConfig
+  register?: RegisterMap[]
 }
 
+// 布局配置
 export interface LayoutConfig {
   type: string
 }
@@ -29,6 +31,12 @@ export interface LayoutConfig {
 // itemType
 export type ItemType = 'node' | 'edge'
 
+
+// 注册函数的map
+export interface RegisterMap {
+  name: string
+  render: Record<string, any>
+}
 
 export interface Model {
   nodes: NodeModel[];

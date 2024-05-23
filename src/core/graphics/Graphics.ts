@@ -99,7 +99,6 @@ export class Graphics extends Container {
       // 设置阴影
       ctx.shadowColor = shapeStyle.shadowColor;
       ctx.shadowBlur = shapeStyle.shadowBlur;
-      console.log('shapeStyle: ', shapeStyle);
 
       ctx.shadowOffsetX = shapeStyle.shadowOffsetX
       ctx.shadowOffsetY = shapeStyle.shadowOffsetY
@@ -542,6 +541,7 @@ export class Graphics extends Container {
       if (typeof styleConfig[styleKey] == "number") {
         styleConfig[styleKey] = fixFactor(styleConfig[styleKey]);
       }
+
       this._shapeStyle[styleKey] = styleConfig[styleKey];
     }
   }

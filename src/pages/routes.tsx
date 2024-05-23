@@ -11,6 +11,7 @@ import { PolygonPage } from "./ShapePage/PolygonPage.tsx";
 import ForcePage from "./LayoutPage/ForcePage.tsx";
 import DagrePage from "./LayoutPage/Dagre.tsx";
 import { StylePage } from "./ShapePage/StylePage.tsx";
+import { CombinationPage } from "./ShapePage/CombinationPage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -66,6 +67,14 @@ export const routes = [
     element: <StylePage />,
     options: {
       name: "节点样式",
+      group: "Shape",
+    },
+  },
+  {
+    path: `${BASE_URL}/combination`,
+    element: <CombinationPage />,
+    options: {
+      name: "组合节点样式",
       group: "Shape",
     },
   },
