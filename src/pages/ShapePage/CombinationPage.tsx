@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { EXTEND_NODE, NetaGraph, RendererType } from "../../core";
+import neta from './neta.jpg'
 
 export function CombinationPage() {
   const appRef = useRef<NetaGraph>();
@@ -14,10 +15,12 @@ export function CombinationPage() {
     const model = {
       id: "node1",
       label: "node1",
-      type: "circle",
+      type: "test",
       x: 200,
       y: 150,
-      radius: 50,
+      wdith: 100,
+      height: 100,
+      src: neta,
       style: {
         fill: "blue",
       },

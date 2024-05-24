@@ -18,7 +18,7 @@ import { cloneDeep } from "lodash-es";
 
 export class NetaGraph extends Application {
   public model: Model;
-  public registerList: RegisterMap[] = null
+  public registerMap: Map<string, RegisterMap["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
 
   constructor(options: NetaGraphOptions) {
@@ -26,7 +26,11 @@ export class NetaGraph extends Application {
     if (options.layout) {
       this.layout(options.layout);
     }
-    this.registerList = options.register
+    if (Array.isArray(options.register)) {
+      options.register.forEach((item) => {
+        this.registerMap.set(item.name, item.render);
+      });
+    }
     // this.init();
   }
 
@@ -78,7 +82,7 @@ export class NetaGraph extends Application {
   }
 
   read(model: Model) {
-    this.data(model)
+    this.data(model);
     const { nodes, edges } = this.model;
     // this.render();
     this.layoutRender(nodes, edges);
@@ -94,15 +98,13 @@ export class NetaGraph extends Application {
   }
 
   addNode(model: NodeModel) {
-    console.log(this, '===');
-    
-    const graphic = graphicsShapeParse(model);
+    console.log(this, "===");
+
+    const graphic = graphicsShapeParse(this.registerMap, model);
     this.stage.addChild(graphic);
   }
   addEdge(model: EdgeModel) {
     const graphic = graphicsLineParse(model);
     this.stage.addChild(graphic);
   }
-
-
 }
