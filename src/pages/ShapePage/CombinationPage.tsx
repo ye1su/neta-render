@@ -15,7 +15,7 @@ export function CombinationPage() {
     const model = {
       id: "node1",
       label: "node1",
-      type: "test",
+      type: "userTask",
       x: 200,
       y: 150,
       wdith: 100,

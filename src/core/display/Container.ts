@@ -58,6 +58,7 @@ export class Container extends DisplayObject {
         child.renderCanvas(render);
       });
 
+
     for (let i = 0; i < this.children.length; i++) {
       const child = this.children[i];
       child.renderCanvasRecursive(render);
@@ -161,5 +162,4 @@ export class Container extends DisplayObject {
   get anchorPoint() {
     return this.anchor.anchorPort.point;
   }
-
 }

@@ -72,6 +72,18 @@ export class CanvasRenderer extends Renderer {
     this.render(this._container);
   }
 
+  public resetCanvasTransform() {
+    const _matrix = this.matrix;
+    this.ctx.setTransform(
+      _matrix[0],
+      _matrix[1],
+      _matrix[3],
+      _matrix[4],
+      _matrix[6],
+      _matrix[7]
+    );
+  }
+
   // 把原有坐标转换成缩放平移后的位置
   public getPointByTransform(x: number, y: number) {
     return {
@@ -96,14 +108,7 @@ export class CanvasRenderer extends Renderer {
 
     this.ctx.save();
     const _matrix = this.matrix;
-    this.ctx.setTransform(
-      _matrix[0],
-      _matrix[1],
-      _matrix[3],
-      _matrix[4],
-      _matrix[6],
-      _matrix[7]
-    );
+    this.resetCanvasTransform()
 
     this.ctx.clearRect(
       -_matrix[6],

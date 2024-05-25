@@ -1,50 +1,14 @@
 import { Container } from "../display";
 import { BaseShapes, LineType } from "../enums";
-import { RegisterMap } from "../types";
+import { RegisterContextOptions, RegisterMap } from "../types";
 import { BASE_FONT_SIZE, fixFactor, getCenterX } from "../utils";
 import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
-
-export function addShape(type: string, config: Record<string, any>) {
-  const { x, y, wdith, height, style, text } = config;
-  const graphics = new Graphics();
-  graphics.style(style);
-
-  if (type == "rect") {
-    const { radius } = config;
-    graphics.drawRect(x, y, wdith, height, radius);
-  }
-  if (type == "circle") {
-    const { radius } = config;
-    graphics.drawCircle(x, y, radius);
-  }
-
-  if (type == "image") {
-    const { src } = config;
-    graphics.drawImage(x, y, wdith, height, src);
-  }
-
-  if (type == "ellipse") {
-    const { radiusX, radiusY } = config;
-    graphics.drawEllipse(x, y, radiusX, radiusY);
-  }
-
-  if (type == "polygon") {
-    const { points } = config;
-    graphics.drawPolygon(x, y, points);
-  }
-
-  if (type == "text") {
-    graphics.drawText(x, y, text);
-  }
-  return graphics;
-}
 
 export function graphicsShapeParse(
   registerMap: Map<string, RegisterMap["render"]>,
   json: Record<string, any>
 ) {
-  console.log('registerMap: ', registerMap);
 
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
@@ -140,24 +104,15 @@ export function graphicsShapeParse(
     children = [polygon];
   }
 
-  if (type == "test") {
-    const rect = addShape("rect", {
-      ...json,
-      x: 0,
-      y: 0,
-    });
-    console.log("rect: ", rect);
-    const image = addShape("image", {
-      ...json,
-      x: 20,
-      y: 20,
-      wdith: 40,
-      height: 40,
-    });
 
-    children = [rect, image];
+  if (registerMap.get(type)) {
+    const action = new RegisterContext({
+      inputProperties: json,
+    });
+    const shapeIns = registerMap.get(type);
+    shapeIns.draw(action);
+    children = action.groups;
   }
-  console.log("children: ", children);
 
   children.forEach((item) => {
     graphic.addChild(item);
@@ -197,4 +152,53 @@ export function graphicsLineParse(json: Record<string, any>) {
   // }
 
   return line;
+}
+
+function addShape(type: string, config: Record<string, any>) {
+  const { x, y, wdith, height, style, text } = config;
+  const graphics = new Graphics();
+  graphics.style(style);
+
+  if (type == "rect") {
+    const { radius } = config;
+    graphics.drawRect(x, y, wdith, height, radius);
+  }
+  if (type == "circle") {
+    const { radius } = config;
+    graphics.drawCircle(x, y, radius);
+  }
+
+  if (type == "image") {
+    const { src } = config;
+    graphics.drawImage(x, y, wdith, height, src);
+  }
+
+  if (type == "ellipse") {
+    const { radiusX, radiusY } = config;
+    graphics.drawEllipse(x, y, radiusX, radiusY);
+  }
+
+  if (type == "polygon") {
+    const { points } = config;
+    graphics.drawPolygon(x, y, points);
+  }
+
+  if (type == "text") {
+    graphics.drawText(x, y, text);
+  }
+  return graphics;
+}
+
+class RegisterContext {
+  public groups: Graphics[] = [];
+  public inputProperties = null;
+
+  constructor(options: RegisterContextOptions) {
+    this.inputProperties = options.inputProperties;
+  }
+
+  public addShape(type: string, config: Record<string, any>) {
+    const shape = addShape(type, config);
+    this.groups.push(shape);
+  }
 }

@@ -60,3 +60,8 @@ export interface EdgeModel extends  BaseModel{
   source: string
   target: string
 }
+
+// 注册上下问初始化参数
+export interface RegisterContextOptions {
+  inputProperties: Record<string, any>
+}

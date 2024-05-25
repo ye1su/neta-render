@@ -35,7 +35,6 @@ export class NetaGraph extends Application {
   }
 
   init() {
-    console.log("===");
     this.on("graphics:click", (event, target) => {
       // console.log("event: ", event, target);
     });

@@ -196,7 +196,8 @@ export class Graphics extends Container {
       const img = new Image();
       img.src = src;
 
-      img.onload = function () {
+      img.onload = () => {
+        this._render.resetCanvasTransform()
         ctx.drawImage(img, x, y, width, height);
       };
     }
