@@ -92,7 +92,6 @@ export class Graphics extends Container {
     const { shapeStyle, shape } = data;
 
     if (shapeStyle.visible) {
-
       // 设置颜色
       ctx.fillStyle = shapeStyle.fill;
 
@@ -100,8 +99,8 @@ export class Graphics extends Container {
       ctx.shadowColor = shapeStyle.shadowColor;
       ctx.shadowBlur = shapeStyle.shadowBlur;
 
-      ctx.shadowOffsetX = shapeStyle.shadowOffsetX
-      ctx.shadowOffsetY = shapeStyle.shadowOffsetY
+      ctx.shadowOffsetX = shapeStyle.shadowOffsetX;
+      ctx.shadowOffsetY = shapeStyle.shadowOffsetY;
 
       // 设置line
       ctx.lineWidth = shapeStyle.lineWidth;
@@ -196,10 +195,10 @@ export class Graphics extends Container {
       const img = new Image();
       img.src = src;
 
-      img.onload = () => {
-        this._render.resetCanvasTransform()
+      this._render.loadImage(src, (img) => {
+        this._render.resetCanvasTransform();
         ctx.drawImage(img, x, y, width, height);
-      };
+      });
     }
 
     if (shape instanceof Ellipse) {

@@ -7,6 +7,7 @@ export class Renderer {
   public screen = new Rectangle();
   public width: number;
   public height: number;
+  public imageCache: Record<string, HTMLImageElement> = {};
   constructor(options: IApplicationOptions) {
     const { el } = options;
     this.el = el;
@@ -24,4 +25,20 @@ export class Renderer {
     // nothing
   }
   public clear() {}
+
+  public loadImage(url: string, callback: (img: HTMLImageElement) => void) {
+
+    if (this.imageCache[url]) {
+      // 如果图像已在缓存中，直接使用
+      callback(this.imageCache[url]);
+    } else {
+      // 否则加载图像并缓存
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        this.imageCache[url] = img;
+        callback(img);
+      };
+    }
+  }
 }
