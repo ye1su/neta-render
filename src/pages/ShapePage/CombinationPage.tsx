@@ -18,6 +18,7 @@ export function CombinationPage() {
       type: "userTask",
       x: 200,
       y: 150,
+      anchor: true,
     };
 
     appRef.current.addItem("node", model);

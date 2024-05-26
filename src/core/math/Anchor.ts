@@ -3,7 +3,7 @@ import { AnchorPort, BBox } from "../types/graphics";
 import { Point } from "./Point";
 
 export class Anchor {
-  public visible = true;
+  public visible = false;
   public ports: AnchorPort[] = [];
   public bbox: BBox;
   public anchorIndex: number = 0;

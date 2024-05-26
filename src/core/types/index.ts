@@ -46,6 +46,7 @@ export interface Model {
 
 export interface BaseModel {
   id: string;
+  type: string;
   label?: string;
 }
 

@@ -21,7 +21,7 @@ export class NetaGraph extends Application {
   public model: Model;
   public registerMap: Map<string, RegisterMap["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
-  public buildInEvent = new BuiltInEvent()
+  public buildInEvent = new BuiltInEvent(this)
 
   constructor(options: NetaGraphOptions) {
     super(options);
@@ -33,7 +33,7 @@ export class NetaGraph extends Application {
         this.registerMap.set(item.name, item.render);
       });
     }
-    this.buildInEvent.eventInit(this)
+    this.buildInEvent.eventInit()
   }
 
 
@@ -92,8 +92,6 @@ export class NetaGraph extends Application {
   }
 
   addNode(model: NodeModel) {
-    console.log(this, "===");
-
     const graphic = graphicsShapeParse(this.registerMap, model);
     this.stage.addChild(graphic);
   }

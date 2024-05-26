@@ -18,7 +18,7 @@ export function ImagePage() {
       src: neta,
       x: 200,
       y: 150,
-      wdith: 200,
+      width: 200,
       height: 180,
     };
 

@@ -18,7 +18,7 @@ export function OrthogonalPage() {
           type: "rect",
           x: 200,
           y: 150,
-          wdith: 100,
+          width: 100,
           height: 100,
         },
         {
@@ -27,7 +27,7 @@ export function OrthogonalPage() {
           type: "rect",
           x: 400,
           y: 300,
-          wdith: 100,
+          width: 100,
           height: 100,
         },
 
@@ -37,7 +37,7 @@ export function OrthogonalPage() {
           type: "rect",
           x: 600,
           y: 400,
-          wdith: 100,
+          width: 100,
           height: 100,
         },
       ],

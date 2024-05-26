@@ -58,7 +58,6 @@ export class Container extends DisplayObject {
         child.renderCanvas(render);
       });
 
-
     for (let i = 0; i < this.children.length; i++) {
       const child = this.children[i];
       child.renderCanvasRecursive(render);
@@ -97,6 +96,14 @@ export class Container extends DisplayObject {
     this.children.push(child);
     child.parent = this; // 将要添加的child的parent指向this
     this.sortDirty = true;
+  }
+
+  /**
+   * 查找某个child
+   * @param child
+   */
+  public findChild(id: string) {
+    return this.children.find((child) => child.id == id);
   }
 
   /**
@@ -153,9 +160,9 @@ export class Container extends DisplayObject {
   }
 
   public containsPoint(p: Point) {
-    const tag = this.anchor.portsContains(p)
-    if(tag) {
-      return true
+    const tag = this.anchor.portsContains(p);
+    if (tag) {
+      return true;
     }
     return false;
   }

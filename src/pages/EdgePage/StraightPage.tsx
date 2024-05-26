@@ -17,7 +17,7 @@ export function StraightPage() {
       type: "rect",
       x: 200,
       y: 150,
-      wdith: 100,
+      width: 100,
       height: 100,
       style: {
         fill: "blue",
@@ -30,7 +30,7 @@ export function StraightPage() {
       type: "rect",
       x: 400,
       y: 150,
-      wdith: 100,
+      width: 100,
       height: 100,
       style: {
         fill: "blue",

@@ -16,7 +16,7 @@ export function RectanglePage() {
       type: "rect",
       x: 200,
       y: 150,
-      wdith: 100,
+      width: 100,
       height: 100,
       style: {
         fill: "#0DDE67",
@@ -31,7 +31,7 @@ export function RectanglePage() {
       type: "rect",
       x: 400,
       y: 350,
-      wdith: 140,
+      width: 140,
       height: 100,
       radius: 20,
       style: {

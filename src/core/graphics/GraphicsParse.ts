@@ -14,6 +14,9 @@ export function graphicsShapeParse(
   const { id, type, x, y, width, height } = json;
 
   const graphic = new Container();
+  if (json?.anchor) {
+    graphic.anchor.visible = true;
+  }
   let children: Graphics[] = [];
   if (type == "rect") {
     const rect = addShape("rect", {

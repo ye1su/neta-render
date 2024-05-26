@@ -1,4 +1,5 @@
 import { Container } from "../display";
+import { ItmeType } from "../enums";
 import { Graphics } from "../graphics/Graphics";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
@@ -59,6 +60,10 @@ export class EventSystem {
     this._dragging = true;
     this._renderer.cloneMatrix();
 
+    if(target?.type === ItmeType.Container) {
+      this._dragging = false;
+    }
+
     if (target) {
       const tansferTarget = this._renderer.getPointByTransform(
         target.x,
@@ -67,7 +72,7 @@ export class EventSystem {
       // 记录点击节点在图形的位置
       this._mouseDownPoint.diffx = e.offsetX - tansferTarget.x;
       this._mouseDownPoint.diffy = e.offsetY - tansferTarget.y;
-      this.emit("graphics:pointerdown", event, target);
+      this.emit("graphics:pointerdown", e, target);
     }
   };
 
@@ -80,6 +85,8 @@ export class EventSystem {
       x: e.offsetX,
       y: e.offsetY,
     };
+
+    this.emit("canvas:pointermove", e);
 
     // 拖拽节点事件
     if (this._dragging && this.hitTarget) {
@@ -121,7 +128,7 @@ export class EventSystem {
 
   private onPointerup = (e) => {
     this._dragging = false;
-    this.emit("graphics:pointerup", e);
+    this.emit("canvas:pointerup", e);
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {
