@@ -128,11 +128,13 @@ export class EventSystem {
     this.hasFoundTarget = false;
     this.hitTarget = null;
 
-    this.hitTestRecursive(root, globalPos);
+    // this.hitTestRecursive(root, globalPos);
+    this.hitTestBreadthFirst(root, globalPos);
 
     return this.hitTarget;
   }
 
+  // 深度遍历
   public hitTestRecursive(curTarget: Graphics | Container, globalPos: Point) {
     // 如果对象不可见
     if (!curTarget.visible) {
@@ -161,4 +163,29 @@ export class EventSystem {
       this.hasFoundTarget = true;
     }
   }
+
+  // 广度遍历
+  public hitTestBreadthFirst(root: Graphics | Container, globalPos: Point) {
+    const queue: (Graphics | Container)[] = [root];
+  
+    while (queue.length > 0) {
+      const curTarget = queue.shift();
+  
+      if (!curTarget.visible) {
+        continue;
+      }
+  
+      // 检查自身
+      if (curTarget.containsPoint(globalPos)) {
+        this.hitTarget = curTarget;
+        return;
+      }
+  
+      // 将子元素加入队列
+      for (let i = 0; i < curTarget.children.length; i++) {
+        queue.push(curTarget.children[i]);
+      }
+    }
+  }
+  
 }

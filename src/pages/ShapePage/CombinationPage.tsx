@@ -18,12 +18,6 @@ export function CombinationPage() {
       type: "userTask",
       x: 200,
       y: 150,
-      wdith: 100,
-      height: 100,
-      src: neta,
-      style: {
-        fill: "blue",
-      },
     };
 
     appRef.current.addItem("node", model);

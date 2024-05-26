@@ -9,23 +9,9 @@ export function graphicsShapeParse(
   registerMap: Map<string, RegisterMap["render"]>,
   json: Record<string, any>
 ) {
+  fixUnit(json);
 
-  json.x = fixFactor(json.x);
-  json.y = fixFactor(json.y);
-  if (json.wdith) {
-    json.wdith = fixFactor(json.wdith);
-  }
-  if (json.height) {
-    json.height = fixFactor(json.height);
-  }
-
-  if (json.radius) {
-    json.radius = fixFactor(json.radius);
-  }
-  if (Array.isArray(json.points)) {
-    json.points = json.points.map((item) => fixFactor(item));
-  }
-  const { id, type, x, y, wdith, height } = json;
+  const { id, type, x, y, width, height } = json;
 
   const graphic = new Container();
   let children: Graphics[] = [];
@@ -38,7 +24,7 @@ export function graphicsShapeParse(
 
     const textStart = getCenterX(
       json.label,
-      wdith / 2,
+      width / 2,
       fixFactor(BASE_FONT_SIZE)
     );
     const text = addShape("text", {
@@ -104,7 +90,6 @@ export function graphicsShapeParse(
     children = [polygon];
   }
 
-
   if (registerMap.get(type)) {
     const action = new RegisterContext({
       inputProperties: json,
@@ -122,7 +107,6 @@ export function graphicsShapeParse(
 
   graphic.id = id;
   graphic.updatePosition(x, y);
-
   return graphic;
 }
 
@@ -154,14 +138,32 @@ export function graphicsLineParse(json: Record<string, any>) {
   return line;
 }
 
+function fixUnit(json: Record<string, any>) {
+  json.x = fixFactor(json.x);
+  json.y = fixFactor(json.y);
+  if (json.width) {
+    json.width = fixFactor(json.width);
+  }
+  if (json.height) {
+    json.height = fixFactor(json.height);
+  }
+
+  if (json.radius) {
+    json.radius = fixFactor(json.radius);
+  }
+  if (Array.isArray(json.points)) {
+    json.points = json.points.map((item) => fixFactor(item));
+  }
+}
+
 function addShape(type: string, config: Record<string, any>) {
-  const { x, y, wdith, height, style, text } = config;
+  const { x, y, width, height, style, text } = config;
   const graphics = new Graphics();
   graphics.style(style);
 
   if (type == "rect") {
     const { radius } = config;
-    graphics.drawRect(x, y, wdith, height, radius);
+    graphics.drawRect(x, y, width, height, radius);
   }
   if (type == "circle") {
     const { radius } = config;
@@ -170,7 +172,7 @@ function addShape(type: string, config: Record<string, any>) {
 
   if (type == "image") {
     const { src } = config;
-    graphics.drawImage(x, y, wdith, height, src);
+    graphics.drawImage(x, y, width, height, src);
   }
 
   if (type == "ellipse") {
@@ -197,7 +199,8 @@ class RegisterContext {
     this.inputProperties = options.inputProperties;
   }
 
-  public addShape(type: string, config: Record<string, any>) {
+  public addShape(type: string, config: Record<string, any> = {}) {
+    fixUnit(config);
     const shape = addShape(type, config);
     this.groups.push(shape);
   }

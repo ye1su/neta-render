@@ -3,14 +3,16 @@ import { AnchorPort, BBox } from "../types/graphics";
 import { Point } from "./Point";
 
 export class Anchor {
-  public visible = false
-  public ports: AnchorPort[]= [];
+  public visible = true;
+  public ports: AnchorPort[] = [];
   public bbox: BBox;
-  public anchorIndex: number = 0
+  public anchorIndex: number = 0;
+  public radius = 8;
+  public containPort: AnchorPort = null
   constructor() {}
 
   get anchorPort() {
-    return this.ports.find(port => port.id === this.anchorIndex)
+    return this.ports.find((port) => port.id === this.anchorIndex);
   }
 
   updateContainerBBox(bbox: BBox) {
@@ -33,22 +35,41 @@ export class Anchor {
       };
     });
 
-    this.anchorIndex = 4
+    this.anchorIndex = 4;
   }
 
-
   render(render: CanvasRenderer) {
-    if(!this.visible) return
+    if (!this.visible) return;
     const ctx = render.ctx;
+
     this.ports.forEach((port) => {
       const { point } = port;
       ctx.beginPath();
 
-      ctx.arc(point.x, point.y, 8, 0, 2 * Math.PI);
-      ctx.fillStyle = '#fff';
+      ctx.arc(point.x, point.y, this.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = "#fff";
       ctx.fill();
       ctx.stroke();
       ctx.closePath();
     });
+  }
+
+  portsContains(checkPoint: Point) {
+    const _x = checkPoint.x;
+    const _y = checkPoint.y;
+    if (Array.isArray(this.ports)) {
+      for (const port of this.ports) {
+        const p = port.point;
+        if (
+          (p.x - _x) * (p.x - _x) + (p.y - _y) * (p.y - _y) <
+          this.radius * this.radius
+        ) {
+          this.containPort = port
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }

@@ -153,6 +153,10 @@ export class Container extends DisplayObject {
   }
 
   public containsPoint(p: Point) {
+    const tag = this.anchor.portsContains(p)
+    if(tag) {
+      return true
+    }
     return false;
   }
 

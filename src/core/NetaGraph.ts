@@ -15,11 +15,13 @@ import { Force, Dagre } from "./layout";
 import { Application } from "./Application";
 import { LayoutType } from "./enums";
 import { cloneDeep } from "lodash-es";
+import { BuiltInEvent } from "./events";
 
 export class NetaGraph extends Application {
   public model: Model;
   public registerMap: Map<string, RegisterMap["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
+  public buildInEvent = new BuiltInEvent()
 
   constructor(options: NetaGraphOptions) {
     super(options);
@@ -31,17 +33,10 @@ export class NetaGraph extends Application {
         this.registerMap.set(item.name, item.render);
       });
     }
-    // this.init();
+    this.buildInEvent.eventInit(this)
   }
 
-  init() {
-    this.on("graphics:click", (event, target) => {
-      // console.log("event: ", event, target);
-    });
-    this.on("graphics:mousedown", (event, target) => {
-      // console.log("event: ", event, target);
-    });
-  }
+
 
   layoutRender(nodes, edges) {
     const evnetParmas = {

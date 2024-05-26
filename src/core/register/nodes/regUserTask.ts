@@ -1,20 +1,26 @@
+import userIcon from "../imgs/user.svg";
+
 const userTaskNode = {
   name: "userTask",
   render: {
     draw(action) {
-      console.log("action: ", action);
       const initJson = action.inputProperties;
       action.addShape("rect", {
-        ...initJson,
         x: 0,
         y: 0,
+        width: 100,
+        height: 80,
+        style: {
+          stroke: "#1296db",
+          lineWidth: 2,
+        },
       });
       action.addShape("image", {
-        ...initJson,
-        x: 20,
-        y: 20,
-        wdith: 40,
-        height: 40,
+        src: userIcon,
+        x: 10,
+        y: 10,
+        width: 20,
+        height: 20,
       });
     },
   },
