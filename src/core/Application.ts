@@ -8,7 +8,7 @@ import { default as Eventemitter } from "eventemitter3";
 export class Application extends Eventemitter {
   public readonly el: HTMLDivElement;
   public readonly stage = new Container();
-  private readonly renderer: CanvasRenderer;
+  public readonly renderer: CanvasRenderer;
   private eventSystem: EventSystem;
 
   constructor(options: IApplicationOptions) {

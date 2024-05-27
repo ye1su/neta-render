@@ -65,11 +65,10 @@ export class Anchor {
   }
 
   portsContains(checkPoint: Point) {
-    console.log("checkPoint: ", checkPoint);
+    // console.log("checkPoint: ", checkPoint);
 
     const p = this.transformPoint(checkPoint);
     if (Array.isArray(this.ports)) {
-      console.log('this.ports: ', this.ports);
       for (const port of this.ports) {
         const po = port.point;
         const _x = po.x;
