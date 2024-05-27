@@ -114,18 +114,23 @@ export function graphicsShapeParse(
 }
 
 export function graphicsLineParse(json: Record<string, any>) {
-  const { id, type, source, target, anchorPoints } = json;
+  const { id, type, source, target, anchorPoints, sourceAnchor, targetAnchor } =
+    json;
 
   const line = new GraphicsOfLine();
   line.zIndex = -1;
   line.id = id;
 
   if (type == LineType.Straight) {
-    line.drawStraight(source, target);
+    line.drawStraight(source, target, { sourceAnchor, targetAnchor });
   }
 
   if (type == LineType.Orthogonal) {
-    line.drawOrthogonal(source, target, { anchorPoints });
+    line.drawOrthogonal(source, target, {
+      anchorPoints,
+      sourceAnchor,
+      targetAnchor,
+    });
   }
 
   // if (type == LineType.QuadraticCurve) {

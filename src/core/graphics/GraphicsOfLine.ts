@@ -17,6 +17,7 @@ import {
   OrthogonalConfig,
   QuadraticCurveConfig,
 } from "../types/graphics";
+import { Point } from "../math";
 
 export class GraphicsOfLine extends Container {
   private _render: CanvasRenderer;
@@ -45,12 +46,24 @@ export class GraphicsOfLine extends Container {
     (shape as Line).source = graphicsList.find((item) => item.id == sourceId);
 
     // 修改points
-    const { source: _source, target: _target } = shape as Line;
+    const { source: _source, target: _target, config } = shape as Line;
 
-    const sourceAnchor = _source.anchorPoint
-    const targetAnchor = _target.anchorPoint
-    _polygon.points = [sourceAnchor.x, sourceAnchor.y, targetAnchor.x, targetAnchor.y];
+    let sourceAnchor = _source.position as Point;
+    let targetAnchor = _target.position as Point;
 
+    if (config.sourceAnchor !== undefined) {
+      sourceAnchor = _source.anchor.getAnchorPort(config.sourceAnchor).point;
+    }
+
+    if (config.targetAnchor !== undefined) {
+      targetAnchor = _target.anchor.getAnchorPort(config.targetAnchor).point;
+    }
+    _polygon.points = [
+      sourceAnchor.x,
+      sourceAnchor.y,
+      targetAnchor.x,
+      targetAnchor.y,
+    ];
 
     // draw 正交线
     if (shape.type == LineType.Orthogonal) {
@@ -63,22 +76,21 @@ export class GraphicsOfLine extends Container {
           _points.push(itemPoint);
         });
       }
-      _points.push([targetAnchor.x, targetAnchor.y])
+      _points.push([targetAnchor.x, targetAnchor.y]);
 
       // 进行正交转换
-      const polygonPoints = []
+      const polygonPoints = [];
       _points.forEach((item, index) => {
-        if(index != 0 ) {
+        if (index != 0) {
           // [sourceAnchor.x, targetAnchor.y]
-          const pre = _points[index - 1]
-          polygonPoints.push(pre[0])
-          polygonPoints.push(item[1])
+          const pre = _points[index - 1];
+          polygonPoints.push(pre[0]);
+          polygonPoints.push(item[1]);
         }
 
-        polygonPoints.push(item[0])
-        polygonPoints.push(item[1])
-
-      })
+        polygonPoints.push(item[0]);
+        polygonPoints.push(item[1]);
+      });
 
       _polygon.points = polygonPoints;
     }
@@ -138,10 +150,10 @@ export class GraphicsOfLine extends Container {
 
     if (shapeStyle.visible) {
       ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
-      ctx.fillStyle = "rgba(0, 0, 0, 0)";
+      ctx.fillStyle = "#000";
+
       ctx.fill();
       ctx.stroke();
-
     }
   }
 
@@ -149,18 +161,19 @@ export class GraphicsOfLine extends Container {
    * 绘制图形
    */
   protected drawShape(shape: Line) {
-    this._geometry.drawShape(
-      shape,
-      this._shapeStyle.clone(),
-    );
+    this._geometry.drawShape(shape, this._shapeStyle.clone());
     return this;
   }
 
   /**
    * 画直线
    */
-  public drawStraight(sourceId: string, targetId: string): this {
-    return this.drawShape(new Straight(sourceId, targetId));
+  public drawStraight(
+    sourceId: string,
+    targetId: string,
+    config?: OrthogonalConfig
+  ): this {
+    return this.drawShape(new Straight(sourceId, targetId, config));
   }
   /**
    * take part 正交线

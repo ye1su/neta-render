@@ -24,7 +24,8 @@ export class Container extends DisplayObject {
    */
   protected renderCanvas(render: CanvasRenderer) {
     // nothing
-
+    const { matrix, translate, scale } = render;
+    this.anchor.globalTransform = { matrix, translate, scale };
     // 如果为shape为whole 则更新子节点的所有position
     if (this.whole) {
       for (let i = 0; i < this.children.length; i++) {
@@ -161,16 +162,11 @@ export class Container extends DisplayObject {
 
   public containsPoint(p: Point) {
     const tag = this.anchor.portsContains(p);
+    // console.log('tag: ', tag);
     if (tag) {
       return true;
     }
     return false;
   }
 
-  /**
-   * 获取锚点位置
-   */
-  get anchorPoint() {
-    return this.anchor.anchorPort.point;
-  }
 }

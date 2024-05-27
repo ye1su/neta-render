@@ -126,9 +126,14 @@ export class EventSystem {
     }
   };
 
-  private onPointerup = (e) => {
+  private onPointerup = (event) => {
     this._dragging = false;
-    this.emit("canvas:pointerup", e);
+    const e = Object.assign({}, event, {
+      offsetX: event.offsetX * 2,
+      offsetY: event.offsetY * 2,
+    });
+    const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+    this.emit("canvas:pointerup", e, target);
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {

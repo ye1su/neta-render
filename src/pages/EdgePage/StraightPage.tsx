@@ -44,10 +44,7 @@ export function StraightPage() {
       source: "node1",
       target: "node2",
       type: "Straight",
-      anchorPoints: [
-        [100, 300],
-        [200, 100],
-      ],
+
     };
     appRef.current.addItem("edge", edge1);
 

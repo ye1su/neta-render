@@ -12,6 +12,7 @@ import ForcePage from "./LayoutPage/ForcePage.tsx";
 import DagrePage from "./LayoutPage/Dagre.tsx";
 import { StylePage } from "./ShapePage/StylePage.tsx";
 import { CombinationPage } from "./ShapePage/CombinationPage.tsx";
+import { CraeteEdgePage } from "./EdgePage/CraeteEdgePage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -91,6 +92,14 @@ export const routes = [
     element: <OrthogonalPage />,
     options: {
       name: "正交线",
+      group: "Edge",
+    },
+  },
+  {
+    path: `${BASE_URL}/createdge`,
+    element: <CraeteEdgePage />,
+    options: {
+      name: "创建线",
       group: "Edge",
     },
   },

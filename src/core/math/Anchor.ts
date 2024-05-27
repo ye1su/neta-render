@@ -1,18 +1,30 @@
 import { CanvasRenderer } from "../renderer";
+import { GlobalTransform } from "../types";
 import { AnchorPort, BBox } from "../types/graphics";
 import { Point } from "./Point";
 
 export class Anchor {
+  public globalTransform: GlobalTransform;
   public visible = false;
   public ports: AnchorPort[] = [];
   public bbox: BBox;
-  public anchorIndex: number = 0;
   public radius = 8;
-  public containPort: AnchorPort = null
+  public containPort: AnchorPort = null;
   constructor() {}
 
-  get anchorPort() {
-    return this.ports.find((port) => port.id === this.anchorIndex);
+  public transformPoint(p: Point) {
+    if (!this.globalTransform) return p;
+    const { translate, scale } = this.globalTransform;
+    p = p.clone();
+    p.x = p.x - translate.x;
+    p.y = p.y - translate.y;
+    p.x = p.x / scale;
+    p.y = p.y / scale;
+    return p;
+  }
+
+  getAnchorPort(anchorIndex?: number) {
+    return this.ports.find((port) => port.id === anchorIndex);
   }
 
   updateContainerBBox(bbox: BBox) {
@@ -22,7 +34,7 @@ export class Anchor {
       new Point(bbox.centerX, bbox.minY),
       new Point(bbox.maxX, bbox.minY),
       new Point(bbox.minX, bbox.centerY),
-      new Point(bbox.centerX, bbox.centerY),
+      // new Point(bbox.centerX, bbox.centerY),
       new Point(bbox.maxX, bbox.centerY),
       new Point(bbox.minX, bbox.maxY),
       new Point(bbox.centerX, bbox.maxY),
@@ -34,8 +46,6 @@ export class Anchor {
         point,
       };
     });
-
-    this.anchorIndex = 4;
   }
 
   render(render: CanvasRenderer) {
@@ -55,16 +65,23 @@ export class Anchor {
   }
 
   portsContains(checkPoint: Point) {
-    const _x = checkPoint.x;
-    const _y = checkPoint.y;
+    console.log("checkPoint: ", checkPoint);
+
+    const p = this.transformPoint(checkPoint);
     if (Array.isArray(this.ports)) {
+      console.log('this.ports: ', this.ports);
       for (const port of this.ports) {
-        const p = port.point;
+        const po = port.point;
+        const _x = po.x;
+        const _y = po.y;
         if (
           (p.x - _x) * (p.x - _x) + (p.y - _y) * (p.y - _y) <
           this.radius * this.radius
         ) {
-          this.containPort = port
+          this.containPort = {
+            ...port,
+            // point: this.transformPoint(port.point),
+          };
           return true;
         }
       }
