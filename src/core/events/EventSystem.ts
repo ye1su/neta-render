@@ -3,6 +3,7 @@ import { ItmeType } from "../enums";
 import { Graphics } from "../graphics/Graphics";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
+import { EVENT_TYPE } from "./config";
 
 export class EventSystem {
   // canvas元素
@@ -72,7 +73,7 @@ export class EventSystem {
       // 记录点击节点在图形的位置
       this._mouseDownPoint.diffx = e.offsetX - tansferTarget.x;
       this._mouseDownPoint.diffy = e.offsetY - tansferTarget.y;
-      this.emit("graphics:pointerdown", e, target);
+      this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e, target);
     }
   };
 
@@ -86,7 +87,7 @@ export class EventSystem {
       y: e.offsetY,
     };
 
-    this.emit("canvas:pointermove", e);
+    this.emit(EVENT_TYPE.CANVAS_POINTERMOVE, e);
 
     // 拖拽节点事件
     if (this._dragging && this.hitTarget) {
@@ -133,7 +134,7 @@ export class EventSystem {
       offsetY: event.offsetY * 2,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
-    this.emit("canvas:pointerup", e, target);
+    this.emit(EVENT_TYPE.CANVAS_POINTERUP, e, target);
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {

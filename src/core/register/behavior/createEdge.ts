@@ -1,13 +1,13 @@
 import { TEMPORARY_CREATE_EDGE_ID } from "../../config";
 
-const createEdge = { 
-  name: 'create-edge',
+const createEdge = {
+  name: "create-edge",
   render: {
     getEvents() {
       return {
-        'graphics:pointerdown': 'onPointerDown',
-        'canvas:pointermove': 'onPointermove',
-        'canvas:pointerup': 'onPointerUp',
+        "graphics:pointerdown": "onPointerDown",
+        "canvas:pointermove": "onPointermove",
+        "canvas:pointerup": "onPointerUp",
       };
     },
     onPointerDown(event, target) {
@@ -25,12 +25,12 @@ const createEdge = {
           x: e.offsetX,
           y: e.offsetY,
         };
-  
+
         const tPoint = this.instance.renderer.getTransformByPoint(
           endPoint.x,
           endPoint.y
         );
-  
+
         this.instance.addNode({
           id: TEMPORARY_CREATE_EDGE_ID,
           type: "polygon",
@@ -53,9 +53,9 @@ const createEdge = {
           this.instance.stage.removeChild(child);
           this.instance.render();
         }
-  
+
         const port = target?.anchor?.containPort;
-  
+
         if (port && target.id !== TEMPORARY_CREATE_EDGE_ID) {
           const craeteEdge = {
             id: "xxxxccc",
@@ -66,12 +66,14 @@ const createEdge = {
             sourceAnchor: this.selectedAnchor.id,
             targetAnchor: port.id,
           };
-  
+
           this.instance.addEdge(craeteEdge);
           this.instance.render();
         }
         this.selectedAnchor = null;
       }
-    }
-  }
-}
+    },
+  },
+};
+
+export default createEdge;
