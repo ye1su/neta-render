@@ -8,6 +8,7 @@ export function CraeteEdgePage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
+      modes:['create-edge']
     });
 
     const model = {

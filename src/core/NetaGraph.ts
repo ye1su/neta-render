@@ -33,7 +33,7 @@ export class NetaGraph extends Application {
         this.registerMap.set(item.name, item.render);
       });
     }
-    this.buildInEvent.eventInit()
+    this.buildInEvent.init()
   }
 
 

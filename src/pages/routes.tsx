@@ -12,7 +12,7 @@ import ForcePage from "./LayoutPage/ForcePage.tsx";
 import DagrePage from "./LayoutPage/Dagre.tsx";
 import { StylePage } from "./ShapePage/StylePage.tsx";
 import { CombinationPage } from "./ShapePage/CombinationPage.tsx";
-import { CraeteEdgePage } from "./EdgePage/CraeteEdgePage.tsx";
+import { CraeteEdgePage } from "./ModePage/CraeteEdgePage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -95,14 +95,7 @@ export const routes = [
       group: "Edge",
     },
   },
-  {
-    path: `${BASE_URL}/createdge`,
-    element: <CraeteEdgePage />,
-    options: {
-      name: "创建线",
-      group: "Edge",
-    },
-  },
+
   {
     path: `${BASE_URL}/force`,
     element: <ForcePage />,
@@ -117,6 +110,14 @@ export const routes = [
     options: {
       name: "关系图",
       group: "Layout",
+    },
+  },
+  {
+    path: `${BASE_URL}/createdge`,
+    element: <CraeteEdgePage />,
+    options: {
+      name: "创建线",
+      group: "Mode",
     },
   },
 ].map((item) => {
