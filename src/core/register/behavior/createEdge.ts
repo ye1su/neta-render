@@ -6,17 +6,20 @@ const createEdge = {
     getEvents() {
       return {
         "graphics:pointerdown": "onPointerDown",
-        "canvas:pointermove": "onPointermove",
+        "canvas:pointermove": "onPointerMove",
         "canvas:pointerup": "onPointerUp",
       };
     },
     onPointerDown(event, target) {
       if (target.anchor?.containPort) {
-        this.selectedAnchor = target.anchor?.containPort;
+        this._selectedAnchor = {
+          target,
+          containPort: target.anchor?.containPort,
+        };
       }
     },
     onPointerMove(e) {
-      if (this.selectedAnchor) {
+      if (this._selectedAnchor) {
         const child = this.instance.stage.findChild(TEMPORARY_CREATE_EDGE_ID);
         if (child) {
           this.instance.stage.removeChild(child);
@@ -34,20 +37,20 @@ const createEdge = {
         this.instance.addNode({
           id: TEMPORARY_CREATE_EDGE_ID,
           type: "polygon",
-          x: this.selectedAnchor.point.x / 2,
-          y: this.selectedAnchor.point.y / 2,
+          x: this._selectedAnchor.containPort.point.x / 2,
+          y: this._selectedAnchor.containPort.point.y / 2,
           points: [
             0,
             0,
-            tPoint.x / 2 - this.selectedAnchor.point.x / 2,
-            tPoint.y / 2 - this.selectedAnchor.point.y / 2,
+            tPoint.x / 2 - this._selectedAnchor.containPort.point.x / 2,
+            tPoint.y / 2 - this._selectedAnchor.containPort.point.y / 2,
           ],
         });
         this.instance.render();
       }
     },
     onPointerUp(e, target) {
-      if (this.selectedAnchor) {
+      if (this._selectedAnchor) {
         const child = this.instance.stage.findChild(TEMPORARY_CREATE_EDGE_ID);
         if (child) {
           this.instance.stage.removeChild(child);
@@ -56,21 +59,25 @@ const createEdge = {
 
         const port = target?.anchor?.containPort;
 
-        if (port && target.id !== TEMPORARY_CREATE_EDGE_ID) {
+        // 自己和自己的port相连会被取消
+        const isSamePort =
+          target.id === this._selectedAnchor.target.id &&
+          this._selectedAnchor.containPort.id == port.id;
+
+        if (port && target.id !== TEMPORARY_CREATE_EDGE_ID && !isSamePort) {
           const craeteEdge = {
-            id: "xxxxccc",
-            label: "edge",
-            source: "node1",
-            target: "node2",
+            id: new Date().getTime(),
+            source: this._selectedAnchor.target.id,
+            target: target.id,
             type: "Straight",
-            sourceAnchor: this.selectedAnchor.id,
+            sourceAnchor: this._selectedAnchor.containPort.id,
             targetAnchor: port.id,
           };
 
           this.instance.addEdge(craeteEdge);
           this.instance.render();
         }
-        this.selectedAnchor = null;
+        this._selectedAnchor = null;
       }
     },
   },

@@ -4,18 +4,25 @@ import { EVENT_TYPE } from "./config";
 
 export class BuiltInEvent {
   private instance: NetaGraph;
-  private behaviors = BEHAVIOR
+  private behaviors = BEHAVIOR;
 
   constructor(instance: NetaGraph) {
     this.instance = instance;
   }
 
   init() {
-    this.instance.on(EVENT_TYPE.GRAPHICS_POINTERDOWN, this.pointdown.bind(this));
-    this.instance.on(EVENT_TYPE.CANVAS_POINTERMOVE, this.pointermove.bind(this));
+    // for(const eventKey in EVENT_TYPE) {
+    //   const eventName = EVENT_TYPE[eventKey]
+    // }
+    this.instance.on(
+      EVENT_TYPE.GRAPHICS_POINTERDOWN,
+      this.pointdown.bind(this)
+    );
+    this.instance.on(
+      EVENT_TYPE.CANVAS_POINTERMOVE,
+      this.pointermove.bind(this)
+    );
     this.instance.on(EVENT_TYPE.CANVAS_POINTERUP, this.pointerup.bind(this));
-    console.log(this.behaviors, '===');
-    
   }
 
   destroy() {
@@ -25,17 +32,29 @@ export class BuiltInEvent {
   }
 
   pointdown(event, target) {
-    const name = EVENT_TYPE.GRAPHICS_POINTERDOWN
-    this.behaviors.CreateEdge.render.onPointerDown.apply(this, [event, target])
+    const name = EVENT_TYPE.GRAPHICS_POINTERDOWN;
+    this.loadEvent(name,  [event, target])
   }
 
-  pointermove(event) {
-    const name = EVENT_TYPE.CANVAS_POINTERMOVE
-    this.behaviors.CreateEdge.render.onPointerMove.apply(this, [event])
+  pointermove(event, target) {
+    const name = EVENT_TYPE.CANVAS_POINTERMOVE;
+    this.loadEvent(name,  [event, target])
   }
 
   pointerup(event, target) {
-    const name = EVENT_TYPE.CANVAS_POINTERUP
-    this.behaviors.CreateEdge.render.onPointerUp.apply(this, [event, target])
+    const name = EVENT_TYPE.CANVAS_POINTERUP;
+    this.loadEvent(name,  [event, target])
+  }
+
+  loadEvent(name: string, args: any[]) {
+    for (const behaviorKey in this.behaviors) {
+      const behaviorIns = this.behaviors[behaviorKey];
+      const events = behaviorIns.render.getEvents();
+      const evnetName = events[name];
+      if(typeof behaviorIns.render[evnetName] !== 'function') {
+         throw new Error('当前挂载的behavior动作异常')
+      }
+      behaviorIns.render[evnetName].apply(this, [...args]);
+    }
   }
 }
