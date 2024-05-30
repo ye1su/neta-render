@@ -31,19 +31,19 @@ export class BuiltInEvent {
     this.instance.off(EVENT_TYPE.CANVAS_POINTERUP, this.pointerup);
   }
 
-  pointdown(event, target) {
+  pointdown(event) {
     const name = EVENT_TYPE.GRAPHICS_POINTERDOWN;
-    this.loadEvent(name,  [event, target])
+    this.loadEvent(name,  [event])
   }
 
-  pointermove(event, target) {
+  pointermove(event) {
     const name = EVENT_TYPE.CANVAS_POINTERMOVE;
-    this.loadEvent(name,  [event, target])
+    this.loadEvent(name,  [event])
   }
 
-  pointerup(event, target) {
+  pointerup(event) {
     const name = EVENT_TYPE.CANVAS_POINTERUP;
-    this.loadEvent(name,  [event, target])
+    this.loadEvent(name,  [event])
   }
 
   loadEvent(name: string, args: any[]) {

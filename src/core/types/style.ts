@@ -5,7 +5,7 @@ export interface ItemStyle {
   stroke?: string;
   lineCap?: string;
   lineJoin?: string;
-  lineDash?: string;
+  lineDash?: number[];
 
   shadowColor?: string;
   shadowBlur?: number;

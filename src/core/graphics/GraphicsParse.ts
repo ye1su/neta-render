@@ -1,13 +1,14 @@
 import { Container } from "../display";
 import { BaseShapes, LineType } from "../enums";
-import { RegisterContextOptions, RegisterMap } from "../types";
+import { AddShapeConfig, NodeModel, RegisterContextOptions } from "../types";
+import { RegNodeType } from "../types/register";
 import { BASE_FONT_SIZE, fixFactor, getCenterX } from "../utils";
 import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
 
 export function graphicsShapeParse(
-  registerMap: Map<string, RegisterMap["render"]>,
-  json: Record<string, any>
+  registerMap: Map<string, RegNodeType["render"]>,
+  json: NodeModel
 ) {
   fixUnit(json);
 
@@ -92,7 +93,6 @@ export function graphicsShapeParse(
 
     children = [polygon];
   }
-
   if (registerMap.get(type)) {
     const action = new RegisterContext({
       inputProperties: json,
@@ -109,6 +109,8 @@ export function graphicsShapeParse(
   graphic.whole = true;
 
   graphic.id = id;
+  console.log('graphic: ', graphic);
+  console.log('id: ', id);
   graphic.updatePosition(x, y);
   return graphic;
 }
@@ -146,7 +148,7 @@ export function graphicsLineParse(json: Record<string, any>) {
   return line;
 }
 
-function fixUnit(json: Record<string, any>) {
+function fixUnit(json: AddShapeConfig) {
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
   if (json.width) {
@@ -164,7 +166,7 @@ function fixUnit(json: Record<string, any>) {
   }
 }
 
-function addShape(type: string, config: Record<string, any>) {
+function addShape(type: string, config: AddShapeConfig) {
   const { x, y, width, height, style, text } = config;
   const graphics = new Graphics();
   graphics.style(style);
@@ -199,15 +201,15 @@ function addShape(type: string, config: Record<string, any>) {
   return graphics;
 }
 
-class RegisterContext {
+export class RegisterContext {
   public groups: Graphics[] = [];
-  public inputProperties = null;
+  public inputProperties: RegisterContextOptions["inputProperties"] = null;
 
   constructor(options: RegisterContextOptions) {
     this.inputProperties = options.inputProperties;
   }
 
-  public addShape(type: string, config: Record<string, any> = {}) {
+  public addShape(type: string, config: AddShapeConfig) {
     fixUnit(config);
     const shape = addShape(type, config);
     this.groups.push(shape);

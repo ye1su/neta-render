@@ -50,6 +50,8 @@ export class EventSystem {
       offsetY: event.offsetY * 2,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+    e.target = target
+    e.container = target instanceof Graphics ? target.parent : null
     // 获取当前点击的相关信息
     this._mouseDownPoint = {
       x: e.offsetX,
@@ -73,7 +75,7 @@ export class EventSystem {
       // 记录点击节点在图形的位置
       this._mouseDownPoint.diffx = e.offsetX - tansferTarget.x;
       this._mouseDownPoint.diffy = e.offsetY - tansferTarget.y;
-      this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e, target);
+      this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e);
     }
   };
 
@@ -134,7 +136,9 @@ export class EventSystem {
       offsetY: event.offsetY * 2,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
-    this.emit(EVENT_TYPE.CANVAS_POINTERUP, e, target);
+    e.target = target
+    e.container = target instanceof Graphics ? target.parent : null
+    this.emit(EVENT_TYPE.CANVAS_POINTERUP, e);
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {

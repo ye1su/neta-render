@@ -183,7 +183,7 @@ export class Graphics extends Container {
 
       const _fontSize = 32;
       ctx.font = `${_fontSize}px Arial`;
-      ctx.fillStyle = "#000";
+      ctx.fillStyle = shapeStyle.fill;
 
       // 绘制文字
       ctx.fillText(text, x, y);

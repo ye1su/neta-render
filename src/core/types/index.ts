@@ -1,12 +1,12 @@
 import { RendererType } from "../enums";
+import { RegNodeType } from "./register";
 import { ItemStyle } from "./style";
-
 
 // Application 的如惨
 export interface IApplicationOptions {
   el: HTMLDivElement;
   rendererType?: RendererType;
-  backgroundColor?: string
+  backgroundColor?: string;
 }
 
 export interface GlobalTransform {
@@ -18,32 +18,23 @@ export interface GlobalTransform {
   scale: number;
 }
 
-
 export interface NetaGraphOptions extends IApplicationOptions {
-  layout?: LayoutConfig
-  register?: RegisterMap[]
+  layout?: LayoutConfig;
+  register?: RegNodeType[];
 }
 
 // 布局配置
 export interface LayoutConfig {
-  type: string
+  type: string;
 }
 
 // itemType
-export type ItemType = 'node' | 'edge'
-
-
-// 注册函数的map
-export interface RegisterMap {
-  name: string
-  render: Record<string, any>
-}
+export type ItemType = "node" | "edge";
 
 export interface Model {
   nodes: NodeModel[];
-  edges: EdgeModel[]
+  edges: EdgeModel[];
 }
-
 
 export interface BaseModel {
   id: string;
@@ -53,44 +44,48 @@ export interface BaseModel {
 
 export interface NodeModel extends BaseModel {
   // x 节点x位置
-  x: number,
+  x: number;
   // y 节点y
-  y: number,
+  y: number;
   // 节点文字
-  text?: string
+  text?: string;
   // style样式
-  style?: ItemStyle
+  style?: ItemStyle;
   // 节点宽度
-  width?: number,
+  width?: number;
   // 节点高度
-  height?: number
+  height?: number;
   // 圆的半径或者 直角的圆角
-  radius?: number
+  radius?: number;
   // 图片地址
-  src?: string
+  src?: string;
   // 椭圆x
-  radiusX?: number
+  radiusX?: number;
   // 椭圆y
-  radiusY?: number
+  radiusY?: number;
   // 多边形节点
-  points?: number[]
+  points?: number[];
+  // 是否启动锚点
+  anchor?: boolean;
 }
 
-
-export interface EdgeModel extends  BaseModel{
+export interface EdgeModel extends BaseModel {
   // source Id
-  source: string
+  source: string;
   // target Id
-  target: string
+  target: string;
   // source节点的锚点
-  sourceAnchor?: number
+  sourceAnchor?: number;
   // target节点的锚点
-  targetAnchor?: number
+  targetAnchor?: number;
   // 线需要经过的必经点
-  anchorPoints?: number[][]
+  anchorPoints?: number[][];
 }
+
+export type AddShapeConfig = Omit<NodeModel, "type" | "id">;
 
 // 注册上下问初始化参数
 export interface RegisterContextOptions {
-  inputProperties: Record<string, any>
+  inputProperties: Partial<NodeModel> &
+    Partial<EdgeModel> & { [name: string]: any };
 }

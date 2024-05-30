@@ -1,11 +1,13 @@
 import UserTask from "./nodes/regUserTask";
+import AndOr from "./nodes/regAndOr";
 
-import CreateEdge from './behavior/createEdge'
+import CreateEdge from "./behavior/createEdge";
 
 export const EXTEND_NODE = {
-  UserTask
+  UserTask,
+  AndOr,
 };
 
 export const BEHAVIOR = {
-  CreateEdge
-}
+  CreateEdge,
+};

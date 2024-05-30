@@ -13,6 +13,8 @@ import DagrePage from "./LayoutPage/Dagre.tsx";
 import { StylePage } from "./ShapePage/StylePage.tsx";
 import { CombinationPage } from "./ShapePage/CombinationPage.tsx";
 import { CraeteEdgePage } from "./ModePage/CraeteEdgePage.tsx";
+import { ConditionPage } from "./AppPage/ConditionPage.tsx";
+import { AndOrPage } from "./RegNodePage/AndOrPage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -80,6 +82,14 @@ export const routes = [
     },
   },
   {
+    path: `${BASE_URL}/anornode`,
+    element: <AndOrPage />,
+    options: {
+      name: "且或节点",
+      group: "Custom-Shape",
+    },
+  },
+  {
     path: `${BASE_URL}/straight`,
     element: <StraightPage />,
     options: {
@@ -118,6 +128,14 @@ export const routes = [
     options: {
       name: "创建线",
       group: "Mode",
+    },
+  },
+  {
+    path: `${BASE_URL}/condition`,
+    element: <ConditionPage />,
+    options: {
+      name: "条件组件",
+      group: "App",
     },
   },
 ].map((item) => {

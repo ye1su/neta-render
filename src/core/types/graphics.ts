@@ -6,7 +6,7 @@ export interface IShapeStyle {
   // stroke 笔触的颜色
   stroke?: string;
   // 描边宽度。
-  lineWidth?: string;
+  lineWidth?: number;
   // 描边虚线
   lineDash?: number[];
 }

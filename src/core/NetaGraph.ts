@@ -5,7 +5,6 @@ import {
   Model,
   NetaGraphOptions,
   NodeModel,
-  RegisterMap,
 } from "./types";
 import {
   graphicsLineParse,
@@ -16,27 +15,34 @@ import { Application } from "./Application";
 import { LayoutType } from "./enums";
 import { cloneDeep } from "lodash-es";
 import { BuiltInEvent } from "./events";
+import { RegNodeType } from "./types/register";
+import { EXTEND_NODE } from "./register";
+import _ from "lodash-es";
 
 export class NetaGraph extends Application {
-  public model: Model;
-  public registerMap: Map<string, RegisterMap["render"]> = new Map();
+  public model: Model = {nodes: [], edges: []};
+  public registerMap: Map<string, RegNodeType["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
-  public buildInEvent = new BuiltInEvent(this)
+  public buildInEvent = new BuiltInEvent(this);
 
   constructor(options: NetaGraphOptions) {
     super(options);
     if (options.layout) {
       this.layout(options.layout);
     }
+
+    // 如果内置注册节点
+    Object.values(EXTEND_NODE).forEach((item) => {
+      this.registerMap.set(item.name, item.render);
+    });
+    // 注册传入节点
     if (Array.isArray(options.register)) {
       options.register.forEach((item) => {
         this.registerMap.set(item.name, item.render);
       });
     }
-    this.buildInEvent.init()
+    this.buildInEvent.init();
   }
-
-
 
   layoutRender(nodes, edges) {
     const evnetParmas = {
@@ -91,12 +97,30 @@ export class NetaGraph extends Application {
     }
   }
 
-  addNode(model: NodeModel) {
-    const graphic = graphicsShapeParse(this.registerMap, model);
+  addNode(data: NodeModel) {
+    this.model.nodes.push(data)
+    const graphic = graphicsShapeParse(this.registerMap, data);
     this.stage.addChild(graphic);
   }
-  addEdge(model: EdgeModel) {
-    const graphic = graphicsLineParse(model);
+  addEdge(data: EdgeModel) {
+    this.model.edges.push(data)
+    const graphic = graphicsLineParse(data);
     this.stage.addChild(graphic);
+  }
+  updateNodeData(data: NodeModel | NodeModel[]) {
+    console.log('data: -----', data);
+    if (Array.isArray(data)) {
+      return;
+    }
+    console.log('this.model: ======', this.model);
+
+    this.model.nodes.forEach((n) => {
+      if (n.id == data.id) {
+        console.log('data: ', data);
+
+        n = _.merge(n, data);
+      }
+    });
+    this.read(this.model);
   }
 }

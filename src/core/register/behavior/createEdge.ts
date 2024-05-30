@@ -10,7 +10,8 @@ const createEdge = {
         "canvas:pointerup": "onPointerUp",
       };
     },
-    onPointerDown(event, target) {
+    onPointerDown(e) {
+      const target = e.target
       if (target.anchor?.containPort) {
         this._selectedAnchor = {
           target,
@@ -49,8 +50,9 @@ const createEdge = {
         this.instance.render();
       }
     },
-    onPointerUp(e, target) {
+    onPointerUp(e) {
       if (this._selectedAnchor) {
+        const target = e.target
         const child = this.instance.stage.findChild(TEMPORARY_CREATE_EDGE_ID);
         if (child) {
           this.instance.stage.removeChild(child);
