@@ -18,9 +18,10 @@ import { BuiltInEvent } from "./events";
 import { RegNodeType } from "./types/register";
 import { EXTEND_NODE } from "./register";
 import _ from "lodash-es";
+import { fixFactor } from "./utils";
 
 export class NetaGraph extends Application {
-  public model: Model = {nodes: [], edges: []};
+  public model: Model = { nodes: [], edges: [] };
   public registerMap: Map<string, RegNodeType["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
   public buildInEvent = new BuiltInEvent(this);
@@ -98,29 +99,32 @@ export class NetaGraph extends Application {
   }
 
   addNode(data: NodeModel) {
-    this.model.nodes.push(data)
+    const targetNode = this.model.nodes.find((item) => item.id == data.id);
+    if (!targetNode) {
+      this.model.nodes.push(data);
+    }
     const graphic = graphicsShapeParse(this.registerMap, data);
     this.stage.addChild(graphic);
   }
   addEdge(data: EdgeModel) {
-    this.model.edges.push(data)
+    const targetEdge = this.model.edges.find((item) => item.id == data.id);
+    if (!targetEdge) {
+      this.model.edges.push(data);
+    }
     const graphic = graphicsLineParse(data);
     this.stage.addChild(graphic);
   }
   updateNodeData(data: NodeModel | NodeModel[]) {
-    console.log('data: -----', data);
     if (Array.isArray(data)) {
       return;
     }
-    console.log('this.model: ======', this.model);
 
     this.model.nodes.forEach((n) => {
       if (n.id == data.id) {
-        console.log('data: ', data);
-
-        n = _.merge(n, data);
+        n = _.merge(n, n.factor, data);
       }
     });
+
     this.read(this.model);
   }
 }

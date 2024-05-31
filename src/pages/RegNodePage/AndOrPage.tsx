@@ -25,10 +25,10 @@ export function AndOrPage() {
     appRef.current.addItem("node", model);
     appRef.current.render();
     appRef.current.on("graphics:pointerdown", (evt) => {
-      console.log("evt: ", evt);
+      const isAnd = evt.container?._data?.data?.cate == "and";
       appRef.current.updateNodeData({
         id: evt.container.id,
-        data: { cate: "or" },
+        data: { cate: isAnd ? "or" : "and" },
       });
     });
     return () => {

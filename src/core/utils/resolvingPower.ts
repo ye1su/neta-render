@@ -7,14 +7,17 @@ export const BASE_FONT_SIZE = 16;
 export const RESOLUTION_RATION = 2;
 
 // 根据缩放倍数进行修复
-export function fixFactor(num: number) {
+export function fixFactor(num: number, isClose = false) {
+  if (isClose) {
+    return num / 2;
+  }
   return num * RESOLUTION_RATION;
 }
 
 /**
  * 统计自定义图形的包围框
- * @param points 
- * @returns 
+ * @param points
+ * @returns
  */
 export function getPolygonSurround(points: number[]) {
   const box = {

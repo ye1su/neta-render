@@ -5,6 +5,7 @@ import { RegNodeType } from "../types/register";
 import { BASE_FONT_SIZE, fixFactor, getCenterX } from "../utils";
 import { Graphics } from "./Graphics";
 import { GraphicsOfLine } from "./GraphicsOfLine";
+import _ from "lodash-es";
 
 export function graphicsShapeParse(
   registerMap: Map<string, RegNodeType["render"]>,
@@ -109,8 +110,7 @@ export function graphicsShapeParse(
   graphic.whole = true;
 
   graphic.id = id;
-  console.log('graphic: ', graphic);
-  console.log('id: ', id);
+  graphic._data = json;
   graphic.updatePosition(x, y);
   return graphic;
 }
@@ -149,6 +149,7 @@ export function graphicsLineParse(json: Record<string, any>) {
 }
 
 function fixUnit(json: AddShapeConfig) {
+  json.factor = _.pick(json, ["x", "y", "width", "height", "radius", "points"]);
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
   if (json.width) {

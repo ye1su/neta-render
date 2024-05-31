@@ -40,6 +40,7 @@ export interface BaseModel {
   id: string;
   type: string;
   label?: string;
+  factor?: Record<string, any>;
 }
 
 export interface NodeModel extends BaseModel {

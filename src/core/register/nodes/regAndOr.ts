@@ -10,7 +10,6 @@ const andOrNode: RegNodeType = {
   render: {
     draw(action) {
       const initJson = action.inputProperties;
-      console.log("initJson: ", initJson);
       action.addShape("circle", {
         x: 0,
         y: 0,

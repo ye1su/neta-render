@@ -15,6 +15,9 @@ export class Container extends DisplayObject {
   // 如果是组合whole为true 则container是个整体
   public whole = false;
 
+  // container渲染的数据
+  public _data = null;
+
   constructor() {
     super();
   }
@@ -168,5 +171,4 @@ export class Container extends DisplayObject {
     }
     return false;
   }
-
 }
