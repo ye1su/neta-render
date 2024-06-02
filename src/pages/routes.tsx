@@ -15,6 +15,7 @@ import { CombinationPage } from "./ShapePage/CombinationPage.tsx";
 import { CraeteEdgePage } from "./ModePage/CraeteEdgePage.tsx";
 import { ConditionPage } from "./AppPage/ConditionPage.tsx";
 import { AndOrPage } from "./RegNodePage/AndOrPage.tsx";
+import { CvsSelectPage } from "./RegNodePage/CvsSelectPage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -86,6 +87,14 @@ export const routes = [
     element: <AndOrPage />,
     options: {
       name: "且或节点",
+      group: "Custom-Shape",
+    },
+  },
+  {
+    path: `${BASE_URL}/cvsSelect`,
+    element: <CvsSelectPage />,
+    options: {
+      name: "下拉组件",
       group: "Custom-Shape",
     },
   },
