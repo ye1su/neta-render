@@ -46,12 +46,14 @@ export class EventSystem {
 
   private onPointerDown = (event) => {
     const e = Object.assign({}, event, {
+      x: event.x,
+      y: event.y,
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
-    e.target = target
-    e.container = target instanceof Graphics ? target.parent : null
+    e.target = target;
+    e.container = target instanceof Graphics ? target.parent : null;
     // 获取当前点击的相关信息
     this._mouseDownPoint = {
       x: e.offsetX,
@@ -60,10 +62,12 @@ export class EventSystem {
       diffy: 0,
     };
     // 拖拽开始时存取当前矩阵快照
-    this._dragging = true;
+    // this._dragging = true;
+    this._dragging = false;
+
     this._renderer.cloneMatrix();
 
-    if(target?.type === ItmeType.Container) {
+    if (target?.type === ItmeType.Container) {
       this._dragging = false;
     }
 
@@ -76,7 +80,9 @@ export class EventSystem {
       this._mouseDownPoint.diffx = e.offsetX - tansferTarget.x;
       this._mouseDownPoint.diffy = e.offsetY - tansferTarget.y;
       this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e);
+      return;
     }
+    this.emit(EVENT_TYPE.CANVAS_POINTERDOWN, e);
   };
 
   private onPointerMove = (event) => {
@@ -136,8 +142,8 @@ export class EventSystem {
       offsetY: event.offsetY * 2,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
-    e.target = target
-    e.container = target instanceof Graphics ? target.parent : null
+    e.target = target;
+    e.container = target instanceof Graphics ? target.parent : null;
     this.emit(EVENT_TYPE.CANVAS_POINTERUP, e);
   };
 
@@ -184,25 +190,24 @@ export class EventSystem {
   // 广度遍历
   public hitTestBreadthFirst(root: Graphics | Container, globalPos: Point) {
     const queue: (Graphics | Container)[] = [root];
-  
+
     while (queue.length > 0) {
       const curTarget = queue.shift();
-  
+
       if (!curTarget.visible) {
         continue;
       }
-  
+
       // 检查自身
       if (curTarget.containsPoint(globalPos)) {
         this.hitTarget = curTarget;
         return;
       }
-  
+
       // 将子元素加入队列
       for (let i = 0; i < curTarget.children.length; i++) {
         queue.push(curTarget.children[i]);
       }
     }
   }
-  
 }

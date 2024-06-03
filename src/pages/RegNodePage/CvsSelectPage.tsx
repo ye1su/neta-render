@@ -20,17 +20,19 @@ export function CvsSelectPage() {
 
     appRef.current.addItem("node", model);
     appRef.current.render();
-    // appRef.current.on("graphics:pointerdown", (evt) => {
-    //   const isAnd = evt.container?._data?.data?.cate == "and";
-    //   appRef.current.updateNodeData({
-    //     id: evt.container.id,
-    //     data: { cate: isAnd ? "or" : "and" },
-    //   });
-    // });
+    appRef.current.on("graphics:pointerdown", (evt) => {
+
+
+    });
     return () => {
       appRef.current.destroy();
     };
   }, []);
 
-  return <div id="dom" style={{ width: 800, height: 600 }}></div>;
+  return (
+    <div
+      id="dom"
+      style={{ width: 800, height: 600, position: "relative" }}
+    ></div>
+  );
 }

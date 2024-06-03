@@ -3,6 +3,7 @@ import AndOr from "./nodes/regAndOr";
 import CvsSelect from "./nodes/regCvsSelect";
 
 import CreateEdge from "./behavior/createEdge";
+import clickEditNode from "./behavior/clickEditNode";
 
 export const EXTEND_NODE = {
   UserTask,
@@ -12,4 +13,5 @@ export const EXTEND_NODE = {
 
 export const BEHAVIOR = {
   CreateEdge,
+  clickEditNode
 };

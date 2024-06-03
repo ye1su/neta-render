@@ -101,6 +101,7 @@ export function graphicsShapeParse(
     const shapeIns = registerMap.get(type);
     shapeIns.draw(action);
     children = action.groups;
+    graphic.html = shapeIns.html()
   }
 
   children.forEach((item) => {

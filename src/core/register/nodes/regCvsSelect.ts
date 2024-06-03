@@ -10,15 +10,16 @@ const andOrNode: RegNodeType = {
         x: 0,
         y: 0,
         width: 200,
-        height: 60,
+        height: 40,
         style: {
           stroke: "#1296db",
           lineWidth: 2,
         },
       });
-
-
     },
+    html: () => {
+      return `<input style="width: 100%; height: 100%"></input>`
+    }
   },
 };
 
