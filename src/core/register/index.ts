@@ -1,6 +1,6 @@
 import UserTask from "./nodes/regUserTask";
 import AndOr from "./nodes/regAndOr";
-import CvsSelect from "./nodes/regCvsSelect";
+import CvsInput from "./nodes/regCvsInput";
 
 import CreateEdge from "./behavior/createEdge";
 import clickEditNode from "./behavior/clickEditNode";
@@ -8,7 +8,7 @@ import clickEditNode from "./behavior/clickEditNode";
 export const EXTEND_NODE = {
   UserTask,
   AndOr,
-  CvsSelect,
+  CvsInput,
 };
 
 export const BEHAVIOR = {

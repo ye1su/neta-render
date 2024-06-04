@@ -101,7 +101,7 @@ export function graphicsShapeParse(
     const shapeIns = registerMap.get(type);
     shapeIns.draw(action);
     children = action.groups;
-    graphic.html = shapeIns.html()
+    graphic.html = shapeIns.html({ config: json });
   }
 
   children.forEach((item) => {

@@ -7,6 +7,8 @@ export class ShapeStyle {
 
   public fill = '#ffffff'
 
+  public textAlign = 'start'
+  public textBaseline = 'alphabetic'
 
   public lineWidth = 0.8;
   public stroke = "#000";
@@ -29,6 +31,9 @@ export class ShapeStyle {
 
     obj.fill = this.fill
 
+    obj.textAlign = this.textAlign
+    obj.textBaseline = this.textBaseline
+
     obj.shadowColor = this.shadowColor
     obj.shadowBlur = this.shadowBlur
     obj.shadowOffsetX = this.shadowOffsetX
@@ -48,6 +53,9 @@ export class ShapeStyle {
     this.visible = true
 
     this.fill = '#ffffff'
+
+    this.textAlign = 'start'
+    this.textBaseline = 'alphabetic'
 
     this.shadowColor = 'rgba(0, 0, 0, 0)'
     this.shadowBlur = 0
