@@ -1,7 +1,7 @@
 import { TreeNode, initializeNode } from "./TreeNode";
 
 // 树的主类
-export class Tree {
+export class TreeRender {
   // 根节点
   public root: TreeNode;
   // 节点数
@@ -61,6 +61,8 @@ export class Tree {
     this.layoutChild(this.root);
     // 回推布局，从最底层开始，往上检索，查找重叠节点，调整优化树的布局
     this.layoutOverlaps();
+
+    replaceXY(this.root)
   }
 
   /**
@@ -91,8 +93,8 @@ export class Tree {
     node.x = x;
 
     // 位移所有子节点
-    for (let i = 0; i < node.child.length; i++) {
-      this.translateTree(node.child[i], node.child[i].x + dx);
+    for (let i = 0; i < node.children.length; i++) {
+      this.translateTree(node.children[i], node.children[i].x + dx);
     }
   }
 
@@ -141,23 +143,23 @@ export class Tree {
     if (parent === null) return;
 
     // 只有一个子节点，则只要将该子节点与父节点对齐即可
-    if (parent.child.length === 1) {
-      dx = parent.x - parent.child[0].x;
+    if (parent.children.length === 1) {
+      dx = parent.x - parent.children[0].x;
     }
 
     // > 1 的子节点，就要计算最左的子节点和最右的子节点的距离的中点与父节点的距离
-    if (parent.child.length > 1) {
+    if (parent.children.length > 1) {
       dx =
         parent.x -
-        (parent.child[0].x +
-          (parent.child[parent.child.length - 1].x - parent.child[0].x) / 2);
+        (parent.children[0].x +
+          (parent.children[parent.children.length - 1].x - parent.children[0].x) / 2);
     }
 
     // 若要移动的距离不为0
     if (dx) {
       // 将所有子节点居中对齐父节点
-      for (let i = 0; i < parent.child.length; i++) {
-        this.translateTree(parent.child[i], parent.child[i].x + dx);
+      for (let i = 0; i < parent.children.length; i++) {
+        this.translateTree(parent.children[i], parent.children[i].x + dx);
       }
     }
   }
@@ -168,20 +170,20 @@ export class Tree {
    */
   layoutChild(node: TreeNode) {
     // 若当前节点为叶子节点，返回
-    if (node.child.length === 0) return;
+    if (node.children.length === 0) return;
     else {
       // 计算子节点最左位置
-      let start = node.x - ((node.child.length - 1) * this.nodeInterval) / 2;
+      let start = node.x - ((node.children.length - 1) * this.nodeInterval) / 2;
 
       // 遍历子节点
-      for (let i = 0, len = node.child.length; i < len; i++) {
+      for (let i = 0, len = node.children.length; i < len; i++) {
         // 计算当前子节点横坐标
         let x = start + i * this.nodeInterval;
 
         // 移动该子节点及以该子节点为根的整棵树
-        this.translateTree(node.child[i], x);
+        this.translateTree(node.children[i], x);
         // 递归布局该子节点
-        this.layoutChild(node.child[i]);
+        this.layoutChild(node.children[i]);
       }
     }
   }
@@ -200,38 +202,32 @@ export class Tree {
    * 更新需要更新的节点
    * @param node
    */
-  patch(node: TreeNode) {
+  patch(node: TreeNode, callback) {
     // 若节点的当前位置不等于初始位置，则更新
     if (node.x !== node.ox) {
       // 渲染视图（根据你所使用的渲染库而定，这句只是伪代码）
     //   updateViewOnYourRenderer();
 
       // 更新节点的初始位置为当前位置
-      node.ox = node.x;
+      // node.ox = node.x;
     }
-
+    node.x = this.rootX + node.layer * this.nodeInterval
+    callback(node)
     // 递归更新子节点
-    for (let i = 0; i < node.child.length; i++) {
-      this.patch(node.child[i]);
+    for (let i = 0; i < node.children.length; i++) {
+      this.patch(node.children[i], callback);
     }
   }
 
-  /**
-   * 更新视图
-   */
-  update() {
-    this.renderRequestCount++;
+}
 
-    // 异步更新
-    requestAnimationFrame(() => {
-      this.renderCount++;
 
-      if (this.renderCount === this.renderRequestCount) {
-        this.layout();
-        this.patch(this.root);
+function replaceXY(node: TreeNode) {
+  const temp = node.x
+  node.x = node.y
+  node.y = temp
 
-        this.renderCount = this.renderRequestCount = 0;
-      }
-    });
+  for (let i = 0, len = node.children.length; i < len; i++) {
+    replaceXY(node.children[i]);
   }
 }

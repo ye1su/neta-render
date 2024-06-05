@@ -10,17 +10,49 @@ export function ConditionPage() {
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
       register: [EXTEND_NODE.UserTask],
+      layout: {
+        type: 'tree'
+      }
     });
 
-    const model = {
-      id: "node1",
-      label: "node1",
-      type: "userTask",
-      x: 20,
-      y: 20,
-    };
 
-    appRef.current.addItem("node", model);
+    const model = {
+      nodes: [
+        {
+          id: "node1",
+          label: "node1",
+          type: "andOr",
+          x: 100,
+          y: 100,
+        },
+        {
+          id: "node12",
+          label: "node1",
+          type: "cvsInput",
+          x: 200,
+          y: 50,
+        },
+        {
+          id: "node13",
+          label: "node1",
+          type: "cvsInput",
+          x: 200,
+          y: 150,
+        }
+      ],
+      edges: [
+        {
+          source: 'node1',
+          target: 'node12'
+        },
+        {
+          source: 'node1',
+          target: 'node13'
+        }
+      ]
+    }
+
+    appRef.current.read(model)
     appRef.current.render();
 
     return () => {

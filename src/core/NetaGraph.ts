@@ -10,7 +10,7 @@ import {
   graphicsLineParse,
   graphicsShapeParse,
 } from "./graphics/GraphicsParse";
-import { Force, Dagre } from "./layout";
+import { Force, Dagre, Tree } from "./layout";
 import { Application } from "./Application";
 import { LayoutType } from "./enums";
 import { cloneDeep } from "lodash-es";
@@ -62,6 +62,11 @@ export class NetaGraph extends Application {
       return;
     }
 
+    if (this.layoutConfig?.type == LayoutType.Tree) {
+      const tree = new Tree(nodes, edges, null, evnetParmas);
+      tree.layout();
+      return;
+    }
     this.render();
   }
 
@@ -74,12 +79,15 @@ export class NetaGraph extends Application {
 
     const { nodes, edges } = model;
     this.stage.clearChildren();
-    nodes.forEach((node) => {
-      this.addNode(node);
-    });
-    edges.forEach((edge) => {
-      this.addEdge(edge);
-    });
+    Array.isArray(nodes) &&
+      nodes.forEach((node) => {
+        this.addNode(node);
+      });
+
+    Array.isArray(edges) &&
+      edges.forEach((edge) => {
+        this.addEdge(edge);
+      });
   }
 
   read(model: Model) {

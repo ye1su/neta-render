@@ -42,5 +42,6 @@ export enum ShapeType {
 
 export enum LayoutType {
   Force = "force",
-  Dagre = "dagre"
+  Dagre = "dagre",
+  Tree = "tree"
 }

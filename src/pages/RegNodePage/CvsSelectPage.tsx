@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { EXTEND_NODE, NetaGraph, RendererType } from "../../core";
-import { Tree } from "../../core/layout/tree/Tree";
 
 export function CvsSelectPage() {
   const appRef = useRef<NetaGraph>();
@@ -9,6 +8,7 @@ export function CvsSelectPage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
+
     });
 
     const model = {
@@ -25,24 +25,6 @@ export function CvsSelectPage() {
 
 
     });
-
-
-    const tree = {
-      id: 'xxx',
-      children: [
-        {
-          id: '22'
-        },
-        {
-          id: '33'
-        }
-      ]
-    }
-
-    // const result = initializeNode(tree, null,  0, 0, 0, 0)
-    const result = new Tree(tree)
-    result.layout()
-    console.log('result: ', result);
 
     return () => {
       appRef.current.destroy();

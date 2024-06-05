@@ -28,7 +28,6 @@ const andOrNode: RegNodeType = {
       });
     },
     html: ({ config }) => {
-      console.log("config: ", config);
       return `<input  style="width: 100%; height: 100%" text=${config.text ?? ''}></input>`;
     },
   },

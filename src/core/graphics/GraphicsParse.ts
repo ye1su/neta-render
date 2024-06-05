@@ -101,7 +101,9 @@ export function graphicsShapeParse(
     const shapeIns = registerMap.get(type);
     shapeIns.draw(action);
     children = action.groups;
-    graphic.html = shapeIns.html({ config: json });
+    if(shapeIns.html) {
+      graphic.html = shapeIns.html({ config: json });
+    }
   }
 
   children.forEach((item) => {
@@ -124,7 +126,7 @@ export function graphicsLineParse(json: Record<string, any>) {
   line.zIndex = -1;
   line.id = id;
 
-  if (type == LineType.Straight) {
+  if (!type || type == LineType.Straight) {
     line.drawStraight(source, target, { sourceAnchor, targetAnchor });
   }
 
@@ -135,6 +137,7 @@ export function graphicsLineParse(json: Record<string, any>) {
       targetAnchor,
     });
   }
+
 
   // if (type == LineType.QuadraticCurve) {
   //   const { anchorPoints } = json;

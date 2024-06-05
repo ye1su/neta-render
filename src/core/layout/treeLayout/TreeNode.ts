@@ -6,7 +6,7 @@ export class TreeNode {
   // 父节点
   public parent: TreeNode;
   // 孩子节点
-  public child: TreeNode[];
+  public children: TreeNode[];
 
   // 节点所在的层级
   public layer: number;
@@ -36,7 +36,7 @@ export class TreeNode {
     this.y = y;
 
     this.ox = x;
-    this.child = [];
+    this.children = [];
   }
 }
 
@@ -47,9 +47,9 @@ export function initializeNode(data: any, parent: TreeNode, layer: number, index
   if (data.children && data.children.length > 0) {
     for (let i = 0; i < data.children.length; i++) {
       const childNode = data.children[i];
-      const child = initializeNode(childNode, node, layer + 1, i, 0, 0);
-      child.parent = node
-      node.child.push(child);
+      const children = initializeNode(childNode, node, layer + 1, i, 0, 0);
+      children.parent = node
+      node.children.push(children);
     }
   }
 
