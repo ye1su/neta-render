@@ -37,7 +37,7 @@ export class TreeRender {
     // 同理上面
     this.yInterval = 60 + this.nodeHeight;
 
-    this.rootX = 400;
+    this.rootX = 100;
     this.rootY = 80;
 
     this.hashTree = [];

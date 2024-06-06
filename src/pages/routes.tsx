@@ -16,6 +16,7 @@ import { CraeteEdgePage } from "./ModePage/CraeteEdgePage.tsx";
 import { ConditionPage } from "./AppPage/ConditionPage.tsx";
 import { AndOrPage } from "./RegNodePage/AndOrPage.tsx";
 import { CvsSelectPage } from "./RegNodePage/CvsSelectPage.tsx";
+import { FreedomPage } from "./RegNodePage/FreedomPage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -95,6 +96,14 @@ export const routes = [
     element: <CvsSelectPage />,
     options: {
       name: "下拉组件",
+      group: "Custom-Shape",
+    },
+  },
+  {
+    path: `${BASE_URL}/freedom`,
+    element: <FreedomPage />,
+    options: {
+      name: "自定义dom节点",
       group: "Custom-Shape",
     },
   },

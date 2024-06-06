@@ -7,7 +7,7 @@ import { default as Eventemitter } from "eventemitter3";
 
 export class Application extends Eventemitter {
   public readonly el: HTMLDivElement;
-  public readonly stage = new Container();
+  public stage = new Container();
   public readonly renderer: CanvasRenderer;
   private eventSystem: EventSystem;
 
@@ -18,7 +18,6 @@ export class Application extends Eventemitter {
 
     this.renderer = getRenderer({ ...options });
     this.render();
-
 
     const _emit = this.emit;
     if (this.renderer instanceof CanvasRenderer) {

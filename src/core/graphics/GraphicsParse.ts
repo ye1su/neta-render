@@ -9,7 +9,8 @@ import _ from "lodash-es";
 
 export function graphicsShapeParse(
   registerMap: Map<string, RegNodeType["render"]>,
-  json: NodeModel
+  json: NodeModel,
+  ctx
 ) {
   fixUnit(json);
 
@@ -101,8 +102,8 @@ export function graphicsShapeParse(
     const shapeIns = registerMap.get(type);
     shapeIns.draw(action);
     children = action.groups;
-    if(shapeIns.html) {
-      graphic.html = shapeIns.html({ config: json });
+    if (shapeIns.html && typeof shapeIns.html == "function") {
+      graphic.html = shapeIns.html({ config: json, ctx });
     }
   }
 
@@ -137,7 +138,6 @@ export function graphicsLineParse(json: Record<string, any>) {
       targetAnchor,
     });
   }
-
 
   // if (type == LineType.QuadraticCurve) {
   //   const { anchorPoints } = json;

@@ -8,7 +8,7 @@ import { BBox } from "../types/graphics";
 export class Container extends DisplayObject {
   public type = ItmeType.Container;
   public sortDirty = false;
-  public readonly children: Container[] = [];
+  public children: Container[] = [];
   // 锚点
   public anchor = new Anchor();
 

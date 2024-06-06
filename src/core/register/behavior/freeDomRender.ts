@@ -1,11 +1,13 @@
 import { isString } from "lodash-es";
 import { TEMPORARY_CREATE_EDGE_ID } from "../../config";
 import { EVENT_TYPE } from "../../events/config";
+import { createRoot } from "react-dom/client";
+import React from "react";
 
 const clickEditNode = {
-  name: "clic-edit-node",
+  name: "freedom-node",
   render: {
-    id: null,
+    vid: null,
     renderContainer: null,
     init() {},
     destroy() {},
@@ -16,21 +18,17 @@ const clickEditNode = {
       };
     },
     onPointerDown(evt) {
-      if (!isString(evt.container.html)) return;
-      clickEditNode.render.renderContainer = evt.container;
+      const vNode = evt.container.html;
+      if (!vNode) return;
+      if (isString(vNode)) return;
       const bbox = evt.container.getBBox();
-      clickEditNode.render.id = "stagehtml-" + evt.container.id;
-      const stageChildren =
-        this.instance.el.querySelectorAll("[id^='stagehtml-']");
-      for (const child of stageChildren) {
-        this.instance.el.removeChild(child);
-      }
       const newEle = document.createElement("div");
-      newEle.id = clickEditNode.render.id;
-      newEle.innerHTML = evt.container.html;
-      const input = newEle.querySelector("input");
-      const getText = input.getAttribute("text");
-      input.value = getText;
+      clickEditNode.render.vid = "stagehtml-" + evt.container.id;
+      newEle.id = clickEditNode.render.vid;
+
+      const renderItem = createRoot(newEle);
+
+      renderItem.render(vNode);
 
       newEle.style.position = "absolute";
       newEle.style.left = evt.target.x / 2 + "px";
@@ -39,24 +37,9 @@ const clickEditNode = {
       newEle.style.height = (bbox.maxY - bbox.minY) / 2 + "px";
 
       this.instance.el.appendChild(newEle);
-
-      setTimeout(() => {
-        input.focus();
-      });
     },
     onCanvasClick(evt) {
-      if (clickEditNode.render.id) {
-        const stageChild = this.instance.el.querySelector(
-          `#${clickEditNode.render.id}`
-        );
-        const text = stageChild.querySelector("input").value;
-
-        const targetId = clickEditNode.render.renderContainer.id;
-        this.instance.updateNodeData({
-          id: targetId,
-          text,
-        });
-        // stageChild && this.instance.el.removeChild(stageChild);
+      if (clickEditNode.render.vid) {
         const stageChildren =
           this.instance.el.querySelectorAll("[id^='stagehtml-']");
         for (const child of stageChildren) {

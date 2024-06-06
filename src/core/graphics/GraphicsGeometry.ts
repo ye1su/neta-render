@@ -25,6 +25,7 @@ export class GraphicsGeometry<T extends Shape | Line> {
   }
   public updateShapeGlobalTransform(transform: GlobalTransform) {
     if (!(this.graphicsData.shape instanceof Shape)) return;
+
     this.graphicsData.shape.globalTransform = transform;
   }
   /**

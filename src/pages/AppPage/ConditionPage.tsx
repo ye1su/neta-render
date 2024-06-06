@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { EXTEND_NODE, NetaGraph, RendererType } from "../../core";
-import neta from './neta.jpg'
+import neta from "./neta.jpg";
 
 export function ConditionPage() {
   const appRef = useRef<NetaGraph>();
@@ -11,10 +11,9 @@ export function ConditionPage() {
       backgroundColor: "#fff",
       register: [EXTEND_NODE.UserTask],
       layout: {
-        type: 'tree'
-      }
+        type: "tree",
+      },
     });
-
 
     const model = {
       nodes: [
@@ -38,21 +37,21 @@ export function ConditionPage() {
           type: "cvsInput",
           x: 200,
           y: 150,
-        }
+        },
       ],
       edges: [
         {
-          source: 'node1',
-          target: 'node12'
+          source: "node1",
+          target: "node12",
         },
         {
-          source: 'node1',
-          target: 'node13'
-        }
-      ]
-    }
+          source: "node1",
+          target: "node13",
+        },
+      ],
+    };
 
-    appRef.current.read(model)
+    appRef.current.read(model);
     appRef.current.render();
 
     return () => {
@@ -60,5 +59,10 @@ export function ConditionPage() {
     };
   }, []);
 
-  return <div id="dom" style={{ width: 800, height: 600 }}></div>;
+  return (
+    <div
+      id="dom"
+      style={{ width: 800, height: 600, position: "relative" }}
+    ></div>
+  );
 }

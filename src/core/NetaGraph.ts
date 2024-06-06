@@ -53,19 +53,16 @@ export class NetaGraph extends Application {
     if (this.layoutConfig?.type == LayoutType.Force) {
       const force = new Force(nodes, edges, null, evnetParmas);
       force.layout();
-      return;
     }
 
     if (this.layoutConfig?.type == LayoutType.Dagre) {
       const dagre = new Dagre(nodes, edges, null, evnetParmas);
       dagre.layout();
-      return;
     }
 
     if (this.layoutConfig?.type == LayoutType.Tree) {
       const tree = new Tree(nodes, edges, null, evnetParmas);
       tree.layout();
-      return;
     }
     this.render();
   }
@@ -75,6 +72,7 @@ export class NetaGraph extends Application {
   }
 
   data(model: Model) {
+    this.stage.children = [];
     this.model = cloneDeep(model);
 
     const { nodes, edges } = model;
@@ -111,7 +109,8 @@ export class NetaGraph extends Application {
     if (!targetNode) {
       this.model.nodes.push(data);
     }
-    const graphic = graphicsShapeParse(this.registerMap, data);
+    const _this = this;
+    const graphic = graphicsShapeParse(this.registerMap, data, _this);
     this.stage.addChild(graphic);
   }
   addEdge(data: EdgeModel) {
