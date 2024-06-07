@@ -1,4 +1,4 @@
-import { TreeNode, initializeNode } from "./TreeNode";
+import { TreeNode } from "./TreeNode";
 
 // 树的主类
 export class TreeRender {
@@ -33,11 +33,11 @@ export class TreeRender {
     this.nodeWidth = 20;
     this.nodeHeight = 20;
     // 因为节点间的距离是从节点的中心距离计算的，所以为了方便计算，加上2*(节点宽度/2)即一个节点宽度
-    this.nodeInterval = 30 + this.nodeWidth;
+    this.nodeInterval = 60 + this.nodeWidth;
     // 同理上面
     this.yInterval = 60 + this.nodeHeight;
 
-    this.rootX = 100;
+    this.rootX = 300;
     this.rootY = 80;
 
     this.hashTree = [];
@@ -45,12 +45,41 @@ export class TreeRender {
 
     // 创建一个节点到根节点（createNode函数代码省略）
     this.root = this.createNode(treeData);
-    this.root.x = this.rootX
-    this.root.y = this.rootY
+    this.root.x = this.rootX;
+    this.root.y = this.rootY;
   }
 
   createNode(treeData) {
-    return initializeNode(treeData, null,  0, 0, 0, 0)
+    const _this = this;
+    function initializeNode(
+      data: any,
+      parent: TreeNode,
+      layer: number,
+      index: number,
+      x: number,
+      y: number
+    ): TreeNode {
+      const node = new TreeNode(data, parent, layer, index, x, y);
+      const layerList = _this.hashTree[layer];
+      if (!layerList) {
+        _this.hashTree[layer] = [node];
+      } else {
+        _this.hashTree[layer].push(node);
+      }
+
+      if (data.children && data.children.length > 0) {
+        for (let i = 0; i < data.children.length; i++) {
+          const childNode = data.children[i];
+          const children = initializeNode(childNode, node, layer + 1, i, 0, 0);
+          children.parent = node;
+          node.children.push(children);
+        }
+      }
+
+      return node;
+    }
+
+    return initializeNode(treeData, null, 0, 0, 0, 0);
   }
 
   /**
@@ -62,7 +91,7 @@ export class TreeRender {
     // 回推布局，从最底层开始，往上检索，查找重叠节点，调整优化树的布局
     this.layoutOverlaps();
 
-    replaceXY(this.root)
+    // replaceXY(this.root)
   }
 
   /**
@@ -105,20 +134,20 @@ export class TreeRender {
     // 外层循环，扫描hashtree，从最底层开始往上
     for (let i = this.hashTree.length - 1; i >= 0; i--) {
       // 获取当前层
-      let curLayer = this.hashTree[i];
+      const curLayer = this.hashTree[i];
 
       // 内层循环，遍历该层所有节点
       for (let j = 0; j < curLayer.length - 1; j++) {
         // 获取相邻的两个节点，保存为n1，n2
-        let n1 = curLayer[j],
+        const n1 = curLayer[j],
           n2 = curLayer[j + 1];
 
         // 若n1，n2有重叠
         if (this.isOverlaps(n1, n2)) {
           // 计算需要移动距离
-          let dx = n1.x + this.nodeInterval - n2.x,
-            // 找出与n1的某个祖先为兄弟节点的n2的祖先
-            node2Move = this.findCommonParentNode(n1, n2);
+          const dx = n1.x + this.nodeInterval - n2.x;
+          // 找出与n1的某个祖先为兄弟节点的n2的祖先
+          const node2Move = this.findCommonParentNode(n1, n2);
 
           // 往右移动n2
           this.translateTree(node2Move, node2Move.x + dx);
@@ -152,7 +181,9 @@ export class TreeRender {
       dx =
         parent.x -
         (parent.children[0].x +
-          (parent.children[parent.children.length - 1].x - parent.children[0].x) / 2);
+          (parent.children[parent.children.length - 1].x -
+            parent.children[0].x) /
+            2);
     }
 
     // 若要移动的距离不为0
@@ -173,12 +204,13 @@ export class TreeRender {
     if (node.children.length === 0) return;
     else {
       // 计算子节点最左位置
-      let start = node.x - ((node.children.length - 1) * this.nodeInterval) / 2;
+      const start =
+        node.x - ((node.children.length - 1) * this.nodeInterval) / 2;
 
       // 遍历子节点
       for (let i = 0, len = node.children.length; i < len; i++) {
         // 计算当前子节点横坐标
-        let x = start + i * this.nodeInterval;
+        const x = start + i * this.nodeInterval;
 
         // 移动该子节点及以该子节点为根的整棵树
         this.translateTree(node.children[i], x);
@@ -203,29 +235,36 @@ export class TreeRender {
    * @param node
    */
   patch(node: TreeNode, callback) {
-    // 若节点的当前位置不等于初始位置，则更新
-    if (node.x !== node.ox) {
-      // 渲染视图（根据你所使用的渲染库而定，这句只是伪代码）
-    //   updateViewOnYourRenderer();
-
-      // 更新节点的初始位置为当前位置
-      // node.ox = node.x;
-    }
-    node.x = this.rootX + node.layer * this.nodeInterval
-    callback(node)
+    node.y = this.rootY + node.layer * this.yInterval;
+    callback(node);
     // 递归更新子节点
     for (let i = 0; i < node.children.length; i++) {
       this.patch(node.children[i], callback);
     }
   }
 
+  /**
+   * 异步更新视图
+   */
+  update() {
+    this.renderRequestCount++;
+
+    // 异步更新
+    requestAnimationFrame(() => {
+      this.renderCount++;
+
+      if (this.renderCount === this.renderRequestCount) {
+        this.layout();
+        this.renderCount = this.renderRequestCount = 0;
+      }
+    });
+  }
 }
 
-
 function replaceXY(node: TreeNode) {
-  const temp = node.x
-  node.x = node.y
-  node.y = temp
+  const temp = node.x;
+  node.x = node.y;
+  node.y = temp;
 
   for (let i = 0, len = node.children.length; i < len; i++) {
     replaceXY(node.children[i]);

@@ -14,6 +14,8 @@ class Tree extends Layer {
 
     const treeRender = new TreeRender(tree);
     treeRender.layout();
+    console.log('treeRender: ', treeRender);
+
     treeRender.patch(treeRender.root, (nodeInfo) => {
       const targetNode = this.nodes.find((n) => n.id === nodeInfo.data.id);
       targetNode.x = nodeInfo.x;

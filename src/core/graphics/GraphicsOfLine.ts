@@ -151,7 +151,7 @@ export class GraphicsOfLine extends Container {
     if (shapeStyle.visible) {
       ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
       ctx.fillStyle = "#000";
-
+      ctx.lineWidth = 1
       ctx.fill();
       ctx.stroke();
     }

@@ -16,10 +16,10 @@ export function CirclePage() {
       type: "circle",
       x: 200,
       y: 150,
-      radius: 50,
-      style: {
-        fill: "blue",
-      },
+      radius: 20,
+      // style: {
+      //   fill: "blue",
+      // },
     };
 
     appRef.current.addItem('node', model)

@@ -17,8 +17,6 @@ export class TreeNode {
   // 纵坐标
   public y: number;
 
-  // 初始横坐标
-  public ox: number;
 
   constructor(
     data: any,
@@ -35,23 +33,6 @@ export class TreeNode {
     this.x = x;
     this.y = y;
 
-    this.ox = x;
     this.children = [];
   }
-}
-
-
-export function initializeNode(data: any, parent: TreeNode, layer: number, index: number, x: number, y: number): TreeNode {
-  const node = new TreeNode(data, parent, layer, index, x, y);
-
-  if (data.children && data.children.length > 0) {
-    for (let i = 0; i < data.children.length; i++) {
-      const childNode = data.children[i];
-      const children = initializeNode(childNode, node, layer + 1, i, 0, 0);
-      children.parent = node
-      node.children.push(children);
-    }
-  }
-
-  return node;
 }

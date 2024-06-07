@@ -17,6 +17,7 @@ import { ConditionPage } from "./AppPage/ConditionPage.tsx";
 import { AndOrPage } from "./RegNodePage/AndOrPage.tsx";
 import { CvsSelectPage } from "./RegNodePage/CvsSelectPage.tsx";
 import { FreedomPage } from "./RegNodePage/FreedomPage.tsx";
+import { TreePage } from "./LayoutPage/TreePage.tsx";
 
 const { Sider, Content } = Layout;
 
@@ -137,6 +138,14 @@ export const routes = [
     element: <DagrePage />,
     options: {
       name: "关系图",
+      group: "Layout",
+    },
+  },
+  {
+    path: `${BASE_URL}/tree`,
+    element: <TreePage />,
+    options: {
+      name: "树布局",
       group: "Layout",
     },
   },

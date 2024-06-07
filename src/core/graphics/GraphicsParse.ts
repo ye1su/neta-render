@@ -21,6 +21,7 @@ export function graphicsShapeParse(
     graphic.anchor.visible = true;
   }
   let children: Graphics[] = [];
+
   if (type == "rect") {
     const rect = addShape("rect", {
       ...json,
@@ -50,10 +51,12 @@ export function graphicsShapeParse(
 
     const textStart = getCenterX(json.label, 0, fixFactor(BASE_FONT_SIZE));
     const text = addShape("text", {
-      ...json,
       x: textStart,
       y: 0 + BASE_FONT_SIZE,
       text: json.label,
+      style: {
+        fill: "#000",
+      },
     });
     children = [circle, text];
   }
@@ -152,7 +155,12 @@ export function graphicsLineParse(json: Record<string, any>) {
   return line;
 }
 
-function fixUnit(json: AddShapeConfig) {
+function fixUnit(json: NodeModel) {
+  if (!json.type) {
+    json.type = "circle";
+    json.radius = 30;
+  }
+
   json.factor = _.pick(json, ["x", "y", "width", "height", "radius", "points"]);
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);

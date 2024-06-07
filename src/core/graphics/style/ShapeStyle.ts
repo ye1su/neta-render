@@ -10,7 +10,7 @@ export class ShapeStyle {
   public textAlign = 'start'
   public textBaseline = 'alphabetic'
 
-  public lineWidth = 0.8;
+  public lineWidth = 1;
   public stroke = "#000";
   public lineCap = LineCap.Butt;
   public lineJoin = LineJoin.Miter;
