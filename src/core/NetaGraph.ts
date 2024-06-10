@@ -45,11 +45,35 @@ export class NetaGraph extends Application {
     this.buildInEvent.init();
   }
 
+  /**
+   * 修改整个layout的内容
+   * @param config 
+   */
+  layout(config: LayoutConfig) {
+    this.layoutConfig = config;
+  }
+
+  /**
+   * 合并layout的config
+   * @param config 
+   */
+  updateLayoutConfig(config: LayoutConfig['config']) {
+    if(config) {
+      this.layoutConfig.config = _.merge(this.layoutConfig.config, config)
+    }
+  }
+
+  /**
+   * 根据布局进行render，如果没有根据node的x y
+   * @param nodes 
+   * @param edges 
+   */
   layoutRender(nodes, edges) {
     const evnetParmas = {
       stage: this.stage,
       graph: this,
     };
+
     if (this.layoutConfig?.type == LayoutType.Force) {
       const force = new Force(nodes, edges, null, evnetParmas);
       force.layout();
@@ -61,16 +85,16 @@ export class NetaGraph extends Application {
     }
 
     if (this.layoutConfig?.type == LayoutType.Tree) {
-      const tree = new Tree(nodes, edges, null, evnetParmas);
+      const tree = new Tree(nodes, edges, this.layoutConfig.config, evnetParmas);
       tree.layout();
     }
     this.render();
   }
 
-  layout(config: LayoutConfig) {
-    this.layoutConfig = config;
-  }
-
+  /**
+   * 更新数据， 需清除stage的内容
+   * @param model 
+   */
   data(model: Model) {
     this.stage.children = [];
     this.model = cloneDeep(model);
@@ -88,13 +112,21 @@ export class NetaGraph extends Application {
       });
   }
 
+  /**
+   * 更新数据并进行渲染
+   * @param model 
+   */
   read(model: Model) {
     this.data(model);
     const { nodes, edges } = this.model;
-    // this.render();
     this.layoutRender(nodes, edges);
   }
 
+  /**
+   * 增加元素
+   * @param type 
+   * @param model 
+   */
   addItem(type: ItemType, model: NodeModel | EdgeModel) {
     if (type == "node") {
       this.addNode(model as NodeModel);
@@ -104,6 +136,10 @@ export class NetaGraph extends Application {
     }
   }
 
+  /**
+   * 增加节点
+   * @param data 
+   */
   addNode(data: NodeModel) {
     const targetNode = this.model.nodes.find((item) => item.id == data.id);
     if (!targetNode) {
@@ -113,6 +149,11 @@ export class NetaGraph extends Application {
     const graphic = graphicsShapeParse(this.registerMap, data, _this);
     this.stage.addChild(graphic);
   }
+
+  /**
+   * 增加线
+   * @param data 
+   */
   addEdge(data: EdgeModel) {
     const targetEdge = this.model.edges.find((item) => item.id == data.id);
     if (!targetEdge) {
@@ -121,6 +162,12 @@ export class NetaGraph extends Application {
     const graphic = graphicsLineParse(data);
     this.stage.addChild(graphic);
   }
+
+  /**
+   * 更新某个节点的内容
+   * @param data 
+   * @returns 
+   */
   updateNodeData(data: NodeModel | NodeModel[]) {
     if (Array.isArray(data)) {
       return;
@@ -133,5 +180,15 @@ export class NetaGraph extends Application {
     });
 
     this.read(this.model);
+  }
+
+  /**
+   * 刷新所有节点并进行渲染
+   */
+  refresh() {
+    const _nodes = this.model.nodes 
+    if(Array.isArray(_nodes))
+    this.model.nodes = _nodes.map(n => Object.assign(n, {x: null, y: null}))
+    this.read(this.model)
   }
 }

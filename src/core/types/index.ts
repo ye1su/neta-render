@@ -26,6 +26,7 @@ export interface NetaGraphOptions extends IApplicationOptions {
 // 布局配置
 export interface LayoutConfig {
   type: string;
+  config?: Record<string, any>
 }
 
 // itemType

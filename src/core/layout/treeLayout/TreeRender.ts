@@ -1,5 +1,37 @@
 import { TreeNode } from "./TreeNode";
 
+export interface TreeData {
+  id: string;
+  children?: TreeData[];
+  [key: string]: any;
+}
+export interface TreeRenderConfig {
+  direction: "tb" | "bt" | "lr" | "rl";
+}
+
+const DIRECT_MAP = {
+  tb: {
+    main: "y",
+    side: "x",
+    increase: true,
+  },
+  bt: {
+    main: "y",
+    side: "x",
+    increase: false,
+  },
+  lr: {
+    main: "x",
+    side: "y",
+    increase: true,
+  },
+  rl: {
+    main: "x",
+    side: "y",
+    increase: false,
+  },
+};
+
 // 树的主类
 export class TreeRender {
   // 根节点
@@ -26,8 +58,10 @@ export class TreeRender {
   private nodeWidth: number;
   // 节点的高度
   private nodeHeight: number;
+  // 树的方向
+  private direction: "tb" | "bt" | "lr" | "rl";
 
-  constructor(treeData) {
+  constructor(treeData: TreeData, config?: TreeRenderConfig) {
     this.count = 0;
 
     this.nodeWidth = 20;
@@ -47,12 +81,26 @@ export class TreeRender {
     this.root = this.createNode(treeData);
     this.root.x = this.rootX;
     this.root.y = this.rootY;
+
+    this.direction = config?.direction ?? "tb";
+    if (!DIRECT_MAP[this.direction].increase) {
+      this.yInterval = -this.yInterval;
+    }
   }
 
-  createNode(treeData) {
+  get sideKey() {
+    return DIRECT_MAP[this.direction].side;
+  }
+
+  get mianKey() {
+    return DIRECT_MAP[this.direction].main;
+  }
+
+  createNode(treeData: TreeData) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _this = this;
     function initializeNode(
-      data: any,
+      data: TreeData,
       parent: TreeNode,
       layer: number,
       index: number,
@@ -115,15 +163,17 @@ export class TreeRender {
    * @param node 该树的根节点
    * @param x 要移动到的位置
    */
-  translateTree(node: TreeNode, x: number) {
+  translateTree(node: TreeNode, num: number) {
+    const _key = this.sideKey;
     // 计算移动的距离
-    let dx = x - node.x;
+    const dx = num - node[_key];
+
     // 更新节点的横坐标
-    node.x = x;
+    node[_key] = num;
 
     // 位移所有子节点
     for (let i = 0; i < node.children.length; i++) {
-      this.translateTree(node.children[i], node.children[i].x + dx);
+      this.translateTree(node.children[i], node.children[i][_key] + dx);
     }
   }
 
@@ -131,6 +181,7 @@ export class TreeRender {
    * 回推函数
    */
   layoutOverlaps() {
+    const _key = this.sideKey;
     // 外层循环，扫描hashtree，从最底层开始往上
     for (let i = this.hashTree.length - 1; i >= 0; i--) {
       // 获取当前层
@@ -145,12 +196,12 @@ export class TreeRender {
         // 若n1，n2有重叠
         if (this.isOverlaps(n1, n2)) {
           // 计算需要移动距离
-          const dx = n1.x + this.nodeInterval - n2.x;
+          const dx = n1[_key] + this.nodeInterval - n2[_key];
           // 找出与n1的某个祖先为兄弟节点的n2的祖先
           const node2Move = this.findCommonParentNode(n1, n2);
 
           // 往右移动n2
-          this.translateTree(node2Move, node2Move.x + dx);
+          this.translateTree(node2Move, node2Move[_key] + dx);
           this.centerChild(node2Move.parent);
 
           // 移动后下层节点有可能再次发生重叠，所以重新从底层扫描
@@ -171,26 +222,27 @@ export class TreeRender {
     // 父节点为null，返回
     if (parent === null) return;
 
+    const _key = this.sideKey;
+
     // 只有一个子节点，则只要将该子节点与父节点对齐即可
     if (parent.children.length === 1) {
-      dx = parent.x - parent.children[0].x;
+      dx = parent[_key] - parent.children[0][_key];
     }
 
     // > 1 的子节点，就要计算最左的子节点和最右的子节点的距离的中点与父节点的距离
     if (parent.children.length > 1) {
-      dx =
-        parent.x -
-        (parent.children[0].x +
-          (parent.children[parent.children.length - 1].x -
-            parent.children[0].x) /
-            2);
+      const halfValue =
+        (parent.children[parent.children.length - 1][_key] -
+          parent.children[0][_key]) /
+        2;
+      dx = parent[_key] - (parent.children[0][_key] + halfValue);
     }
 
     // 若要移动的距离不为0
     if (dx) {
       // 将所有子节点居中对齐父节点
       for (let i = 0; i < parent.children.length; i++) {
-        this.translateTree(parent.children[i], parent.children[i].x + dx);
+        this.translateTree(parent.children[i], parent.children[i][_key] + dx);
       }
     }
   }
@@ -204,16 +256,16 @@ export class TreeRender {
     if (node.children.length === 0) return;
     else {
       // 计算子节点最左位置
+      const _key = this.sideKey;
       const start =
-        node.x - ((node.children.length - 1) * this.nodeInterval) / 2;
+        node[_key] - ((node.children.length - 1) * this.nodeInterval) / 2;
 
       // 遍历子节点
       for (let i = 0, len = node.children.length; i < len; i++) {
         // 计算当前子节点横坐标
-        const x = start + i * this.nodeInterval;
-
+        const coordinate = start + i * this.nodeInterval;
         // 移动该子节点及以该子节点为根的整棵树
-        this.translateTree(node.children[i], x);
+        this.translateTree(node.children[i], coordinate);
         // 递归布局该子节点
         this.layoutChild(node.children[i]);
       }
@@ -226,8 +278,13 @@ export class TreeRender {
    * @param node2 右边的节点
    */
   isOverlaps(node1: TreeNode, node2: TreeNode): boolean {
+    const _key = this.sideKey;
+
     // 若左边节点的横坐标比右边节点大，或者两节点间的间距小于最小间距，均判断为重叠
-    return node1.x - node2.x > 0 || node2.x - node1.x < this.nodeInterval;
+    return (
+      node1[_key] - node2[_key] > 0 ||
+      node2[_key] - node1[_key] < this.nodeInterval
+    );
   }
 
   /**
@@ -235,7 +292,8 @@ export class TreeRender {
    * @param node
    */
   patch(node: TreeNode, callback) {
-    node.y = this.rootY + node.layer * this.yInterval;
+    const _key = this.mianKey;
+    node[_key] = this.rootY + node.layer * this.yInterval;
     callback(node);
     // 递归更新子节点
     for (let i = 0; i < node.children.length; i++) {
@@ -258,15 +316,5 @@ export class TreeRender {
         this.renderCount = this.renderRequestCount = 0;
       }
     });
-  }
-}
-
-function replaceXY(node: TreeNode) {
-  const temp = node.x;
-  node.x = node.y;
-  node.y = temp;
-
-  for (let i = 0, len = node.children.length; i < len; i++) {
-    replaceXY(node.children[i]);
   }
 }

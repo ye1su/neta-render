@@ -12,9 +12,8 @@ class Tree extends Layer {
   layout() {
     const tree = BuildTree({ nodes: this.nodes, edges: this.edges });
 
-    const treeRender = new TreeRender(tree);
+    const treeRender = new TreeRender(tree, { direction: this.config.direction });
     treeRender.layout();
-    console.log('treeRender: ', treeRender);
 
     treeRender.patch(treeRender.root, (nodeInfo) => {
       const targetNode = this.nodes.find((n) => n.id === nodeInfo.data.id);

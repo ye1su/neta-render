@@ -8,8 +8,8 @@ export class Layer {
   constructor(nodes, edges, config, event) {
     this.nodes = cloneDeep(nodes)
     this.edges = cloneDeep(edges)
-    this.config = config
-    this.event = event
+    this.config = config ?? {}
+    this.event = event ?? {}
   }
 
 }
