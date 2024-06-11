@@ -24,3 +24,5 @@ docs-dist
 *.njsproj
 *.sln
 *.sw?
+
+docs/.vitepress/cache/**

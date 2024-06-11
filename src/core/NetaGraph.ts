@@ -88,6 +88,7 @@ export class NetaGraph extends Application {
       const tree = new Tree(nodes, edges, this.layoutConfig.config, evnetParmas);
       tree.layout();
     }
+    
     this.render();
   }
 
@@ -100,6 +101,7 @@ export class NetaGraph extends Application {
     this.model = cloneDeep(model);
 
     const { nodes, edges } = model;
+    console.log('nodes: ', nodes);
     this.stage.clearChildren();
     Array.isArray(nodes) &&
       nodes.forEach((node) => {
