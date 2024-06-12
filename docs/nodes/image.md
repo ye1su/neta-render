@@ -31,7 +31,7 @@ outline: deep
 <script setup>
 import { NetaGraph } from '../../src/core'
 import { onMounted } from 'vue'
-import neta from '../neta.jpg'
+import neta from '../public/neta.jpg'
 onMounted(() => {
 
   const graph= new NetaGraph({
