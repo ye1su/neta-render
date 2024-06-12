@@ -135,7 +135,6 @@ export class GraphicsOfLine extends Container {
       ctx.lineJoin = shapeStyle.lineJoin;
       ctx.strokeStyle = shapeStyle.stroke;
     }
-
     ctx.beginPath();
 
     // 渲染线上绘制的多边形
@@ -146,13 +145,12 @@ export class GraphicsOfLine extends Container {
     for (let i = 2; i < points.length; i += 2) {
       ctx.lineTo(points[i], points[i + 1]);
     }
-    // ctx.closePath();
 
     if (shapeStyle.visible) {
       ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
-      ctx.fillStyle = "#000";
       ctx.lineWidth = 1
-      ctx.fill();
+      // ctx.fill();
+      // ctx.fillStyle = "#000";
       ctx.stroke();
     }
   }

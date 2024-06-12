@@ -7,7 +7,10 @@ class Dagre extends Layer {
   constructor(nodes, edges, config, event) {
     super(nodes, edges, config, event);
 
-    this.graphlib.setGraph({});
+    this.graphlib.setGraph({
+      nodesep: 100,
+      ranksep: 100
+    });
 
     this.graphlib.setDefaultEdgeLabel(() => ({}));
   }

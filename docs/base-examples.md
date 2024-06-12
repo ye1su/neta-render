@@ -64,8 +64,6 @@ onMounted(() => {
     el: document.getElementById("canvans"),
     backgroundColor: "#ffe",
   }); 
-    console.log('document.getElementById("canvans"): ', document.getElementById("canvans"));
-
 
   const model1 = {
     nodes: [{
@@ -92,6 +90,5 @@ onMounted(() => {
 
   graph.read(model1)
   graph.render();
-  console.log('graph: ', graph);
 })
 </script>

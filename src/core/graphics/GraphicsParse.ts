@@ -23,6 +23,7 @@ export function graphicsShapeParse(
   let children: Graphics[] = [];
 
   if (type == "rect") {
+
     const rect = addShape("rect", {
       ...json,
       x: 0,
@@ -155,15 +156,18 @@ export function graphicsLineParse(json: Record<string, any>) {
   return line;
 }
 
-function fixUnit(json: NodeModel) {
+function fixUnit(json: Omit<NodeModel, "id">) {
   if (!json.type) {
     json.type = "circle";
     json.radius = 30;
   }
 
+
+
   json.factor = _.pick(json, ["x", "y", "width", "height", "radius", "points"]);
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
+
   if (json.width) {
     json.width = fixFactor(json.width);
   }
@@ -223,8 +227,10 @@ export class RegisterContext {
   }
 
   public addShape(type: string, config: AddShapeConfig) {
-    fixUnit(config);
-    const shape = addShape(type, config);
+    const _confg = { type, ...config }
+    fixUnit(_confg);
+
+    const shape = addShape(type, _confg);
     this.groups.push(shape);
   }
 }

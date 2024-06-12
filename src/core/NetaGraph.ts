@@ -101,7 +101,6 @@ export class NetaGraph extends Application {
     this.model = cloneDeep(model);
 
     const { nodes, edges } = model;
-    console.log('nodes: ', nodes);
     this.stage.clearChildren();
     Array.isArray(nodes) &&
       nodes.forEach((node) => {

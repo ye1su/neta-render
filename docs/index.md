@@ -6,6 +6,8 @@ hero:
   name: "Neta-Render"
   text: "Canvas 为画布，API 为桨，自游搭建可视化应用。"
   tagline: 一个轻量级的开源 JavaScript 库，旨在简化在 HTML5 Canvas 上进行渲染和绘制的过程
+  image: 
+    src: /neta.jpg  
   actions:
     - theme: brand
       text: 开始使用

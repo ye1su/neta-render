@@ -225,9 +225,9 @@ export class Graphics extends Container {
       for (let i = 2; i < points.length; i += 2) {
         ctx.lineTo(points[i], points[i + 1]);
       }
-      // if (closeStroke) {
-      //   ctx.closePath();
-      // }
+      if (closeStroke) {
+        ctx.closePath();
+      }
 
       if (shapeStyle.visible) {
         ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
