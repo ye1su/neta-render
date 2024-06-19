@@ -117,7 +117,10 @@ export class NetaGraph extends Application {
    * 更新数据并进行渲染
    * @param model 
    */
-  read(model: Model) {
+  read(model: {
+    nodes?: Omit<NodeModel, "x" | "y">[];
+    edges?: Omit<EdgeModel, "x" | "y">[];
+  }) {
     this.data(model);
     const { nodes, edges } = this.model;
     this.layoutRender(nodes, edges);

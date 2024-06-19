@@ -29,7 +29,7 @@ export default Tree;
 
 export function BuildTree(model) {
   const { nodes, edges: beforeEdges } = model;
-  const edges = beforeEdges.filter((edge) => edge.source !== edge.target);
+  const edges = beforeEdges?.filter((edge) => edge.source !== edge.target) ?? [];
   const nodeMap: { [id: string]: any } = {};
 
   for (const node of nodes) {
