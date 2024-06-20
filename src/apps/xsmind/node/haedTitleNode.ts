@@ -3,6 +3,7 @@ const headTitleNode = {
   render: {
     draw(action) {
       const initJson = action.inputProperties;
+
       action.addShape("rect", {
         x: 0,
         y: 0,
@@ -20,11 +21,11 @@ const headTitleNode = {
         y: 8,
         width: 92,
         height: 32,
-        radius: 0,
         style: {
           stroke: "#8C80A7",
         },
       });
+
 
     },
   },

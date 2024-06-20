@@ -151,8 +151,8 @@ export class EventSystem {
     this.hasFoundTarget = false;
     this.hitTarget = null;
 
-    // this.hitTestRecursive(root, globalPos);
-    this.hitTestBreadthFirst(root, globalPos);
+    this.hitTestRecursive(root, globalPos);
+    // this.hitTestBreadthFirst(root, globalPos);
 
     return this.hitTarget;
   }
