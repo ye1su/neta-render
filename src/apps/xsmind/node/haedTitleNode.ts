@@ -6,11 +6,23 @@ const headTitleNode = {
       action.addShape("rect", {
         x: 0,
         y: 0,
-        width: 100,
-        height: 80,
+        width: 108,
+        height: 48,
+        radius: 4,
         style: {
-          stroke: "#1296db",
-          lineWidth: 2,
+          stroke: "transparent",
+          fill: '#F9DDB0'
+        },
+      });
+
+      action.addShape("rect", {
+        x: 8,
+        y: 8,
+        width: 92,
+        height: 32,
+        radius: 0,
+        style: {
+          stroke: "#8C80A7",
         },
       });
 

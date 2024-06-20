@@ -20,13 +20,13 @@ export interface GlobalTransform {
 
 export interface NetaGraphOptions extends IApplicationOptions {
   layout?: LayoutConfig;
-  register?: RegNodeType[];
+  register?: { nodes?: RegNodeType[]; behaviors?: any[] };
 }
 
 // 布局配置
 export interface LayoutConfig {
   type: string;
-  config?: Record<string, any>
+  config?: Record<string, any>;
 }
 
 // itemType

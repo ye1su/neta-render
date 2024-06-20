@@ -1,4 +1,5 @@
 import { NetaGraph } from "../../core";
+import { MIND_BEHAVIOR } from "./behavior";
 import { MIND_NODE } from "./node";
 
 class Mind {
@@ -15,7 +16,7 @@ class Mind {
           direction: "lr",
         },
       },
-      register: MIND_NODE,
+      register: { nodes: MIND_NODE, behaviors: MIND_BEHAVIOR },
     });
   }
 

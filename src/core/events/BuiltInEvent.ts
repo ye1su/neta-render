@@ -6,8 +6,13 @@ export class BuiltInEvent {
   private instance: NetaGraph;
   private behaviors = BEHAVIOR;
 
-  constructor(instance: NetaGraph) {
+  constructor(instance: NetaGraph, registerEvent) {
     this.instance = instance;
+    if (Array.isArray(registerEvent)) {
+      for(const regEvent of registerEvent) {
+        this.behaviors[regEvent.name] = regEvent
+      }
+    }
   }
 
   init() {
@@ -44,13 +49,11 @@ export class BuiltInEvent {
       }
     }
 
-
     this.instance.off(EVENT_TYPE.GRAPHICS_POINTERDOWN, this.graphicPointDown);
     this.instance.off(EVENT_TYPE.CANVAS_POINTERDOWN, this.canvasPointDown);
     this.instance.off(EVENT_TYPE.CANVAS_POINTERMOVE, this.canvasPointerMove);
     this.instance.off(EVENT_TYPE.CANVAS_POINTERUP, this.canvasPointerUp);
   }
-
 
   graphicPointDown(event) {
     const name = EVENT_TYPE.GRAPHICS_POINTERDOWN;
@@ -61,7 +64,6 @@ export class BuiltInEvent {
     const name = EVENT_TYPE.CANVAS_POINTERDOWN;
     this.loadEvent(name, [event]);
   }
-
 
   canvasPointerMove(event) {
     const name = EVENT_TYPE.CANVAS_POINTERMOVE;

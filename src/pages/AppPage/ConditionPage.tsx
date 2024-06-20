@@ -9,7 +9,9 @@ export function ConditionPage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
-      register: [EXTEND_NODE.UserTask],
+      register: {
+        nodes: [EXTEND_NODE.UserTask]
+      },
       layout: {
         type: "tree",
       },
