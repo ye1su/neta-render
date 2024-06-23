@@ -82,5 +82,6 @@ export function getContainerSurround(shapeBoxList: BBox[]) {
   });
   box.centerX = (box.maxX + box.minX) / 2;
   box.centerY = (box.maxY + box.minY) / 2;
+  
   return box;
 }

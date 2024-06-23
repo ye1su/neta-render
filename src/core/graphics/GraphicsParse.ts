@@ -232,5 +232,6 @@ export class RegisterContext {
 
     const shape = addShape(type, _confg);
     this.groups.push(shape);
+    return shape
   }
 }

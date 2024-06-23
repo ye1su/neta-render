@@ -2,8 +2,6 @@
 const mindSelectNode = {
   name: "mind-select-node",
   render: {
-    id: null,
-    renderContainer: null,
     init() {},
     destroy() {},
     getEvents() {
@@ -13,7 +11,8 @@ const mindSelectNode = {
     },
     onPointerDown(evt) {
       console.log('evt: ', evt);
-  
+      console.log('this:====== ', this);
+      
     },
 
   },
