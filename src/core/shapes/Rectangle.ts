@@ -11,7 +11,7 @@ export class Rectangle extends Shape {
   public height: number;
   public radius: number | undefined;
   public type = ShapeType.Rectangle;
-  constructor(x = 0, y = 0, width = 0, height = 0, radius?: number) {
+  constructor(x = 0, y = 0, name: string, width = 0, height = 0, radius?: number) {
     super();
 
     this.offsetX = x;
@@ -19,6 +19,9 @@ export class Rectangle extends Shape {
 
     this.x = 0;
     this.y = 0;
+
+    this.name = name
+
     this.width = width;
     this.height = height;
 

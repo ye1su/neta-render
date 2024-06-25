@@ -10,13 +10,14 @@ export class Text extends Shape {
   public text: string;
 
   public type = ShapeType.Text;
-  constructor(x = 0, y = 0, text = "") {
+  constructor(x = 0, y = 0, name: string, text = "") {
     super();
     this.offsetX = x;
     this.offsetY = y;
 
     this.x = 0;
     this.y = 0;
+    this.name = name
     this.text = text
   }
 

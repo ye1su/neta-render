@@ -23,7 +23,6 @@ export function graphicsShapeParse(
   let children: Graphics[] = [];
 
   if (type == "rect") {
-
     const rect = addShape("rect", {
       ...json,
       x: 0,
@@ -162,8 +161,6 @@ function fixUnit(json: Omit<NodeModel, "id">) {
     json.radius = 30;
   }
 
-
-
   json.factor = _.pick(json, ["x", "y", "width", "height", "radius", "points"]);
   json.x = fixFactor(json.x);
   json.y = fixFactor(json.y);
@@ -184,36 +181,36 @@ function fixUnit(json: Omit<NodeModel, "id">) {
 }
 
 function addShape(type: string, config: AddShapeConfig) {
-  const { x, y, width, height, style, text } = config;
+  const { x, y, name, width, height, style, text } = config;
   const graphics = new Graphics();
   graphics.style(style);
 
   if (type == "rect") {
     const { radius } = config;
-    graphics.drawRect(x, y, width, height, radius);
+    graphics.drawRect(x, y, name, width, height, radius);
   }
   if (type == "circle") {
     const { radius } = config;
-    graphics.drawCircle(x, y, radius);
+    graphics.drawCircle(x, y, name, radius);
   }
 
   if (type == "image") {
     const { src } = config;
-    graphics.drawImage(x, y, width, height, src);
+    graphics.drawImage(x, y, name, width, height, src);
   }
 
   if (type == "ellipse") {
     const { radiusX, radiusY } = config;
-    graphics.drawEllipse(x, y, radiusX, radiusY);
+    graphics.drawEllipse(x, y, name, radiusX, radiusY);
   }
 
   if (type == "polygon") {
     const { points } = config;
-    graphics.drawPolygon(x, y, points);
+    graphics.drawPolygon(x, y, name, points);
   }
 
   if (type == "text") {
-    graphics.drawText(x, y, text);
+    graphics.drawText(x, y, name, text);
   }
   return graphics;
 }
@@ -227,11 +224,11 @@ export class RegisterContext {
   }
 
   public addShape(type: string, config: AddShapeConfig) {
-    const _confg = { type, ...config }
+    const _confg = { type, ...config };
     fixUnit(_confg);
 
     const shape = addShape(type, _confg);
     this.groups.push(shape);
-    return shape
+    return shape;
   }
 }

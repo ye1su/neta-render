@@ -3,7 +3,7 @@ import { Point } from "../math";
 import { Shape } from "./Shape";
 
 export class Polygon extends Shape {
-  public shapePoints: number[] 
+  public shapePoints: number[];
   public points: number[]; // 多边形由多个点构成，points数组每2个元素代表一个顶点的坐标
   public x: number;
   public y: number;
@@ -11,7 +11,7 @@ export class Polygon extends Shape {
   public offsetY: number;
   public closeStroke = false;
   public readonly type = ShapeType.Polygon;
-  constructor(x = 0, y = 0, points: number[] = []) {
+  constructor(x = 0, y = 0, name: string, points: number[] = []) {
     super();
 
     this.offsetX = x;
@@ -19,7 +19,8 @@ export class Polygon extends Shape {
 
     this.x = 0;
     this.y = 0;
-    this.shapePoints = points
+    this.name = name;
+    this.shapePoints = points;
     this.points = points;
   }
 
@@ -27,15 +28,15 @@ export class Polygon extends Shape {
     this.x = x;
     this.y = y;
 
-    const _x = this.x + this.offsetX
-    const _y = this.y + this.offsetY
+    const _x = this.x + this.offsetX;
+    const _y = this.y + this.offsetY;
     const transferPoints = this.shapePoints.map((point, index) => {
-      if(index & 1) {
-        return point + _y
+      if (index & 1) {
+        return point + _y;
       }
-      return point + _x
-    })
-    this.points = transferPoints
+      return point + _x;
+    });
+    this.points = transferPoints;
   }
 
   /**

@@ -69,6 +69,8 @@ export interface NodeModel extends BaseModel {
   points?: number[];
   // 是否启动锚点
   anchor?: boolean;
+  // shape的名称
+  name?: string;
 }
 
 export interface EdgeModel extends BaseModel {

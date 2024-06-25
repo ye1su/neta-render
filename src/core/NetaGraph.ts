@@ -18,7 +18,6 @@ import { BuiltInEvent } from "./events";
 import { RegNodeType } from "./types/register";
 import { EXTEND_NODE } from "./register";
 import _ from "lodash-es";
-import { fixFactor } from "./utils";
 
 export class NetaGraph extends Application {
   public model: Model = { nodes: [], edges: [] };

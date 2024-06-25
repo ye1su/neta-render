@@ -11,13 +11,16 @@ export class Ellipse extends Shape {
   public radiusY: number;
   public readonly type = ShapeType.Ellipse;
 
-  constructor(x = 0, y = 0, radiusX = 0, radiusY = 0) {
+  constructor(x = 0, y = 0, name: string, radiusX = 0, radiusY = 0) {
     super();
     this.offsetX = x;
     this.offsetY = y;
 
     this.x = 0;
     this.y = 0;
+
+    this.name = name
+
     this.radiusX = radiusX;
     this.radiusY = radiusY;
   }

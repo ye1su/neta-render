@@ -11,13 +11,16 @@ export class Image extends Shape {
   public height: number;
   public src: string;
   public type = ShapeType.Image;
-  constructor(x = 0, y = 0, width = 0, height = 0, src = "") {
+  constructor(x = 0, y = 0, name: string,  width = 0, height = 0, src = "") {
     super();
     this.offsetX = x;
     this.offsetY = y;
 
     this.x = 0;
     this.y = 0;
+
+    this.name = name
+
     this.width = width;
     this.height = height;
     this.src = src;

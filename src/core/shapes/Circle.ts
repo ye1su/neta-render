@@ -10,13 +10,14 @@ export class Circle extends Shape {
   public radius: number;
   public readonly type = ShapeType.Circle;
 
-  constructor(x = 0, y = 0, radius = 0) {
+  constructor(x = 0, y = 0, name: string, radius = 0) {
     super();
     this.offsetX = x;
     this.offsetY = y;
 
     this.x = 0;
     this.y = 0;
+    this.name = name;
     this.radius = radius;
   }
 

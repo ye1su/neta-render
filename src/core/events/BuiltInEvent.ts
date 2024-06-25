@@ -9,8 +9,8 @@ export class BuiltInEvent {
   constructor(instance: NetaGraph, registerEvent) {
     this.instance = instance;
     if (Array.isArray(registerEvent)) {
-      for(const regEvent of registerEvent) {
-        this.behaviors[regEvent.name] = regEvent
+      for (const regEvent of registerEvent) {
+        this.behaviors[regEvent.name] = regEvent;
       }
     }
   }
@@ -83,6 +83,11 @@ export class BuiltInEvent {
 
       if (typeof behaviorIns.render[evnetName] == "function") {
         // throw new Error("当前挂载的behavior动作异常");
+        const originThis = behaviorIns.render;
+
+        if(typeof args[0] === 'object') {
+          args[0].originThis = originThis
+        }
         behaviorIns.render[evnetName].apply(this, [...args]);
       }
     }

@@ -4,7 +4,8 @@ import { GlobalTransform } from "../types";
 
 export abstract class Shape {
   public globalTransform: GlobalTransform
-  public type: ShapeType;
+  public type: ShapeType; // shape 的类型
+  public name: string; // shape 的name
   constructor() {}
   public abstract contains(point: Point): boolean;
   public abstract setPosition(x: number, y: number): void 

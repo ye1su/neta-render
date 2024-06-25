@@ -33,6 +33,7 @@ const headTitleNode = {
 
       
       action.addShape("circle", {
+        name: 'drag-pointer',
         x: shapeWidth,
         y: 0,
         radius: 5,

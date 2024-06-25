@@ -62,8 +62,8 @@ export class EventSystem {
       diffy: 0,
     };
     // 拖拽开始时存取当前矩阵快照
-    this._dragging = true;
-    // this._dragging = false;`
+    // this._dragging = true;
+    this._dragging = false;
 
     this._renderer.cloneMatrix();
 

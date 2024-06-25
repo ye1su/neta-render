@@ -175,7 +175,6 @@ export class Graphics extends Container {
         ctx.fill();
         ctx.stroke();
       }
-
     }
 
     if (shape instanceof Text) {
@@ -185,7 +184,7 @@ export class Graphics extends Container {
       const _fontSize = 32;
       ctx.font = `${_fontSize}px Arial`;
       ctx.fillStyle = shapeStyle.fill;
-      
+
       // 绘制文字
       ctx.fillText(text, x, y);
     }
@@ -261,8 +260,8 @@ export class Graphics extends Container {
    * @param y y坐标
    * @param text 文字内容
    */
-  public drawText(x: number, y: number, text: string): this {
-    return this.drawShape(new Text(x, y, text));
+  public drawText(x: number, y: number, name: string, text: string): this {
+    return this.drawShape(new Text(x, y, name, text));
   }
 
   /**
@@ -275,11 +274,12 @@ export class Graphics extends Container {
   public drawRect(
     x: number,
     y: number,
+    name: string,
     width: number,
     height: number,
     radius?: number
   ): this {
-    return this.drawShape(new Rectangle(x, y, width, height, radius));
+    return this.drawShape(new Rectangle(x, y, name, width, height, radius));
   }
 
   /**
@@ -288,8 +288,8 @@ export class Graphics extends Container {
    * @param y 圆心Y坐标
    * @param radius 半径
    */
-  public drawCircle(x: number, y: number, radius: number) {
-    return this.drawShape(new Circle(x, y, radius));
+  public drawCircle(x: number, y: number, name: string, radius: number) {
+    return this.drawShape(new Circle(x, y, name, radius));
   }
 
   /**
@@ -301,23 +301,30 @@ export class Graphics extends Container {
   public drawImage(
     x: number,
     y: number,
+    name: string,
     width: number,
     height: number,
     src: string
   ) {
-    return this.drawShape(new ImageShpe(x, y, width, height, src));
+    return this.drawShape(new ImageShpe(x, y, name, width, height, src));
   }
 
-  public drawEllipse(x: number, y: number, radiusX: number, radiusY: number) {
-    return this.drawShape(new Ellipse(x, y, radiusX, radiusY));
+  public drawEllipse(
+    x: number,
+    y: number,
+    name: string,
+    radiusX: number,
+    radiusY: number
+  ) {
+    return this.drawShape(new Ellipse(x, y, name, radiusX, radiusY));
   }
 
   /**
    * 画多边形
    * @param points 多边形顶点坐标数组，每2个元素算一组(x,y)
    */
-  public drawPolygon(x: number, y: number, points: number[]) {
-    const poly = new Polygon(x, y, points);
+  public drawPolygon(x: number, y: number, name: string, points: number[]) {
+    const poly = new Polygon(x, y, name, points);
     poly.closeStroke = true;
 
     return this.drawShape(poly);
