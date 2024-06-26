@@ -12,7 +12,7 @@ const createEdge = {
     },
     onPointerDown(e) {
       const target = e.target
-      if (target.anchor?.containPort) {
+      if (target.anchor?.containPort && target.anchor?.visible) {
         this._selectedAnchor = {
           target,
           containPort: target.anchor?.containPort,

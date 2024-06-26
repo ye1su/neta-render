@@ -18,7 +18,7 @@ const clickEditNode = {
       };
     },
     onPointerDown(evt) {
-      const vNode = evt.container.html;
+      const vNode = evt.container?.html;
       if (!vNode) return;
       if (isString(vNode)) return;
       const bbox = evt.container.getBBox();

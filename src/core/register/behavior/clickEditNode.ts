@@ -16,7 +16,7 @@ const clickEditNode = {
       };
     },
     onPointerDown(evt) {
-      if (!isString(evt.container.html)) return;
+      if (!isString(evt.container?.html)) return;
       clickEditNode.render.renderContainer = evt.container;
       const bbox = evt.container.getBBox();
       clickEditNode.render.id = "stagehtml-" + evt.container.id;
