@@ -27,6 +27,12 @@ export class BuiltInEvent {
       EVENT_TYPE.GRAPHICS_POINTERDOWN,
       this.graphicPointDown.bind(this)
     );
+
+    this.instance.on(
+      EVENT_TYPE.GRAPHICS_MOUSEENTER,
+      this.graphicMouseEnter.bind(this)
+    );
+
     this.instance.on(
       EVENT_TYPE.CANVAS_POINTERDOWN,
       this.canvasPointDown.bind(this)
@@ -50,6 +56,7 @@ export class BuiltInEvent {
     }
 
     this.instance.off(EVENT_TYPE.GRAPHICS_POINTERDOWN, this.graphicPointDown);
+    this.instance.off(EVENT_TYPE.GRAPHICS_MOUSEENTER, this.graphicMouseEnter);
     this.instance.off(EVENT_TYPE.CANVAS_POINTERDOWN, this.canvasPointDown);
     this.instance.off(EVENT_TYPE.CANVAS_POINTERMOVE, this.canvasPointerMove);
     this.instance.off(EVENT_TYPE.CANVAS_POINTERUP, this.canvasPointerUp);
@@ -57,6 +64,11 @@ export class BuiltInEvent {
 
   graphicPointDown(event) {
     const name = EVENT_TYPE.GRAPHICS_POINTERDOWN;
+    this.loadEvent(name, [event]);
+  }
+
+  graphicMouseEnter(event) {
+    const name = EVENT_TYPE.GRAPHICS_MOUSEENTER;
     this.loadEvent(name, [event]);
   }
 

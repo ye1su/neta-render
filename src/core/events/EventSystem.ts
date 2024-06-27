@@ -26,6 +26,8 @@ export class EventSystem {
   };
   private emit;
 
+  private moveItem: Container = null
+
   constructor(stage: Container, renderer: CanvasRenderer, emit) {
     this.canvasEle = renderer.viewer;
     this.stage = stage;
@@ -95,6 +97,22 @@ export class EventSystem {
       y: e.offsetY,
     };
 
+    const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+    if(!this.moveItem && target) {
+      this.moveItem = target
+      console.log('move in');
+      e.target = target
+      this.emit(EVENT_TYPE.GRAPHICS_MOUSEENTER, e)
+      
+    }
+    if(this.moveItem && !target) {
+      e.target = target
+      this.moveItem = null
+      this.emit(EVENT_TYPE.GRAPHICS_MOUSEOUT, e)
+      console.log('move out');
+    }
+
+    // 传递事件
     this.emit(EVENT_TYPE.CANVAS_POINTERMOVE, e);
 
     // 拖拽节点事件
