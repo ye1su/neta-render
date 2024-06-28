@@ -13,6 +13,14 @@ export class BuiltInEvent {
         this.behaviors[regEvent.name] = regEvent;
       }
     }
+
+    const _this = this
+    for(const key in EVENT_TYPE) {
+      this[`EVENT_${key}`] = function(event) {
+        const name = EVENT_TYPE[key];
+        _this.loadEvent(name, [event]);
+      }
+    }
   }
 
   init() {
@@ -23,28 +31,12 @@ export class BuiltInEvent {
       }
     }
 
-    this.instance.on(
-      EVENT_TYPE.GRAPHICS_POINTERDOWN,
-      this.graphicPointDown.bind(this)
-    );
+    for(const key in this) {
+      if(!key.startsWith('EVENT_')) continue
+      const eventKey = key.slice(6)
+      this.instance.on(EVENT_TYPE[eventKey], this[key].bind(this))
+    }
 
-    this.instance.on(
-      EVENT_TYPE.GRAPHICS_MOUSEENTER,
-      this.graphicMouseEnter.bind(this)
-    );
-
-    this.instance.on(
-      EVENT_TYPE.CANVAS_POINTERDOWN,
-      this.canvasPointDown.bind(this)
-    );
-    this.instance.on(
-      EVENT_TYPE.CANVAS_POINTERMOVE,
-      this.canvasPointerMove.bind(this)
-    );
-    this.instance.on(
-      EVENT_TYPE.CANVAS_POINTERUP,
-      this.canvasPointerUp.bind(this)
-    );
   }
 
   destroy() {
@@ -55,37 +47,15 @@ export class BuiltInEvent {
       }
     }
 
-    this.instance.off(EVENT_TYPE.GRAPHICS_POINTERDOWN, this.graphicPointDown);
-    this.instance.off(EVENT_TYPE.GRAPHICS_MOUSEENTER, this.graphicMouseEnter);
-    this.instance.off(EVENT_TYPE.CANVAS_POINTERDOWN, this.canvasPointDown);
-    this.instance.off(EVENT_TYPE.CANVAS_POINTERMOVE, this.canvasPointerMove);
-    this.instance.off(EVENT_TYPE.CANVAS_POINTERUP, this.canvasPointerUp);
+    for(const key in this) {
+      if(!key.startsWith('EVENT_')) continue
+
+      const eventKey = key.slice(6)
+      this.instance.off(EVENT_TYPE[eventKey], this[key])
+    }
+
   }
 
-  graphicPointDown(event) {
-    const name = EVENT_TYPE.GRAPHICS_POINTERDOWN;
-    this.loadEvent(name, [event]);
-  }
-
-  graphicMouseEnter(event) {
-    const name = EVENT_TYPE.GRAPHICS_MOUSEENTER;
-    this.loadEvent(name, [event]);
-  }
-
-  canvasPointDown(event) {
-    const name = EVENT_TYPE.CANVAS_POINTERDOWN;
-    this.loadEvent(name, [event]);
-  }
-
-  canvasPointerMove(event) {
-    const name = EVENT_TYPE.CANVAS_POINTERMOVE;
-    this.loadEvent(name, [event]);
-  }
-
-  canvasPointerUp(event) {
-    const name = EVENT_TYPE.CANVAS_POINTERUP;
-    this.loadEvent(name, [event]);
-  }
 
   loadEvent(name: string, args: any[]) {
     for (const behaviorKey in this.behaviors) {

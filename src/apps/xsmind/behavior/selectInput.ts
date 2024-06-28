@@ -3,12 +3,14 @@ const mindSelectNode = {
   render: {
     currentShape: null,
     currentNode: null,
+    hoverShape: null,
     init() {},
     destroy() {},
     getEvents() {
       return {
         "graphics:pointerdown": "onPointerDown",
         "graphics:mouseenter": "onMouseEnter",
+        "graphics:mouseout": "onMouseOut",
         "canvas:pointerdown": "onCanvasDown",
         "canvas:pointermove": "onCanvasMove",
         "canvas:pointerup": "onCanvasUp",
@@ -18,11 +20,11 @@ const mindSelectNode = {
       const originThis = evt.originThis;
 
       const target = evt.target;
-      console.log("target: ", target);
       const shape = target._geometry?.graphicsData?.shape ?? null;
 
       if (target.parent._data?.type === "headTitle") {
-        this.instance.model.nodes[0].nodeState = ["select"];
+        const node = getTargetNode(this.instance.model.nodes, target.parent.id);
+        node.nodeState.push("select");
         this.instance.refresh();
       }
 
@@ -30,10 +32,26 @@ const mindSelectNode = {
       originThis.currentNode = target;
     },
     onMouseEnter(evt) {
-      console.log('evt: ', evt);
-      const target = evt.target;
-      if (target.parent._data?.type === "headTitle") {
-        this.instance.model.nodes[0].nodeState.push('hover');
+      const parent = evt.target.parent;
+      const originThis = evt.originThis;
+      if (parent._data?.type === "headTitle") {
+        originThis.hoverShape = parent;
+        const node = getTargetNode(this.instance.model.nodes, parent.id);
+        node.nodeState.push("hover");
+        this.instance.refresh();
+      }
+    },
+    onMouseOut(evt) {
+      const originThis = evt.originThis;
+
+      if (originThis.hoverShape) {
+        const node = getTargetNode(
+          this.instance.model.nodes,
+          originThis.hoverShape.id
+        );
+        const nodeState = node.nodeState;
+        const hoverIndex = nodeState.indexOf("hover");
+        nodeState.splice(hoverIndex, 1);
         this.instance.refresh();
       }
     },
@@ -41,7 +59,8 @@ const mindSelectNode = {
       let refreshTag = false;
       this.instance.model.nodes.forEach((node) => {
         if (node.nodeState) {
-          node.nodeState = [];
+          const hoverIndex = node.nodeState.indexOf("select");
+          node.nodeState.splice(hoverIndex, 1);
           refreshTag = true;
         }
       });
@@ -66,12 +85,14 @@ const mindSelectNode = {
       const targetNode = this.instance.model.nodes.find(
         (n) => n.id == originThis.currentNode.parent.id
       );
+
       if (targetNode) {
         let offsetX = tPoint.x - originThis.currentNode.x;
         if (offsetX < 80) {
           offsetX = 80;
         }
-        this.instance.model.nodes[0].width = offsetX / 4;
+        const node = getTargetNode(this.instance.model.nodes, targetNode.id);
+        node.width = offsetX / 4;
         this.instance.refresh();
       }
     },
@@ -82,5 +103,9 @@ const mindSelectNode = {
     },
   },
 };
+
+function getTargetNode(nodes = [], id) {
+  return nodes.find((node) => node.id === id);
+}
 
 export default mindSelectNode;

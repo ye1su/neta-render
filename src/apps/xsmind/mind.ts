@@ -27,6 +27,7 @@ class Mind {
           id: "1",
           type: "headTitle",
           label: "Company1",
+          nodeState: []
         },
       ],
     });
