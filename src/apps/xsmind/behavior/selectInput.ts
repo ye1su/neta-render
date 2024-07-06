@@ -28,12 +28,23 @@ const mindSelectNode = {
         this.instance.refresh();
       }
 
+      if(shape.name === 'expand-circle') {
+       console.log('evt: ', evt);
+
+      }
+
       originThis.currentShape = shape;
       originThis.currentNode = target;
     },
     onMouseEnter(evt) {
-      const parent = evt.target.parent;
       const originThis = evt.originThis;
+      let parent = null;
+      if (evt.target.whole) {
+        parent = evt.target;
+      } else {
+        parent = evt.target.parent;
+      }
+
       if (parent._data?.type === "headTitle") {
         originThis.hoverShape = parent;
         const node = getTargetNode(this.instance.model.nodes, parent.id);

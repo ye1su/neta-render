@@ -98,6 +98,7 @@ export class EventSystem {
     };
 
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+
     if(!this.moveItem && target) {
       this.moveItem = target
       console.log('move in');

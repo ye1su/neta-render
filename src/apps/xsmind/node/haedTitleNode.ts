@@ -18,7 +18,7 @@ const headTitleNode = {
         y: 0,
         width: shapeWidth,
         height: shapeHeight,
-        radius: 4,
+        // radius: 4,
         style: getBaseRectStyle(isSelect),
       });
 
@@ -48,6 +48,7 @@ const headTitleNode = {
         action.addShape("circle", {
           x: shapeWidth + 16,
           y: shapeHeight / 2 - 2,
+          name: "expand-circle",
           radius: 8,
           style: {
             stroke: "transparent",
