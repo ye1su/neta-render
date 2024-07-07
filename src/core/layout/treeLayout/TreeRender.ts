@@ -64,15 +64,15 @@ export class TreeRender {
   constructor(treeData: TreeData, config?: TreeRenderConfig) {
     this.count = 0;
 
-    this.nodeWidth = 20;
-    this.nodeHeight = 20;
+    this.nodeWidth = 110;
+    this.nodeHeight = 50;
     // 因为节点间的距离是从节点的中心距离计算的，所以为了方便计算，加上2*(节点宽度/2)即一个节点宽度
     this.nodeInterval = 60 + this.nodeWidth;
     // 同理上面
-    this.yInterval = 60 + this.nodeHeight;
+    this.yInterval = 120 + this.nodeHeight;
 
     this.rootX = 300;
-    this.rootY = 80;
+    this.rootY = 200;
 
     this.hashTree = [];
     this.renderRequestCount = this.renderCount = 0;

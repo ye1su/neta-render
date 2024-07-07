@@ -28,9 +28,20 @@ const mindSelectNode = {
         this.instance.refresh();
       }
 
-      if(shape.name === 'expand-circle') {
-       console.log('evt: ', evt);
-
+      if (shape.name === "expand-circle") {
+        const newNodeId = new Date().getTime();
+        this.instance.model.nodes.push({
+          id: `node-${newNodeId}`,
+          type: "headTitle",
+          label: "Company1",
+          nodeState: [],
+        });
+        this.instance.model.edges.push({
+          id: `edge-${newNodeId}`,
+          source: target.parent.id,
+          target: `node-${newNodeId}`,
+        });
+        this.instance.refresh();
       }
 
       originThis.currentShape = shape;

@@ -30,6 +30,7 @@ class Mind {
           nodeState: []
         },
       ],
+      edges: []
     });
     this.netaRender.render();
   }
