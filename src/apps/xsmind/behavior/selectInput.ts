@@ -22,12 +22,18 @@ const mindSelectNode = {
       const target = evt.target;
       const shape = target._geometry?.graphicsData?.shape ?? null;
 
+      /**
+       * 点击选中
+       */
       if (target.parent._data?.type === "headTitle") {
         const node = getTargetNode(this.instance.model.nodes, target.parent.id);
         node.nodeState.push("select");
         this.instance.refresh();
       }
 
+      /**
+       * 新增节点
+       */
       if (shape.name === "expand-circle") {
         const newNodeId = new Date().getTime();
         this.instance.model.nodes.push({

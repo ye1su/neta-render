@@ -58,6 +58,7 @@ export class BuiltInEvent {
 
 
   loadEvent(name: string, args: any[]) {
+
     for (const behaviorKey in this.behaviors) {
       const behaviorIns = this.behaviors[behaviorKey];
       const events = behaviorIns.render.getEvents();
@@ -67,6 +68,7 @@ export class BuiltInEvent {
         // throw new Error("当前挂载的behavior动作异常");
         const originThis = behaviorIns.render;
 
+  
         if(typeof args[0] === 'object') {
           args[0].originThis = originThis
         }

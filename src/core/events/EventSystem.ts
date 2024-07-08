@@ -15,15 +15,6 @@ export class EventSystem {
   // 寻找目标节点
   public hasFoundTarget: boolean = false;
   public hitTarget: Graphics | Container | null = null;
-  // 是否在拖拽中
-  private _dragging = false;
-  // 点击鼠标后存取的数据
-  public _mouseDownPoint = {
-    x: 0,
-    y: 0,
-    diffx: 0,
-    diffy: 0,
-  };
   private emit;
 
   private moveItem: Container = null
@@ -39,11 +30,13 @@ export class EventSystem {
     this.canvasEle.addEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.addEventListener("pointermove", this.onPointerMove);
     this.canvasEle.addEventListener("pointerup", this.onPointerup);
+    this.canvasEle.addEventListener('wheel', this.onWheel)
   };
   public removeEvents = () => {
     this.canvasEle.removeEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.removeEventListener("pointermove", this.onPointerMove);
     this.canvasEle.removeEventListener("pointerup", this.onPointerup);
+    this.canvasEle.removeEventListener("wheel", this.onWheel);
   };
 
   private onPointerDown = (event) => {
@@ -52,35 +45,14 @@ export class EventSystem {
       y: event.y,
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
+      hitTarget: this.hitTarget
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     e.target = target;
     e.container = target instanceof Graphics ? target.parent : null;
-    // 获取当前点击的相关信息
-    this._mouseDownPoint = {
-      x: e.offsetX,
-      y: e.offsetY,
-      diffx: 0,
-      diffy: 0,
-    };
-    // 拖拽开始时存取当前矩阵快照
-    // this._dragging = true;
-    this._dragging = false;
-
-    this._renderer.cloneMatrix();
-
-    if (target?.type === ItmeType.Container) {
-      this._dragging = false;
-    }
 
     if (target) {
-      const tansferTarget = this._renderer.getPointByTransform(
-        target.x,
-        target.y
-      );
-      // 记录点击节点在图形的位置
-      this._mouseDownPoint.diffx = e.offsetX - tansferTarget.x;
-      this._mouseDownPoint.diffy = e.offsetY - tansferTarget.y;
+
       this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e);
       return;
     }
@@ -91,11 +63,8 @@ export class EventSystem {
     const e = Object.assign({}, event, {
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
+      hitTarget: this.hitTarget
     });
-    const movePosition = {
-      x: e.offsetX,
-      y: e.offsetY,
-    };
 
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
 
@@ -116,42 +85,6 @@ export class EventSystem {
     // 传递事件
     this.emit(EVENT_TYPE.CANVAS_POINTERMOVE, e);
 
-    // 拖拽节点事件
-    if (this._dragging && this.hitTarget) {
-      // 相对当前位置的偏移量
-      const diffX =
-        movePosition.x - this._mouseDownPoint.x - this._mouseDownPoint.diffx;
-      const diffY =
-        movePosition.y - this._mouseDownPoint.y - this._mouseDownPoint.diffy;
-
-      const whole = this.hitTarget?.parent?.whole;
-
-      // 如果为组合节点则指向parent
-      if (whole) {
-        this.hitTarget = this.hitTarget.parent;
-      }
-
-      // 根据画布缩放平移动
-      const realPoint = this._renderer.getTransformByPoint(
-        this._mouseDownPoint.x + diffX,
-        this._mouseDownPoint.y + diffY
-      );
-
-      // 更新拖拽的的节点位置
-      this.hitTarget.updatePosition(
-        this._mouseDownPoint.x + diffX,
-        this._mouseDownPoint.y + diffY
-      );
-      this.hitTarget.updatePosition(realPoint.x, realPoint.y);
-      this._renderer.render(this.stage);
-    }
-
-    // 拖拽画布
-    if (this._dragging && !this.hitTarget) {
-      const diffX = movePosition.x - this._mouseDownPoint.x;
-      const diffY = movePosition.y - this._mouseDownPoint.y;
-      this._renderer.updateCanvasTranslate(diffX, diffY);
-    }
   };
 
   private onPointerup = (event) => {
@@ -159,12 +92,28 @@ export class EventSystem {
     const e = Object.assign({}, event, {
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
+      hitTarget: this.hitTarget
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     e.target = target;
     e.container = target instanceof Graphics ? target.parent : null;
     this.emit(EVENT_TYPE.CANVAS_POINTERUP, e);
   };
+
+  private onWheel = (event) => {
+    // event.preventDefault()
+    // event.stopPropagation()
+    // const e = Object.assign({}, event, {
+    //   deltaX: event.deltaX * 2,
+    //   deltaY: event.deltaY * 2,
+    //   offsetX: event.offsetX * 2,
+    //   offsetY: event.offsetY * 2,
+    // });
+
+    // this._renderer.updateCanvasTranslate(e.deltaX, e.deltaY);
+    // console.log('e.deltaX, e.deltaY: ', e.deltaX, e.deltaY);
+
+  }
 
   public hitTest(root: Container, globalPos: Point): Container | null {
     this.hasFoundTarget = false;

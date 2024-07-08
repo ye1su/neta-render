@@ -6,6 +6,7 @@ import Freedom from "./nodes/regFreedom";
 import CreateEdge from "./behavior/createEdge";
 import ClickEditNode from "./behavior/clickEditNode";
 import FreeDomRender from "./behavior/freeDomRender";
+import DragAll from './behavior/dragAll'
 
 export const EXTEND_NODE = {
   UserTask,
@@ -18,4 +19,5 @@ export const BEHAVIOR = {
   CreateEdge,
   ClickEditNode,
   FreeDomRender,
+  DragAll,
 };
