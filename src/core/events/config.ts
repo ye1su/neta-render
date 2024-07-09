@@ -5,4 +5,5 @@ export const EVENT_TYPE = {
   CANVAS_POINTERDOWN:  "canvas:pointerdown",
   CANVAS_POINTERMOVE: "canvas:pointermove",
   CANVAS_POINTERUP: "canvas:pointerup",
+  CANVAS_WHEEL: "canvas:wheel",
 };

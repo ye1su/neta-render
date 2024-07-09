@@ -2,7 +2,6 @@ import { isString } from "lodash-es";
 import { TEMPORARY_CREATE_EDGE_ID } from "../../config";
 import { EVENT_TYPE } from "../../events/config";
 import { createRoot } from "react-dom/client";
-import React from "react";
 
 const clickEditNode = {
   name: "freedom-node",

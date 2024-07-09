@@ -24,6 +24,7 @@ export class NetaGraph extends Application {
   public registerMap: Map<string, RegNodeType["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
   public buildInEvent: BuiltInEvent;
+  public behaviors?: string[]
 
   constructor(options: NetaGraphOptions) {
     super(options);
@@ -42,7 +43,9 @@ export class NetaGraph extends Application {
       });
     }
 
-    this.buildInEvent = new BuiltInEvent(this, options.register?.behaviors);
+    this.behaviors = options.behaviors
+
+    this.buildInEvent = new BuiltInEvent(this, options.register?.behaviors, options.behaviors);
     this.buildInEvent.init();
   }
 

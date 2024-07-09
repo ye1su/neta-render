@@ -7,6 +7,7 @@ import CreateEdge from "./behavior/createEdge";
 import ClickEditNode from "./behavior/clickEditNode";
 import FreeDomRender from "./behavior/freeDomRender";
 import DragAll from './behavior/dragAll'
+import WheelCanvasMove from './behavior/wheelCanvasMove'
 
 export const EXTEND_NODE = {
   UserTask,
@@ -20,4 +21,6 @@ export const BEHAVIOR = {
   ClickEditNode,
   FreeDomRender,
   DragAll,
+  WheelCanvasMove,
 };
+

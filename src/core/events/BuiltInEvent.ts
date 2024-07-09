@@ -4,22 +4,34 @@ import { EVENT_TYPE } from "./config";
 
 export class BuiltInEvent {
   private instance: NetaGraph;
-  private behaviors = BEHAVIOR;
+  private behaviors = [];
 
-  constructor(instance: NetaGraph, registerEvent) {
+  constructor(instance: NetaGraph, registerEvent, optBhvs?: string[]) {
     this.instance = instance;
+
+    // 加载注册内置的behavior
+    if (Array.isArray(optBhvs)) {
+      for (const name of optBhvs) {
+        const modules = Object.values(BEHAVIOR).filter((i) => i.name === name);
+        modules.forEach((m) => {
+          this.behaviors[name] = m;
+        });
+      }
+    }
+
+    // 加载自定义的behavior
     if (Array.isArray(registerEvent)) {
       for (const regEvent of registerEvent) {
         this.behaviors[regEvent.name] = regEvent;
       }
     }
 
-    const _this = this
-    for(const key in EVENT_TYPE) {
-      this[`EVENT_${key}`] = function(event) {
+    const _this = this;
+    for (const key in EVENT_TYPE) {
+      this[`EVENT_${key}`] = function (event) {
         const name = EVENT_TYPE[key];
         _this.loadEvent(name, [event]);
-      }
+      };
     }
   }
 
@@ -31,12 +43,11 @@ export class BuiltInEvent {
       }
     }
 
-    for(const key in this) {
-      if(!key.startsWith('EVENT_')) continue
-      const eventKey = key.slice(6)
-      this.instance.on(EVENT_TYPE[eventKey], this[key].bind(this))
+    for (const key in this) {
+      if (!key.startsWith("EVENT_")) continue;
+      const eventKey = key.slice(6);
+      this.instance.on(EVENT_TYPE[eventKey], this[key].bind(this));
     }
-
   }
 
   destroy() {
@@ -47,18 +58,15 @@ export class BuiltInEvent {
       }
     }
 
-    for(const key in this) {
-      if(!key.startsWith('EVENT_')) continue
+    for (const key in this) {
+      if (!key.startsWith("EVENT_")) continue;
 
-      const eventKey = key.slice(6)
-      this.instance.off(EVENT_TYPE[eventKey], this[key])
+      const eventKey = key.slice(6);
+      this.instance.off(EVENT_TYPE[eventKey], this[key]);
     }
-
   }
 
-
   loadEvent(name: string, args: any[]) {
-
     for (const behaviorKey in this.behaviors) {
       const behaviorIns = this.behaviors[behaviorKey];
       const events = behaviorIns.render.getEvents();
@@ -68,9 +76,8 @@ export class BuiltInEvent {
         // throw new Error("当前挂载的behavior动作异常");
         const originThis = behaviorIns.render;
 
-  
-        if(typeof args[0] === 'object') {
-          args[0].originThis = originThis
+        if (typeof args[0] === "object") {
+          args[0].originThis = originThis;
         }
         behaviorIns.render[evnetName].apply(this, [...args]);
       }

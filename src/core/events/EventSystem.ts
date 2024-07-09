@@ -88,7 +88,6 @@ export class EventSystem {
   };
 
   private onPointerup = (event) => {
-    this._dragging = false;
     const e = Object.assign({}, event, {
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
@@ -101,18 +100,15 @@ export class EventSystem {
   };
 
   private onWheel = (event) => {
-    // event.preventDefault()
-    // event.stopPropagation()
-    // const e = Object.assign({}, event, {
-    //   deltaX: event.deltaX * 2,
-    //   deltaY: event.deltaY * 2,
-    //   offsetX: event.offsetX * 2,
-    //   offsetY: event.offsetY * 2,
-    // });
-
-    // this._renderer.updateCanvasTranslate(e.deltaX, e.deltaY);
-    // console.log('e.deltaX, e.deltaY: ', e.deltaX, e.deltaY);
-
+    event.preventDefault()
+    event.stopPropagation()
+    const e = Object.assign({}, event, {
+      deltaX: event.deltaX * 2,
+      deltaY: event.deltaY * 2,
+      offsetX: event.offsetX * 2,
+      offsetY: event.offsetY * 2,
+    });
+    this.emit(EVENT_TYPE.CANVAS_WHEEL, e);
   }
 
   public hitTest(root: Container, globalPos: Point): Container | null {

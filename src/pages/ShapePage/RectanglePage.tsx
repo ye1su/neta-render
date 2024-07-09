@@ -8,6 +8,7 @@ export function RectanglePage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
+      behaviors: ['drag-all'],
     });
 
     const model = {

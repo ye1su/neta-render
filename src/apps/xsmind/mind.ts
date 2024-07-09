@@ -16,6 +16,7 @@ class Mind {
           direction: "lr",
         },
       },
+      behaviors: ["wheel-canvas-move"],
       register: { nodes: MIND_NODE, behaviors: MIND_BEHAVIOR },
     });
   }
@@ -27,10 +28,10 @@ class Mind {
           id: "1",
           type: "headTitle",
           label: "Company1",
-          nodeState: []
+          nodeState: [],
         },
       ],
-      edges: []
+      edges: [],
     });
     this.netaRender.render();
   }

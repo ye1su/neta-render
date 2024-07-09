@@ -21,6 +21,7 @@ export interface GlobalTransform {
 export interface NetaGraphOptions extends IApplicationOptions {
   layout?: LayoutConfig;
   register?: { nodes?: RegNodeType[]; behaviors?: any[] };
+  behaviors?: string[];
 }
 
 // 布局配置
@@ -71,6 +72,8 @@ export interface NodeModel extends BaseModel {
   anchor?: boolean;
   // shape的名称
   name?: string;
+
+  [key: string]: any;
 }
 
 export interface EdgeModel extends BaseModel {
