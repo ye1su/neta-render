@@ -70,7 +70,6 @@ export class EventSystem {
 
     if(!this.moveItem && target) {
       this.moveItem = target
-      console.log('move in');
       e.target = target
       this.emit(EVENT_TYPE.GRAPHICS_MOUSEENTER, e)
       
@@ -79,7 +78,6 @@ export class EventSystem {
       e.target = target
       this.moveItem = null
       this.emit(EVENT_TYPE.GRAPHICS_MOUSEOUT, e)
-      console.log('move out');
     }
 
     // 传递事件

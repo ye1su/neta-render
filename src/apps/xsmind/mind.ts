@@ -28,6 +28,7 @@ class Mind {
           id: "1",
           type: "headTitle",
           label: "Company1",
+          width: 54,
           nodeState: [],
         },
       ],

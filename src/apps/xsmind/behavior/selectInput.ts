@@ -40,12 +40,15 @@ const mindSelectNode = {
           id: `node-${newNodeId}`,
           type: "headTitle",
           label: "Company1",
+          width: 54,
           nodeState: [],
         });
         this.instance.model.edges.push({
           id: `edge-${newNodeId}`,
           source: target.parent.id,
           target: `node-${newNodeId}`,
+          sourceAnchor: 4,
+          targetAnchor: 3,
         });
         this.instance.refresh();
       }
@@ -62,16 +65,22 @@ const mindSelectNode = {
         parent = evt.target.parent;
       }
 
+      // hover进入后展示新增的bar
       if (parent._data?.type === "headTitle") {
         originThis.hoverShape = parent;
         const node = getTargetNode(this.instance.model.nodes, parent.id);
-        node.nodeState.push("hover");
-        this.instance.refresh();
+        const nodeState = node.nodeState;
+        const hoverIndex = nodeState.indexOf("hover");
+        if(hoverIndex == -1) {
+          node.nodeState.push("hover");
+          this.instance.refresh();
+        }
       }
     },
     onMouseOut(evt) {
       const originThis = evt.originThis;
 
+      // hover一处去出bar
       if (originThis.hoverShape) {
         const node = getTargetNode(
           this.instance.model.nodes,
@@ -80,7 +89,9 @@ const mindSelectNode = {
         const nodeState = node.nodeState;
         const hoverIndex = nodeState.indexOf("hover");
         nodeState.splice(hoverIndex, 1);
-        this.instance.refresh();
+        setTimeout(() => {
+          this.instance.refresh();
+        }, 300)
       }
     },
     onCanvasDown() {

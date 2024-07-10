@@ -67,9 +67,9 @@ export class TreeRender {
     this.nodeWidth = 110;
     this.nodeHeight = 50;
     // 因为节点间的距离是从节点的中心距离计算的，所以为了方便计算，加上2*(节点宽度/2)即一个节点宽度
-    this.nodeInterval = 60 + this.nodeWidth;
+    this.nodeInterval = 100;
     // 同理上面
-    this.yInterval = 120 + this.nodeHeight;
+    this.yInterval = 100;
 
     this.rootX = 300;
     this.rootY = 200;
@@ -94,6 +94,17 @@ export class TreeRender {
 
   get mianKey() {
     return DIRECT_MAP[this.direction].main;
+  }
+
+  getYIntervalOffset(node) {
+    if (["lr", "rl"].includes(this.direction) && node.parent?.data?.width) {
+      return node.parent?.data?.width * 2;
+    }
+    if (["tb", "bt"].includes(this.direction) && node.parent?.data?.width) {
+      return node.parent?.data?.height * 2;
+    }
+
+    return 0;
   }
 
   createNode(treeData: TreeData) {
@@ -293,7 +304,17 @@ export class TreeRender {
    */
   patch(node: TreeNode, callback) {
     const _key = this.mianKey;
-    node[_key] = this.rootY + node.layer * this.yInterval;
+
+    if (!node.parent) {
+      node[_key] = this.rootY;
+    } else {
+      node[_key] = node.parent?.[_key] + this.yInterval;
+    }
+
+    //
+    if (this.getYIntervalOffset(node)) {
+      node[_key] += this.getYIntervalOffset(node);
+    }
     callback(node);
     // 递归更新子节点
     for (let i = 0; i < node.children.length; i++) {
