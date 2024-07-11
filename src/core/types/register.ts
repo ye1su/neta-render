@@ -1,9 +1,10 @@
-import { RegisterContext } from "../graphics/GraphicsParse"
-
+import { Graphics } from "../graphics/Graphics";
+import { RegisterContext } from "../graphics/GraphicsParse";
 
 export interface RegNodeType {
-  name: string
+  name: string;
   render: {
-    draw: (action: RegisterContext) => void
-  }
+    draw: (action: RegisterContext) => Graphics | undefined;
+    html?: any;
+  };
 }

@@ -101,8 +101,8 @@ export class EventSystem {
     event.preventDefault()
     event.stopPropagation()
     const e = Object.assign({}, event, {
-      deltaX: event.deltaX * 2,
-      deltaY: event.deltaY * 2,
+      deltaX: event.deltaX,
+      deltaY: event.deltaY,
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
     });

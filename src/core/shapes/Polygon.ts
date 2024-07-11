@@ -11,7 +11,7 @@ export class Polygon extends Shape {
   public offsetY: number;
   public closeStroke = false;
   public readonly type = ShapeType.Polygon;
-  constructor(x = 0, y = 0, name: string, points: number[] = []) {
+  constructor(x = 0, y = 0, name?: string, points: number[] = []) {
     super();
 
     this.offsetX = x;

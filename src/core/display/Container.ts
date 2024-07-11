@@ -154,7 +154,13 @@ export class Container extends DisplayObject {
    * @returns BBox
    */
   public getBBox(): BBox {
-    const shapeBoxList = this.children
+
+    // 如果有核心节点，则进行取核心节点的范围
+    const kernelChildren = this.children.filter((i) => i.kernel);
+
+    const children =
+      kernelChildren.length == 0 ? this.children : kernelChildren;
+    const shapeBoxList = children
       .map((shape) => {
         return shape.getBBox();
       })

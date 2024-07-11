@@ -57,7 +57,7 @@ export class Anchor {
       ctx.beginPath();
 
       ctx.arc(point.x, point.y, this.radius, 0, 2 * Math.PI);
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = "#000";
       ctx.fill();
       ctx.stroke();
       ctx.closePath();

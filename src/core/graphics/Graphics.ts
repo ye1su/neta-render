@@ -18,9 +18,14 @@ import { fixFactor, getPolygonSurround } from "../utils";
 
 export class Graphics extends Container {
   private _render: CanvasRenderer;
+  // 图形的样式
   private _shapeStyle = new ShapeStyle();
+  // geometry 存储数据
   private _geometry = new GraphicsGeometry<Shape>();
+  // 多边形的绘制path
   public currentPath: Polygon | null = null;
+  // 如果是container 下， 以当前Graphics为轮廓节点
+  public kernel: boolean = false
 
   constructor() {
     super();

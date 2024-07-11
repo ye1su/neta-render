@@ -103,7 +103,11 @@ export function graphicsShapeParse(
       inputProperties: json,
     });
     const shapeIns = registerMap.get(type);
-    shapeIns.draw(action);
+    const kernelShape = shapeIns.draw(action);
+    // 如果自定义节点返回了节点，则以当前节点为核心节点
+    if(kernelShape) {
+      kernelShape.kernel = true
+    }
     children = action.groups;
     if (shapeIns.html && typeof shapeIns.html == "function") {
       graphic.html = shapeIns.html({ config: json, ctx });

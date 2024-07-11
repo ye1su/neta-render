@@ -7,19 +7,18 @@ const headTitleNode = {
       const shapeWidth = initJson.width ?? 108;
       const shapeHeight = 48;
 
-      const inputOutPadding = 8;
 
       const nodeState = initJson.nodeState ?? [];
       const isSelect = nodeState.find((item) => item == "select");
       const isHover = nodeState.find((item) => item == "hover");
 
-      action.addShape("rect", {
+      const currentShape = action.addShape("rect", {
         x: 0,
         y: 0,
         width: shapeWidth,
         height: shapeHeight,
         // radius: 4,
-        style: getBaseRectStyle(isSelect),
+        style: getBaseRectStyle({ isSelect, isHover }),
       });
 
       // action.addShape("rect", {
@@ -70,18 +69,27 @@ const headTitleNode = {
           },
         });
       }
+
+      return currentShape
     },
   },
 };
 
-function getBaseRectStyle(isSelect) {
-  const syl = {
+function getBaseRectStyle({ isSelect, isHover }) {
+  let syl: Record<string, any> = {
     fill: "#F9DDB0",
     stroke: "transparent",
   };
 
+  if (isHover) {
+    syl = {
+      ...syl,
+      lineWidth: 0,
+    };
+  }
+
   if (isSelect) {
-    return {
+    syl = {
       ...syl,
       stroke: "#e7e6f8",
       lineWidth: 4,

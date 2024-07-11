@@ -26,8 +26,16 @@ const mindSelectNode = {
        * 点击选中
        */
       if (target.parent._data?.type === "headTitle") {
+        
+        this.instance.model.nodes.forEach((node) => {
+          const hoverIndex = node.nodeState?.indexOf("select");
+          if (typeof hoverIndex == 'number' && hoverIndex > -1) {
+            node.nodeState.splice(hoverIndex, 1);
+          }
+        });
         const node = getTargetNode(this.instance.model.nodes, target.parent.id);
         node.nodeState.push("select");
+
         this.instance.refresh();
       }
 
@@ -86,19 +94,23 @@ const mindSelectNode = {
           this.instance.model.nodes,
           originThis.hoverShape.id
         );
-        const nodeState = node.nodeState;
-        const hoverIndex = nodeState.indexOf("hover");
-        nodeState.splice(hoverIndex, 1);
-        setTimeout(() => {
-          this.instance.refresh();
-        }, 300)
+
+        const hoverIndex =  node.nodeState?.indexOf("hover");
+
+        if(typeof hoverIndex == 'number' && hoverIndex > -1) {
+          node.nodeState.splice(hoverIndex, 1);
+          setTimeout(() => {
+            this.instance.refresh();
+          }, 300)
+        }
+
       }
     },
     onCanvasDown() {
       let refreshTag = false;
       this.instance.model.nodes.forEach((node) => {
-        if (node.nodeState) {
-          const hoverIndex = node.nodeState.indexOf("select");
+        const hoverIndex = node.nodeState?.indexOf("select");
+        if (typeof hoverIndex == 'number' && hoverIndex > -1) {
           node.nodeState.splice(hoverIndex, 1);
           refreshTag = true;
         }
