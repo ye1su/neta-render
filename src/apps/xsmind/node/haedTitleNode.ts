@@ -6,11 +6,12 @@ const headTitleNode = {
       // console.log("initJson: ", initJson);
       const shapeWidth = initJson.width ?? 108;
       const shapeHeight = 48;
-
+      const inputOutPadding = 8
 
       const nodeState = initJson.nodeState ?? [];
       const isSelect = nodeState.find((item) => item == "select");
       const isHover = nodeState.find((item) => item == "hover");
+      const isInput = nodeState.find((item) => item == "input");
 
       const currentShape = action.addShape("rect", {
         x: 0,
@@ -21,16 +22,19 @@ const headTitleNode = {
         style: getBaseRectStyle({ isSelect, isHover }),
       });
 
-      // action.addShape("rect", {
-      //   x: inputOutPadding,
-      //   y: inputOutPadding,
-      //   width: shapeWidth - inputOutPadding * 2,
-      //   height: 32,
-      //   style: {
-      //     stroke: "#8C80A7",
-      //     fill: "transparent",
-      //   },
-      // });
+      if(isInput) {
+        action.addShape("rect", {
+          x: inputOutPadding,
+          y: inputOutPadding,
+          width: shapeWidth - inputOutPadding * 2,
+          height: 32,
+          style: {
+            stroke: "#8C80A7",
+            fill: "transparent",
+          },
+        });
+      }
+      
 
       if (isHover) {
         action.addShape("rect", {
