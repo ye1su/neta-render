@@ -19,6 +19,8 @@ export class Application extends Eventemitter {
     this.renderer = getRenderer({ ...options });
     this.render();
 
+    // this.frameRender()
+
     const _emit = this.emit;
     if (this.renderer instanceof CanvasRenderer) {
       this.eventSystem = new EventSystem(

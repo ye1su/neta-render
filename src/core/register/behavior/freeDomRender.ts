@@ -3,7 +3,7 @@ import { TEMPORARY_CREATE_EDGE_ID } from "../../config";
 import { EVENT_TYPE } from "../../events/config";
 import { createRoot } from "react-dom/client";
 
-const clickEditNode = {
+const freeDomNode = {
   name: "freedom-node",
   render: {
     vid: null,
@@ -20,10 +20,11 @@ const clickEditNode = {
       const vNode = evt.container?.html;
       if (!vNode) return;
       if (isString(vNode)) return;
+      
       const bbox = evt.container.getBBox();
       const newEle = document.createElement("div");
-      clickEditNode.render.vid = "stagehtml-" + evt.container.id;
-      newEle.id = clickEditNode.render.vid;
+      freeDomNode.render.vid = "stagehtml-" + evt.container.id;
+      newEle.id = freeDomNode.render.vid;
 
       const renderItem = createRoot(newEle);
 
@@ -38,7 +39,7 @@ const clickEditNode = {
       this.instance.el.appendChild(newEle);
     },
     onCanvasClick(evt) {
-      if (clickEditNode.render.vid) {
+      if (freeDomNode.render.vid) {
         const stageChildren =
           this.instance.el.querySelectorAll("[id^='stagehtml-']");
         for (const child of stageChildren) {
@@ -49,4 +50,4 @@ const clickEditNode = {
   },
 };
 
-export default clickEditNode;
+export default freeDomNode;

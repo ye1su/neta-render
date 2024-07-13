@@ -16,7 +16,7 @@ class Mind {
           direction: "lr",
         },
       },
-      behaviors: ["wheel-canvas-move"],
+      behaviors: ["wheel-canvas-move", 'render-dynamic-element'],
       register: { nodes: MIND_NODE, behaviors: MIND_BEHAVIOR },
     });
   }

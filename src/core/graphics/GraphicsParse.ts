@@ -109,8 +109,8 @@ export function graphicsShapeParse(
       kernelShape.kernel = true
     }
     children = action.groups;
-    if (shapeIns.html && typeof shapeIns.html == "function") {
-      graphic.html = shapeIns.html({ config: json, ctx });
+    if (shapeIns.dynamicElement && typeof shapeIns.dynamicElement == "function") {
+      graphic.dynamicElement = shapeIns.dynamicElement({ config: json, ctx });
     }
   }
 

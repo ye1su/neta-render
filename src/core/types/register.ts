@@ -5,6 +5,6 @@ export interface RegNodeType {
   name: string;
   render: {
     draw: (action: RegisterContext) => Graphics | undefined;
-    html?: any;
+    dynamicElement?: (val: any) => any;
   };
 }

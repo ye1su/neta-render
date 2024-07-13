@@ -26,6 +26,12 @@ export interface AnchorPort {
   point: Point;
 }
 
+// 动态组件类型
+export interface DynamicElement {
+  eleType: string,
+  [key: string]: any
+}
+
 export interface LineBaseConfig {
   anchorPoints?: number[][];
   targetAnchor?: number;

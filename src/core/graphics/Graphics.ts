@@ -10,7 +10,7 @@ import {
 import { Container } from "../display";
 import { Point } from "../math";
 import { CanvasRenderer } from "../renderer/CanvasRender";
-import { IShapeStyle } from "../types/graphics";
+import { DynamicElement, IShapeStyle } from "../types/graphics";
 import { GraphicsGeometry } from "./GraphicsGeometry";
 import { ShapeStyle } from "./style";
 import { ItmeType, ShapeType } from "../enums";
@@ -25,7 +25,8 @@ export class Graphics extends Container {
   // 多边形的绘制path
   public currentPath: Polygon | null = null;
   // 如果是container 下， 以当前Graphics为轮廓节点
-  public kernel: boolean = false
+  public kernel: boolean = false;
+
 
   constructor() {
     super();

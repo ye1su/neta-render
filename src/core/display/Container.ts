@@ -3,7 +3,7 @@ import { CanvasRenderer } from "../renderer/CanvasRender";
 import { Anchor, Point } from "../math";
 import { getContainerSurround } from "../utils";
 import { ItmeType } from "../enums";
-import { BBox } from "../types/graphics";
+import { BBox, DynamicElement } from "../types/graphics";
 
 export class Container extends DisplayObject {
   public type = ItmeType.Container;
@@ -17,6 +17,9 @@ export class Container extends DisplayObject {
 
   // container渲染的数据
   public _data = null;
+
+  // 当前的是否绑定动态元素
+  public dynamicElement: DynamicElement = null;
 
   constructor() {
     super();
@@ -154,7 +157,6 @@ export class Container extends DisplayObject {
    * @returns BBox
    */
   public getBBox(): BBox {
-
     // 如果有核心节点，则进行取核心节点的范围
     const kernelChildren = this.children.filter((i) => i.kernel);
 

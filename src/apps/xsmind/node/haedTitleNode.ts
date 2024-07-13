@@ -6,7 +6,7 @@ const headTitleNode = {
       // console.log("initJson: ", initJson);
       const shapeWidth = initJson.width ?? 108;
       const shapeHeight = 48;
-      const inputOutPadding = 8
+      const inputOutPadding = 8;
 
       const nodeState = initJson.nodeState ?? [];
       const isSelect = nodeState.find((item) => item == "select");
@@ -22,7 +22,7 @@ const headTitleNode = {
         style: getBaseRectStyle({ isSelect, isHover }),
       });
 
-      if(isInput) {
+      if (isInput) {
         action.addShape("rect", {
           x: inputOutPadding,
           y: inputOutPadding,
@@ -34,7 +34,6 @@ const headTitleNode = {
           },
         });
       }
-      
 
       if (isHover) {
         action.addShape("rect", {
@@ -74,7 +73,22 @@ const headTitleNode = {
         });
       }
 
-      return currentShape
+      return currentShape;
+    },
+    dynamicElement: ({ config }) => {
+      return {
+        eleType: "textarea",
+        style: {
+          border: "none",
+          background: "transparent",
+          padding: 0,
+          outline: "none",
+          resize: "none" /* 禁用调整大小 */,
+          width: "100%" /* 可选：使 textarea 占满父容器的宽度 */,
+          height: "100px" /* 可选：设置固定高度 */,
+        },
+        text: config.text ?? "",
+      };
     },
   },
 };
