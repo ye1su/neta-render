@@ -4,9 +4,9 @@ const headTitleNode = {
     draw(action) {
       const initJson = action.inputProperties;
       // console.log("initJson: ", initJson);
-      const shapeWidth = initJson.width ?? 108;
-      const shapeHeight = 48;
-      const inputOutPadding = 8;
+      const shapeWidth = initJson.width ?? 130;
+      const shapeHeight = 56;
+      const inputOutPadding = 12;
 
       const nodeState = initJson.nodeState ?? [];
       const isSelect = nodeState.find((item) => item == "select");
@@ -79,7 +79,7 @@ const headTitleNode = {
       return {
         eleType: "textarea",
         style: {
-          border: "none",
+          // border: "none",
           background: "transparent",
           padding: 0,
           outline: "none",

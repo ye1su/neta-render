@@ -62,7 +62,7 @@ const mindSelectNode = {
           id: `node-${newNodeId}`,
           type: "headTitle",
           label: "Company1",
-          width: 54,
+          width: 65,
           nodeState: [],
         });
         this.instance.model.edges.push({

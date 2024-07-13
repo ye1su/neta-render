@@ -1,5 +1,3 @@
-import { isString } from "lodash-es";
-import { TEMPORARY_CREATE_EDGE_ID } from "../../config";
 import { EVENT_TYPE } from "../../events/config";
 
 const renderDynamicElement = {
@@ -12,22 +10,28 @@ const renderDynamicElement = {
     getEvents() {
       return {
         "graphics:pointerdown": "onPointerDown",
+        "canvas:wheel": "onCanvasWheel",
         [EVENT_TYPE.CANVAS_POINTERDOWN]: "onCanvasClick",
       };
     },
     onPointerDown(evt) {
-      console.log("evt: ", evt);
       if (!evt.container?.dynamicElement) return;
+
+      const target = evt.target;
+      const node = getTargetNode(this.instance.model.nodes, target.parent.id);
+
+      if (node.nodeState.indexOf("select") == -1) return;
+
       const originThis = evt.originThis;
       const dynamicElementInfo = evt.container?.dynamicElement;
       originThis.renderContainer = evt.container;
-      console.log("evt.container: ", evt.container);
+
       const bbox = evt.container.getBBox();
-
       originThis.id = "stagehtml-" + evt.container.id;
-
+      // 去除elements
       originThis.clearAllDynamicEles(this.instance.el);
 
+      // 创建element
       const newEle = document.createElement(dynamicElementInfo.eleType);
       newEle.id = originThis.id;
       newEle.value = dynamicElementInfo.text;
@@ -37,11 +41,21 @@ const renderDynamicElement = {
         }
       }
 
+      const ltPoint = this.instance.renderer.getPointByTransform(
+        evt.target.x,
+        evt.target.y
+      );
+
+      const offsetMargin = 12;
+      
+      newEle.style.fontSize = '24px'
       newEle.style.position = "absolute";
-      newEle.style.left = evt.target.x / 2 + "px";
-      newEle.style.top = evt.target.y / 2 + "px";
-      newEle.style.width = (bbox.maxX - bbox.minX) / 2 + "px";
-      newEle.style.height = (bbox.maxY - bbox.minY) / 2 + "px";
+      newEle.style.left = ltPoint.x / 2 + offsetMargin + "px";
+      newEle.style.top = ltPoint.y / 2 + offsetMargin + "px";
+      newEle.style.width =
+        (bbox.maxX - bbox.minX) / 2 - offsetMargin * 2 + "px";
+      newEle.style.height =
+        (bbox.maxY - bbox.minY) / 2 - offsetMargin * 2 + "px";
 
       this.instance.el.appendChild(newEle);
 
@@ -53,20 +67,25 @@ const renderDynamicElement = {
       const originThis = evt.originThis;
       if (originThis.id) {
         const stageChild = this.instance.el.querySelector(`#${originThis.id}`);
-
-        console.log("stageChild: ", stageChild);
-
         const text = stageChild.value;
-        console.log("text: ", text);
 
         const targetId = originThis.renderContainer.id;
         this.instance.updateNodeData({
           id: targetId,
           text,
         });
-        // stageChild && this.instance.el.removeChild(stageChild);
 
         originThis.clearAllDynamicEles(this.instance.el);
+      }
+    },
+    onCanvasWheel(evt) {
+      const originThis = evt.originThis;
+      const stageChild = this.instance.el.querySelector(`#${originThis.id}`);
+      if (stageChild) {
+        stageChild.style.left =
+          parseFloat(stageChild.style.left) + evt.deltaX / 2 + "px";
+        stageChild.style.top =
+          parseFloat(stageChild.style.top) + evt.deltaY / 2 + "px";
       }
     },
     clearAllDynamicEles(fatherNode) {
@@ -78,5 +97,9 @@ const renderDynamicElement = {
     },
   },
 };
+
+function getTargetNode(nodes = [], id) {
+  return nodes.find((node) => node.id === id);
+}
 
 export default renderDynamicElement;
