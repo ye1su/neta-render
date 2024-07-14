@@ -19,8 +19,11 @@ const renderDynamicElement = {
 
       const target = evt.target;
       const node = getTargetNode(this.instance.model.nodes, target.parent.id);
-
+      const shape = target._geometry?.graphicsData?.shape ?? null;
       if (node.nodeState.indexOf("select") == -1) return;
+
+      if (shape.name === "drag-pointer") return
+
 
       const originThis = evt.originThis;
       const dynamicElementInfo = evt.container?.dynamicElement;
@@ -34,7 +37,8 @@ const renderDynamicElement = {
       // 创建element
       const newEle = document.createElement(dynamicElementInfo.eleType);
       newEle.id = originThis.id;
-      newEle.value = dynamicElementInfo.text;
+
+
       if (typeof dynamicElementInfo.style == "object") {
         for (const key in dynamicElementInfo.style) {
           newEle.style[key] = dynamicElementInfo.style[key];
@@ -54,10 +58,43 @@ const renderDynamicElement = {
       newEle.style.top = ltPoint.y / 2 + offsetMargin + "px";
       newEle.style.width =
         (bbox.maxX - bbox.minX) / 2 - offsetMargin * 2 + "px";
-      newEle.style.height =
-        (bbox.maxY - bbox.minY) / 2 - offsetMargin * 2 + "px";
+      // newEle.style.height =
+      //   (bbox.maxY - bbox.minY) / 2 - offsetMargin * 2 + "px";
 
       this.instance.el.appendChild(newEle);
+
+      // appendChild 完之后进行赋值
+      newEle.value = dynamicElementInfo.text;
+      // 进行高度计算
+      const initialHeight = '1.5em';
+      newEle.style.height = initialHeight;
+      newEle.style.height = newEle.scrollHeight + 'px'
+      // 刷新元素高度
+      const targetId = originThis.renderContainer.id;
+      this.instance.updateNodeData({
+        id: targetId,
+        height: newEle.scrollHeight / 2 + 13
+      });
+
+
+      // 处理input时间
+      const _this = this
+      newEle.addEventListener('input', function() {
+
+        const initialHeight = '1.5em';
+        newEle.style.height = initialHeight; // 重置高度
+        const newHeight = newEle.scrollHeight + 'px';
+        newEle.style.height = newHeight; // 设置为新的高度
+
+
+        const targetId = originThis.renderContainer.id;
+
+        _this.instance.updateNodeData({
+          id: targetId,
+          height: this.scrollHeight / 2 + 13
+        });
+
+      });
 
       setTimeout(() => {
         newEle.focus();
@@ -65,8 +102,9 @@ const renderDynamicElement = {
     },
     onCanvasClick(evt) {
       const originThis = evt.originThis;
-      if (originThis.id) {
-        const stageChild = this.instance.el.querySelector(`#${originThis.id}`);
+      const stageChild = this.instance.el.querySelector(`#${originThis.id}`);
+
+      if (originThis.id && stageChild) {
         const text = stageChild.value;
 
         const targetId = originThis.renderContainer.id;

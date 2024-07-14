@@ -5,7 +5,7 @@ const headTitleNode = {
       const initJson = action.inputProperties;
       // console.log("initJson: ", initJson);
       const shapeWidth = initJson.width ?? 130;
-      const shapeHeight = 56;
+      const shapeHeight = initJson.height ?? 54;
       const inputOutPadding = 12;
 
       const nodeState = initJson.nodeState ?? [];
@@ -23,16 +23,16 @@ const headTitleNode = {
       });
 
       if (isInput) {
-        action.addShape("rect", {
-          x: inputOutPadding,
-          y: inputOutPadding,
-          width: shapeWidth - inputOutPadding * 2,
-          height: 32,
-          style: {
-            stroke: "#8C80A7",
-            fill: "transparent",
-          },
-        });
+        // action.addShape("rect", {
+        //   x: inputOutPadding,
+        //   y: inputOutPadding,
+        //   width: shapeWidth - inputOutPadding * 2,
+        //   height: 32,
+        //   style: {
+        //     stroke: "#8C80A7",
+        //     fill: "transparent",
+        //   },
+        // });
       }
 
       if (isHover) {
@@ -81,6 +81,8 @@ const headTitleNode = {
         style: {
           // border: "none",
           background: "transparent",
+          minHeight: '1.5em', /* 初始高度设为一行的高度 */
+          lineHeight: '1.5em',/* 每行的高度 */
           padding: 0,
           outline: "none",
           resize: "none" /* 禁用调整大小 */,

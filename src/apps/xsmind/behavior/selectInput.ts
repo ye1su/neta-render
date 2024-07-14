@@ -44,7 +44,10 @@ const mindSelectNode = {
           }
         });
 
+        // 如果没有select 和 input 则进入select 状态 否则进入input
         if (selectIndex == -1 && inputIndex == -1) {
+          node.nodeState.push("select");
+        } else if (selectIndex > -1 && shape.name === "drag-pointer") {
           node.nodeState.push("select");
         } else {
           node.nodeState.push("input");
@@ -63,6 +66,7 @@ const mindSelectNode = {
           type: "headTitle",
           label: "Company1",
           width: 65,
+          height: 31,
           nodeState: [],
         });
         this.instance.model.edges.push({
