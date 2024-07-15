@@ -27,7 +27,7 @@ class Mind {
         {
           id: "1",
           type: "headTitle",
-          label: "Company1",
+          text: 'XtMind\n123131',
           width: 65,
           height: 31,
           nodeState: [],

@@ -35,6 +35,20 @@ const headTitleNode = {
         // });
       }
 
+      if (!isInput) {
+        action.addShape("text", {
+          x: inputOutPadding,
+          y: inputOutPadding,
+          text: initJson?.text ?? "",
+          style: {
+            fill: "#595959",
+            fontSize: 24,
+            textBaseline: "middle",
+            textLineHight: 1.5,
+          },
+        });
+      }
+
       if (isHover) {
         action.addShape("rect", {
           x: shapeWidth,
@@ -81,8 +95,8 @@ const headTitleNode = {
         style: {
           // border: "none",
           background: "transparent",
-          minHeight: '1.5em', /* 初始高度设为一行的高度 */
-          lineHeight: '1.5em',/* 每行的高度 */
+          minHeight: "1.5em" /* 初始高度设为一行的高度 */,
+          lineHeight: "1.5em" /* 每行的高度 */,
           padding: 0,
           outline: "none",
           resize: "none" /* 禁用调整大小 */,

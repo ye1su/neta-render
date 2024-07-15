@@ -27,7 +27,6 @@ export class Graphics extends Container {
   // 如果是container 下， 以当前Graphics为轮廓节点
   public kernel: boolean = false;
 
-
   constructor() {
     super();
     this.type = ItmeType.Graphics;
@@ -187,12 +186,25 @@ export class Graphics extends Container {
       const { text } = shape;
       const { x, y } = shape.getXy();
 
-      const _fontSize = 32;
-      ctx.font = `${_fontSize}px Arial`;
+      const _fontSize = shapeStyle.fontSize;
+      ctx.textAlign = shapeStyle.textAlign;
+      ctx.textBaseline = shapeStyle.textBaseline;
+      ctx.font = `${_fontSize}px monospace`;
       ctx.fillStyle = shapeStyle.fill;
-
+      
       // 绘制文字
-      ctx.fillText(text, x, y);
+      if (!shapeStyle.textLineHight) {
+        ctx.fillText(text, x, y);
+      } else {
+        // 增加行间距的段落
+        const lineHeight = shapeStyle.textLineHight / 2; // 行高倍数
+        const lines = text.split("\n");
+        lines.forEach((line, index) => {
+          const yStart =
+            y + index * _fontSize * lineHeight + (_fontSize * lineHeight) / 2;
+          ctx.fillText(line, x, yStart);
+        });
+      }
     }
 
     if (shape instanceof ImageShpe) {
