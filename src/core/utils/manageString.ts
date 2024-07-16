@@ -1,5 +1,41 @@
 import letterAspectRatio from "./letterAspectRatio";
 
+export function autoFixWrap(text, width, options) {
+  const wrappedText = []; // 存储分割后的文本
+  let start = 0; // 当前分割的起始位置
+  for (let i = 0; i < text.length; i++) {
+    const sliceText = text.slice(start, i + 1);
+    const sliceWidth = getActualWidthOfChars(sliceText, options);
+
+    if (sliceWidth > width) {
+      wrappedText.push(sliceText.slice(0, sliceText.length - 1));
+      start = i ; // 更新起始位置
+    }
+  }
+
+  // 添加最后一段文本
+  if (start < text.length) {
+    wrappedText.push(text.slice(start));
+  }
+
+  return wrappedText.join('\n')
+}
+
+export function getActualWidthOfChars(
+  text,
+  options = { size: 14, family: "Microsoft YaHei" }
+) {
+  const { size = 14, family = "Microsoft YaHei" } = options;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.font = `${size}px ${family}`;
+  const metrics = ctx.measureText(text);
+  const actual =
+    Math.abs(metrics.actualBoundingBoxLeft) +
+    Math.abs(metrics.actualBoundingBoxRight);
+  return Math.max(metrics.width, actual);
+}
+
 export const getStringSize = (str: string, fontSize: number) => {
   if (!str || !fontSize) return 0;
   // eslint-disable-next-line no-control-regex

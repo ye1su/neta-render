@@ -1,3 +1,5 @@
+import { autoFixWrap, getActualWidthOfChars } from "../../../core/utils";
+
 const headTitleNode = {
   name: "headTitle",
   render: {
@@ -36,10 +38,18 @@ const headTitleNode = {
       }
 
       if (!isInput) {
+        const _text = initJson?.text ?? "";
+        const innerWidth = shapeWidth - inputOutPadding * 2;
+
+        const fixText = autoFixWrap(_text, innerWidth, {
+          size: 24,
+          family: "monospace",
+        })
+
         action.addShape("text", {
           x: inputOutPadding,
           y: inputOutPadding,
-          text: initJson?.text ?? "",
+          text: fixText,
           style: {
             fill: "#595959",
             fontSize: 24,
@@ -101,7 +111,6 @@ const headTitleNode = {
           outline: "none",
           resize: "none" /* 禁用调整大小 */,
           width: "100%" /* 可选：使 textarea 占满父容器的宽度 */,
-          height: "100px" /* 可选：设置固定高度 */,
         },
         text: config.text ?? "",
       };
