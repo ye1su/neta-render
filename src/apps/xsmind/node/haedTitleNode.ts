@@ -1,19 +1,35 @@
-import { autoFixWrap, getActualWidthOfChars } from "../../../core/utils";
+import { autoFixWrap } from "../../../core/utils";
 
 const headTitleNode = {
   name: "headTitle",
   render: {
     draw(action) {
       const initJson = action.inputProperties;
-      // console.log("initJson: ", initJson);
       const shapeWidth = initJson.width ?? 130;
-      const shapeHeight = initJson.height ?? 54;
       const inputOutPadding = 12;
+      const _fontSize = 24
 
+      // 状态
       const nodeState = initJson.nodeState ?? [];
       const isSelect = nodeState.find((item) => item == "select");
       const isHover = nodeState.find((item) => item == "hover");
       const isInput = nodeState.find((item) => item == "input");
+
+      // 转换成新的text
+      const _text = initJson?.text ?? "";
+      const innerWidth = shapeWidth - inputOutPadding * 2;
+      const { text: fixText, length: lineLen} = autoFixWrap(_text, innerWidth, {
+        size: _fontSize,
+        family: "monospace",
+      })
+
+      // 计算text 的height
+      const textHeight = _fontSize * 1.5 * (lineLen || 1) 
+
+      // 加上padding 为box的高度
+      const shapeHeight = textHeight + inputOutPadding * 2
+
+
 
       const currentShape = action.addShape("rect", {
         x: 0,
@@ -38,17 +54,10 @@ const headTitleNode = {
       }
 
       if (!isInput) {
-        const _text = initJson?.text ?? "";
-        const innerWidth = shapeWidth - inputOutPadding * 2;
-
-        const fixText = autoFixWrap(_text, innerWidth, {
-          size: 24,
-          family: "monospace",
-        })
 
         action.addShape("text", {
-          x: inputOutPadding,
-          y: inputOutPadding,
+          x: inputOutPadding + 2,
+          y: inputOutPadding + 2,
           text: fixText,
           style: {
             fill: "#595959",

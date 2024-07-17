@@ -18,7 +18,10 @@ export function autoFixWrap(text, width, options) {
     wrappedText.push(text.slice(start));
   }
 
-  return wrappedText.join('\n')
+  return {
+    text: wrappedText.join('\n'),
+    length: wrappedText.length,
+  }
 }
 
 export function getActualWidthOfChars(

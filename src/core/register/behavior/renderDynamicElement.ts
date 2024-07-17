@@ -79,19 +79,19 @@ const renderDynamicElement = {
 
       // 处理input时间
       const _this = this
-      newEle.addEventListener('input', function() {
+      newEle.addEventListener('input', function(evt) {
 
         const initialHeight = '1.5em';
         newEle.style.height = initialHeight; // 重置高度
         const newHeight = newEle.scrollHeight + 'px';
         newEle.style.height = newHeight; // 设置为新的高度
 
-
         const targetId = originThis.renderContainer.id;
 
         _this.instance.updateNodeData({
           id: targetId,
-          height: this.scrollHeight / 2 + 13
+          // height: this.scrollHeight / 2 + 13,
+          text: evt.target.value
         });
 
       });

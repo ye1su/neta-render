@@ -29,7 +29,6 @@ class Mind {
           type: "headTitle",
           text: 'XtMind123131',
           width: 65,
-          height: 31,
           nodeState: [],
         },
       ],
