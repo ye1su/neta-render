@@ -25,7 +25,7 @@ const mindSelectNode = {
       /**
        * 点击选中
        */
-      if (target.parent._data?.type === "headTitle") {
+      if (shape.name !== "expand-circle" && target.parent._data?.type === "headTitle") {
         const node = getTargetNode(this.instance.model.nodes, target.parent.id);
 
         const selectIndex = node.nodeState.indexOf("select");

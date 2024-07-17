@@ -22,7 +22,7 @@ const renderDynamicElement = {
       const shape = target._geometry?.graphicsData?.shape ?? null;
       if (node.nodeState.indexOf("select") == -1) return;
 
-      if (shape.name === "drag-pointer") return
+      if (['expand-circle', "drag-pointer"].includes(shape.name)) return
 
 
       const originThis = evt.originThis;
