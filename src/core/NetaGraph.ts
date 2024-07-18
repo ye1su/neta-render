@@ -10,7 +10,7 @@ import {
   graphicsLineParse,
   graphicsShapeParse,
 } from "./graphics/GraphicsParse";
-import { Force, Dagre, Tree } from "./layout";
+import { Force, Dagre, Tree, Mind } from "./layout";
 import { Application } from "./Application";
 import { LayoutType } from "./enums";
 import { cloneDeep } from "lodash-es";
@@ -24,7 +24,7 @@ export class NetaGraph extends Application {
   public registerMap: Map<string, RegNodeType["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
   public buildInEvent: BuiltInEvent;
-  public behaviors?: string[]
+  public behaviors?: string[];
 
   constructor(options: NetaGraphOptions) {
     super(options);
@@ -43,9 +43,13 @@ export class NetaGraph extends Application {
       });
     }
 
-    this.behaviors = options.behaviors
+    this.behaviors = options.behaviors;
 
-    this.buildInEvent = new BuiltInEvent(this, options.register?.behaviors, options.behaviors);
+    this.buildInEvent = new BuiltInEvent(
+      this,
+      options.register?.behaviors,
+      options.behaviors
+    );
     this.buildInEvent.init();
   }
 
@@ -72,31 +76,28 @@ export class NetaGraph extends Application {
    * @param nodes
    * @param edges
    */
-  layoutRender(nodes, edges) {
-    const evnetParmas = {
-      stage: this.stage,
-      graph: this,
-    };
-
+  layoutRender(model) {
     if (this.layoutConfig?.type == LayoutType.Force) {
-      const force = new Force(nodes, edges, null, evnetParmas);
+      const force = new Force(model.nodes, model.edges, null);
       force.layout();
     }
 
     if (this.layoutConfig?.type == LayoutType.Dagre) {
-      const dagre = new Dagre(nodes, edges, null, evnetParmas);
+      const dagre = new Dagre(model.nodes, model.edges, null);
       dagre.layout();
     }
 
     if (this.layoutConfig?.type == LayoutType.Tree) {
-      const tree = new Tree(
-        nodes,
-        edges,
-        this.layoutConfig.config,
-        evnetParmas
-      );
+      const tree = new Tree(model.nodes, model.edges, this.layoutConfig.config);
       tree.layout();
     }
+
+    if (this.layoutConfig?.type == LayoutType.Mind) {
+      const mind = new Mind(model.nodes, model.edges, this.layoutConfig.config);
+      mind.layout();
+    }
+
+    this.data({ nodes: model.nodes, edges: model.edges });
 
     this.render();
   }
@@ -130,9 +131,9 @@ export class NetaGraph extends Application {
     nodes?: Omit<NodeModel, "x" | "y">[];
     edges?: Omit<EdgeModel, "x" | "y">[];
   }) {
-    this.data(model);
-    const { nodes, edges } = this.model;
-    this.layoutRender(nodes, edges);
+    // this.data(model);
+    // const { nodes, edges } = model;
+    this.layoutRender(model);
   }
 
   /**

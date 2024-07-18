@@ -4,8 +4,8 @@ import * as dagre from "dagre";
 class Dagre extends Layer {
   private graphlib = new dagre.graphlib.Graph();
 
-  constructor(nodes, edges, config, event) {
-    super(nodes, edges, config, event);
+  constructor(nodes, edges, config) {
+    super(nodes, edges, config);
 
     this.graphlib.setGraph({
       nodesep: 100,

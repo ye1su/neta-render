@@ -21,10 +21,10 @@ export function fixFactor(num: number, isClose = false) {
  */
 export function getPolygonSurround(points: number[]) {
   const box = {
-    minX: 99999,
-    minY: 99999,
-    maxX: -99999,
-    maxY: -99999,
+    minX: Infinity,
+    minY: Infinity,
+    maxX: -Infinity,
+    maxY: -Infinity,
     centerX: 0,
     centerY: 0,
   };
@@ -59,10 +59,10 @@ export function getPolygonSurround(points: number[]) {
  */
 export function getContainerSurround(shapeBoxList: BBox[]) {
   const box = {
-    minX: 99999,
-    minY: 99999,
-    maxX: -99999,
-    maxY: -99999,
+    minX: Infinity,
+    minY: Infinity,
+    maxX: -Infinity,
+    maxY: -Infinity,
     centerX: 0,
     centerY: 0,
   };

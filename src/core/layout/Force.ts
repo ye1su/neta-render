@@ -10,8 +10,8 @@ import {
 
 class Force extends Layer {
   public simulation: Simulation<SimulationNodeDatum, any>;
-  constructor(nodes, edges, config, event) {
-    super(nodes, edges, config, event);
+  constructor(nodes, edges, config) {
+    super(nodes, edges, config);
     // this.init();
   }
 

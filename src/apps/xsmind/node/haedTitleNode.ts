@@ -30,7 +30,6 @@ const headTitleNode = {
       const shapeHeight = textHeight + inputOutPadding * 2
 
 
-
       const currentShape = action.addShape("rect", {
         x: 0,
         y: 0,

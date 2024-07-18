@@ -11,7 +11,7 @@ class Mind {
       el,
       backgroundColor: "#fff",
       layout: {
-        type: "tree",
+        type: "mind",
         config: {
           direction: "lr",
         },

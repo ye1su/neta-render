@@ -1,5 +1,6 @@
 import letterAspectRatio from "./letterAspectRatio";
 
+// 根据宽度 对一段文本增加 height
 export function autoFixWrap(text, width, options) {
   const wrappedText = []; // 存储分割后的文本
   let start = 0; // 当前分割的起始位置
@@ -24,6 +25,7 @@ export function autoFixWrap(text, width, options) {
   }
 }
 
+// 根据文字大小获取宽度
 export function getActualWidthOfChars(
   text,
   options = { size: 14, family: "Microsoft YaHei" }
@@ -39,6 +41,8 @@ export function getActualWidthOfChars(
   return Math.max(metrics.width, actual);
 }
 
+
+// 根据文字大小获取宽度
 export const getStringSize = (str: string, fontSize: number) => {
   if (!str || !fontSize) return 0;
   // eslint-disable-next-line no-control-regex
@@ -76,6 +80,7 @@ export const getLetterWidth = (letter: string, fontSize: number) => {
   return fontSize * (letterAspectRatio[letter] || 1);
 };
 
+// 根据文本长度获取中间值
 export function getCenterX(str: string, center: number, fontSize: number = 16) {
   const len = getStringSize(str, fontSize);
 

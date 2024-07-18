@@ -105,11 +105,14 @@ export function graphicsShapeParse(
     const shapeIns = registerMap.get(type);
     const kernelShape = shapeIns.draw(action);
     // 如果自定义节点返回了节点，则以当前节点为核心节点
-    if(kernelShape) {
-      kernelShape.kernel = true
+    if (kernelShape) {
+      kernelShape.kernel = true;
     }
     children = action.groups;
-    if (shapeIns.dynamicElement && typeof shapeIns.dynamicElement == "function") {
+    if (
+      shapeIns.dynamicElement &&
+      typeof shapeIns.dynamicElement == "function"
+    ) {
       graphic.dynamicElement = shapeIns.dynamicElement({ config: json, ctx });
     }
   }
@@ -228,7 +231,8 @@ export class RegisterContext {
   }
 
   public addShape(type: string, config: AddShapeConfig) {
-    const _confg = { type, ...config };
+    const _confg = {...config, type};
+    
     fixUnit(_confg);
 
     const shape = addShape(type, _confg);

@@ -5,9 +5,11 @@ export class Layer {
   public edges
   public config
   public event
-  constructor(nodes, edges, config, event) {
-    this.nodes = cloneDeep(nodes)
-    this.edges = cloneDeep(edges)
+  constructor(nodes, edges, config) {
+    // this.nodes = cloneDeep(nodes)
+    this.nodes = nodes
+    this.edges = edges
+    // this.edges = cloneDeep(edges)
     this.config = config ?? {}
     this.event = event ?? {}
   }
