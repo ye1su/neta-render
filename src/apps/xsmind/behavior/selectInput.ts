@@ -25,7 +25,10 @@ const mindSelectNode = {
       /**
        * 点击选中
        */
-      if (shape.name !== "expand-circle" && target.parent._data?.type === "headTitle") {
+      if (
+        shape.name !== "expand-circle" &&
+        target.parent._data?.type === "headTitle"
+      ) {
         const node = getTargetNode(this.instance.model.nodes, target.parent.id);
 
         const selectIndex = node.nodeState.indexOf("select");
@@ -60,6 +63,19 @@ const mindSelectNode = {
        * 新增节点
        */
       if (shape.name === "expand-circle") {
+        this.instance.model.nodes.forEach((node) => {
+          // 清除select
+          const selectIndex = node.nodeState?.indexOf("select");
+          if (typeof selectIndex == "number" && selectIndex > -1) {
+            node.nodeState.splice(selectIndex, 1);
+          }
+          // 清除input
+          const inputIndex = node.nodeState?.indexOf("input");
+          if (typeof inputIndex == "number" && inputIndex > -1) {
+            node.nodeState.splice(inputIndex, 1);
+          }
+        });
+
         const newNodeId = new Date().getTime();
         this.instance.model.nodes.push({
           id: `node-${newNodeId}`,

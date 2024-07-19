@@ -20,12 +20,19 @@ const renderDynamicElement = {
       const target = evt.target;
       const node = getTargetNode(this.instance.model.nodes, target.parent.id);
       const shape = target._geometry?.graphicsData?.shape ?? null;
+      const originThis = evt.originThis;
+
+      // 如果此时是input并且点击的关机为止
+      if ( ['expand-circle', "drag-pointer"].includes(shape.name)) {
+        if(node.nodeState.indexOf("input") > -1) {
+          originThis.onCanvasClick.call(this,evt)
+        }
+        return
+      }
+
       if (node.nodeState.indexOf("select") == -1) return;
 
-      if (['expand-circle', "drag-pointer"].includes(shape.name)) return
 
-
-      const originThis = evt.originThis;
       const dynamicElementInfo = evt.container?.dynamicElement;
       originThis.renderContainer = evt.container;
 
@@ -106,12 +113,14 @@ const renderDynamicElement = {
 
       if (originThis.id && stageChild) {
         const text = stageChild.value;
+        console.log('text: ', text);
 
         const targetId = originThis.renderContainer.id;
         this.instance.updateNodeData({
           id: targetId,
           text,
         });
+        console.log('this.instance: ', this.instance);
 
         originThis.clearAllDynamicEles(this.instance.el);
       }

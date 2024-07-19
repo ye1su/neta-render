@@ -8,8 +8,8 @@ export function BuildTree(model) {
   for (const node of nodes) {
     nodeMap[node.id] = {
       id: node.id,
-      width: node.width,
-      height: node.height,
+      _computedWidth: node._computedWidth,
+      _conputedHeight: node._conputedHeight,
       name: node.name,
       type: node.type,
       children: [],
