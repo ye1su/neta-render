@@ -17,14 +17,7 @@ export function BuildTree(model) {
     };
   }
 
-  // 所有线 按照 node的顺序进行排序
-  let sortEdges: any[] = [];
-  nodes.forEach((node) => {
-    const sourceEdges = edges.filter((e) => e.target === node.id);
-    sortEdges = [...sortEdges, ...sourceEdges];
-  });
-
-  for (const edge of sortEdges) {
+  for (const edge of edges) {
     const sourceNode = nodeMap[edge.source];
     const targetNode = nodeMap[edge.target];
 

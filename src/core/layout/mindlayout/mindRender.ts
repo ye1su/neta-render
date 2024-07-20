@@ -3,6 +3,24 @@ export const NODE_SPACE_X = 100;
 
 // 树节点类
 export class DrawTree {
+  id: string;
+  width: number;
+  height: number;
+  y: number
+  x: number
+  children: DrawTree[]
+  parent: DrawTree | null
+  thread : DrawTree | null
+  mod: number
+  ancestor: DrawTree
+  change: number
+  shift: number
+  _lmost_sibling: DrawTree | null
+  number: number
+  minY: number
+  maxY: number
+  offset: number
+
   constructor(tree, parent = null, depth = 0, number = 1) {
     this.id = tree.id;
     this.width = tree._computedWidth;
@@ -51,7 +69,7 @@ export class DrawTree {
     let n = null;
     if (this.parent) {
       for (let i = 0; i < this.parent.children.length; i++) {
-        let node = this.parent.children[i];
+        const node = this.parent.children[i];
         if (node === this) {
           return n;
         } else {
@@ -107,8 +125,8 @@ const firstwalk = (v) => {
     execute_shifts(v);
 
     // 子节点的中点
-    let midpoint = (v.children[0].y + v.children[v.children.length - 1].y) / 2;
-    let w = v.left_brother();
+    const midpoint = (v.children[0].y + v.children[v.children.length - 1].y) / 2;
+    const w = v.left_brother();
     if (w) {
       // 如果是非叶子节点则其x坐标等于其左兄弟的x坐标加上间距distance
       v.y = w.y + NODE_SPACE;
@@ -124,7 +142,7 @@ const firstwalk = (v) => {
 
 // 修正子孙节点定位
 const apportion = (v, default_ancestor) => {
-  let leftBrother = v.left_brother();
+  const leftBrother = v.left_brother();
   if (leftBrother) {
     // 四个节点指针
     let vInnerRight = v; // 右子树左轮廓
@@ -150,10 +168,10 @@ const apportion = (v, default_ancestor) => {
       vOuterRight.ancestor = v;
 
       // 左侧节点减右侧节点
-      let shift =
+      const shift =
         vInnerLeft.y + sInnerLeft + NODE_SPACE - (vInnerRight.y + sInnerRight);
       if (shift > 0) {
-        let _ancestor = ancestor(vInnerLeft, v, default_ancestor);
+        const _ancestor = ancestor(vInnerLeft, v, default_ancestor);
         // 大于0说明存在交叉，那么右侧的树要向右移动
         move_subtree(_ancestor, v, shift);
         // v.mod，也就是右侧子树增加了shift，sInnerRight、sOuterRight当然也要同步增加
@@ -186,8 +204,8 @@ const apportion = (v, default_ancestor) => {
 
 // 移动子树
 const move_subtree = (leftV, v, shift) => {
-  let subTrees = v.number - leftV.number; // 索引相减，得到之间被分隔的数量
-  let average = shift / subTrees; // 平分偏移量
+  const subTrees = v.number - leftV.number; // 索引相减，得到之间被分隔的数量
+  const average = shift / subTrees; // 平分偏移量
   v.shift += shift; // 完整的shift值添加到v节点的shift属性上
   v.change -= average;
   leftV.change += average;
@@ -202,7 +220,7 @@ const execute_shifts = (v) => {
   let shift = 0;
   // 从后往前遍历子节点
   for (let i = v.children.length - 1; i >= 0; i--) {
-    let node = v.children[i];
+    const node = v.children[i];
     node.y += shift;
     node.mod += shift;
 
@@ -240,11 +258,8 @@ const second_walk = (v, m = 0, depth = 0, s = 0) => {
 
 // 第三次遍历
 const third_walk = (tree) => {
-  // let selfMinY = tree.y - tree.height;
-  // let selfMaxY = tree.y + tree.height;
-
-  let selfMinY = tree.y;
-  let selfMaxY = tree.y + tree.height * 2;
+  const selfMinY = tree.y - tree.height / 2;
+  const selfMaxY = tree.y + tree.height / 2;
   // 计算每个节点的minY和maxY
   if (tree.children.length > 0) {
     let minY = Infinity;
@@ -266,11 +281,9 @@ const third_walk = (tree) => {
     tree.maxY = selfMaxY;
   }
   // 判断是否和左兄弟有交叉
-  console.log("tree.left_brother(): ", tree.left_brother());
-
   if (tree.left_brother()) {
     if (tree.minY < tree.left_brother().maxY + NODE_SPACE) {
-      let o = tree.left_brother().maxY - tree.minY + NODE_SPACE;
+      const o = tree.left_brother().maxY - tree.minY + NODE_SPACE;
       tree.offset = o; // 用于移动子节点
       tree.y += o; // 移动自身
       tree.minY += o; // 更新minY、maxY
@@ -285,20 +298,19 @@ const fourth_walk = (tree, o = 0) => {
   tree.children.forEach((child) => {
     fourth_walk(child, o + tree.offset);
   });
-  let len = tree.children.length;
+  const len = tree.children.length;
   if (len <= 0) {
     return;
   }
   // 重新居于子节点中间
-  let mid = (tree.children[0].y + tree.children[len - 1].y) / 2;
+  const mid = (tree.children[0].y + tree.children[len - 1].y) / 2;
   tree.y = mid;
 };
 
 export const buchheim = (tree) => {
-  let dt = firstwalk(tree);
+  const dt = firstwalk(tree);
   second_walk(dt);
   third_walk(dt);
   fourth_walk(dt);
-  console.log(dt);
   return dt;
 };

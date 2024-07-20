@@ -1,8 +1,7 @@
 import { autoFixWrap } from "../utils";
 import { BuildTree } from "../utils/treeUtils";
 import { Layer } from "./Layer";
-import { mindLayout, MindRender } from "./mindlayout";
-import { TreeRender } from "./treeLayout";
+import { MindRender } from "./mindlayout";
 
 const inputOutPadding = 12;
 
@@ -29,8 +28,8 @@ class Mind extends Layer {
       const textHeight = _fontSize * 1.5 * (lineLen || 1);
 
       const shapeHeight = textHeight + inputOutPadding * 2;
-      node._computedWidth = shapeWidth / 2;
-      node._conputedHeight = shapeHeight / 2;
+      node._computedWidth = shapeWidth;
+      node._conputedHeight = shapeHeight;
     });
 
     const tree = BuildTree({ nodes: this.nodes, edges: this.edges });
@@ -41,9 +40,8 @@ class Mind extends Layer {
     treeRender.patch(treeRender.root, (nodeInfo) => {
       const targetNode = this.nodes.find((n) => n.id === nodeInfo.id);
       targetNode.x = nodeInfo.x;
-      targetNode.y = nodeInfo.y;
+      targetNode.y = nodeInfo.y - nodeInfo.height / 2;
     });
-
   }
 }
 
