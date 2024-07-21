@@ -18,6 +18,7 @@ import { BuiltInEvent } from "./events";
 import { RegNodeType } from "./types/register";
 import { EXTEND_NODE } from "./register";
 import _ from "lodash-es";
+import { Container } from "./display";
 
 export class NetaGraph extends Application {
   public model: Model = { nodes: [], edges: [] };
@@ -134,6 +135,22 @@ export class NetaGraph extends Application {
     // this.data(model);
     // const { nodes, edges } = model;
     this.layoutRender(model);
+  }
+
+  getContainerById(id) {
+
+    function loopStage(list = []) {
+      for(const item of list) {
+        if(item instanceof Container && item.id == id) {
+          return item
+        }
+        if(Array.isArray(item.children)) {
+          loopStage(item.children)
+        }
+      }
+    }
+    
+    return loopStage(this.stage.children)
   }
 
   /**

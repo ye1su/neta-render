@@ -88,18 +88,27 @@ const renderDynamicElement = {
       const _this = this
       newEle.addEventListener('input', function(evt) {
 
+        const targetId = originThis.renderContainer.id;
+    
+        _this.instance.updateNodeData({
+          id: targetId,
+          text: evt.target.value
+        });
+
+        const targetNodeInfo = _this.instance.getContainerById(targetId)
+        const ltPoint = _this.instance.renderer.getPointByTransform(
+          targetNodeInfo.x ,
+          targetNodeInfo.y 
+        );
+  
+        newEle.style.top = ltPoint.y / 2 + offsetMargin + 'px'
         const initialHeight = '1.5em';
         newEle.style.height = initialHeight; // 重置高度
         const newHeight = newEle.scrollHeight + 'px';
         newEle.style.height = newHeight; // 设置为新的高度
 
-        const targetId = originThis.renderContainer.id;
 
-        _this.instance.updateNodeData({
-          id: targetId,
-          // height: this.scrollHeight / 2 + 13,
-          text: evt.target.value
-        });
+
 
       });
 
@@ -113,15 +122,12 @@ const renderDynamicElement = {
 
       if (originThis.id && stageChild) {
         const text = stageChild.value;
-        console.log('text: ', text);
 
         const targetId = originThis.renderContainer.id;
         this.instance.updateNodeData({
           id: targetId,
           text,
         });
-        console.log('this.instance: ', this.instance);
-
         originThis.clearAllDynamicEles(this.instance.el);
       }
     },
