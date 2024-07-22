@@ -90,6 +90,7 @@ export interface EdgeModel extends BaseModel {
 }
 
 export type AddShapeConfig = Omit<NodeModel, "type" | "id">;
+export type AddEdgeConfig = Omit<EdgeModel, "type" | "id">;
 
 // 注册上下问初始化参数
 export interface RegisterContextOptions {

@@ -32,7 +32,7 @@ export class GraphicsOfLine extends Container {
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
 
-    const graphicsList = this.parent.children.filter((item) => item.whole);
+    const graphicsList = this.parent.parent.children.filter((item) => item.whole);
 
     const data = this._geometry.graphicsData;
 

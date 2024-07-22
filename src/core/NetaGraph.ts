@@ -190,7 +190,7 @@ export class NetaGraph extends Application {
     if (!targetEdge) {
       this.model.edges.push(data);
     }
-    const graphic = graphicsLineParse(data);
+    const graphic = graphicsLineParse(this.registerMap, data);
     this.stage.addChild(graphic);
   }
 

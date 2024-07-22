@@ -40,7 +40,7 @@ export interface LineBaseConfig {
 
 // 二次贝塞尔曲线的config
 export interface QuadraticCurveConfig {
-  anchorPoints: number[];
+  anchorPoints: number[][];
 }
 
 // 三次贝塞尔曲线的config

@@ -1,6 +1,11 @@
 import { Container } from "../display";
 import { BaseShapes, LineType } from "../enums";
-import { AddShapeConfig, NodeModel, RegisterContextOptions } from "../types";
+import {
+  AddEdgeConfig,
+  AddShapeConfig,
+  NodeModel,
+  RegisterContextOptions,
+} from "../types";
 import { RegNodeType } from "../types/register";
 import { BASE_FONT_SIZE, fixFactor, getCenterX } from "../utils";
 import { Graphics } from "./Graphics";
@@ -16,9 +21,9 @@ export function graphicsShapeParse(
 
   const { id, type, x, y, width, height } = json;
 
-  const graphic = new Container();
+  const container = new Container();
   if (json?.anchor) {
-    graphic.anchor.visible = true;
+    container.anchor.visible = true;
   }
   let children: Graphics[] = [];
 
@@ -113,78 +118,52 @@ export function graphicsShapeParse(
       shapeIns.dynamicElement &&
       typeof shapeIns.dynamicElement == "function"
     ) {
-      graphic.dynamicElement = shapeIns.dynamicElement({ config: json, ctx });
+      container.dynamicElement = shapeIns.dynamicElement({ config: json, ctx });
     }
   }
 
   children.forEach((item) => {
-    graphic.addChild(item);
+    container.addChild(item);
   });
 
-  graphic.whole = true;
+  container.whole = true;
 
-  graphic.id = id;
-  graphic._data = json;
-  graphic.updatePosition(x, y);
-  return graphic;
+  container.id = id;
+  container._data = json;
+  container.updatePosition(x, y);
+  return container;
 }
 
-export function graphicsLineParse(json: Record<string, any>) {
-  const { id, type, source, target, anchorPoints, sourceAnchor, targetAnchor } =
-    json;
+export function graphicsLineParse(
+  registerMap: Map<string, RegNodeType["render"]>,
+  json: Record<string, any>
+) {
+  const { id, type } = json;
 
-  const line = new GraphicsOfLine();
-  line.zIndex = -1;
-  line.id = id;
+  const container = new Container();
 
-  if (!type || type == LineType.Straight) {
-    line.drawStraight(source, target, { sourceAnchor, targetAnchor });
-  }
+  container.zIndex = -1;
+  container.id = id;
 
-  if (type == LineType.Orthogonal) {
-    line.drawOrthogonal(source, target, {
-      anchorPoints,
-      sourceAnchor,
-      targetAnchor,
+  let children = [];
+
+  if (registerMap.get(type)) {
+    const action = new RegisterContext({
+      inputProperties: json,
     });
+    const edgeIns = registerMap.get(type);
+    edgeIns.draw(action);
+    children = action.groups;
+  } else {
+    const line = addEdge(type, json);
+    children = [line];
   }
 
-  // if (type == LineType.QuadraticCurve) {
-  //   const { anchorPoints } = json;
-  //   line.drawQuadraticCurve(source, target, { anchorPoints });
-  // }
+  children.forEach((item) => {
+    container.addChild(item);
+  });
 
-  // if (type == LineType.BezierCurve) {
-  //   const { anchorPoints } = json;
-  //   line.drawBezierCurve(source, target, { anchorPoints });
-  // }
-
-  return line;
-}
-
-function fixUnit(json: Omit<NodeModel, "id">) {
-  if (!json.type) {
-    json.type = "circle";
-    json.radius = 30;
-  }
-
-  json.factor = _.pick(json, ["x", "y", "width", "height", "radius", "points"]);
-  json.x = fixFactor(json.x);
-  json.y = fixFactor(json.y);
-
-  if (json.width) {
-    json.width = fixFactor(json.width);
-  }
-  if (json.height) {
-    json.height = fixFactor(json.height);
-  }
-
-  if (json.radius) {
-    json.radius = fixFactor(json.radius);
-  }
-  if (Array.isArray(json.points)) {
-    json.points = json.points.map((item) => fixFactor(item));
-  }
+  return container;
 }
 
 function addShape(type: string, config: AddShapeConfig) {
@@ -222,6 +201,36 @@ function addShape(type: string, config: AddShapeConfig) {
   return graphics;
 }
 
+function addEdge(type: string, config: AddEdgeConfig) {
+  const graphicsLine = new GraphicsOfLine();
+
+  const { source, target, anchorPoints, sourceAnchor, targetAnchor } = config;
+
+  if (!type || type == LineType.Straight) {
+    graphicsLine.drawStraight(source, target, { sourceAnchor, targetAnchor });
+  }
+
+  if (type == LineType.Orthogonal) {
+    graphicsLine.drawOrthogonal(source, target, {
+      anchorPoints,
+      sourceAnchor,
+      targetAnchor,
+    });
+  }
+
+  if (type == LineType.QuadraticCurve) {
+    const { anchorPoints } = config;
+    graphicsLine.drawQuadraticCurve(source, target, { anchorPoints });
+  }
+
+  if (type == LineType.BezierCurve) {
+    const { anchorPoints } = config;
+    graphicsLine.drawBezierCurve(source, target, { anchorPoints });
+  }
+
+  return graphicsLine;
+}
+
 export class RegisterContext {
   public groups: Graphics[] = [];
   public inputProperties: RegisterContextOptions["inputProperties"] = null;
@@ -231,12 +240,44 @@ export class RegisterContext {
   }
 
   public addShape(type: string, config: AddShapeConfig) {
-    const _confg = {...config, type};
-    
+    const _confg = { ...config, type };
+
     fixUnit(_confg);
 
     const shape = addShape(type, _confg);
     this.groups.push(shape);
     return shape;
+  }
+
+  public addEdge(type: string, config: AddEdgeConfig) {
+    const _confg = { ...config, type };
+    const shape = addShape(type, _confg);
+    this.groups.push(shape);
+    return shape;
+  }
+}
+
+function fixUnit(json: Omit<NodeModel, "id">) {
+  if (!json.type) {
+    json.type = "circle";
+    json.radius = 30;
+  }
+
+  json.factor = _.pick(json, ["x", "y", "width", "height", "radius", "points"]);
+  json.x = fixFactor(json.x);
+  json.y = fixFactor(json.y);
+
+  if (json.width) {
+    json.width = fixFactor(json.width);
+  }
+  if (json.height) {
+    json.height = fixFactor(json.height);
+  }
+
+  if (json.radius) {
+    json.radius = fixFactor(json.radius);
+  }
+  if (Array.isArray(json.points)) {
+    json.points = json.points.map((item) => fixFactor(item));
   }
 }

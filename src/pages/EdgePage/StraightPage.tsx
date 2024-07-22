@@ -8,6 +8,7 @@ export function StraightPage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
+      behaviors: ['drag-all'],
     });
     // appRef.current.render();
 
