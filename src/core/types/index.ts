@@ -20,7 +20,11 @@ export interface GlobalTransform {
 
 export interface NetaGraphOptions extends IApplicationOptions {
   layout?: LayoutConfig;
-  register?: { nodes?: RegNodeType[]; behaviors?: any[] };
+  register?: {
+    nodes?: RegNodeType[];
+    edges?: RegNodeType[];
+    behaviors?: any[];
+  };
   behaviors?: string[];
 }
 
@@ -81,6 +85,12 @@ export interface EdgeModel extends BaseModel {
   source: string;
   // target Id
   target: string;
+  // style样式
+  style?: ItemStyle;
+  // source节点的信息
+  sourceModel?: NodeModel
+  // target节点的信息
+  targetModel?: NodeModel
   // source节点的锚点
   sourceAnchor?: number;
   // target节点的锚点

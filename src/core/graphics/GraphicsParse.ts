@@ -204,35 +204,37 @@ function addShape(type: string, config: AddShapeConfig) {
 function addEdge(type: string, config: AddEdgeConfig) {
   const graphicsLine = new GraphicsOfLine();
 
-  const { source, target, anchorPoints, sourceAnchor, targetAnchor } = config;
+  const { source, target, anchorPoints, sourceAnchor, targetAnchor, style } = config;
+
+  graphicsLine.style(style);
+
+  const lineProps = {
+    anchorPoints,
+    sourceAnchor,
+    targetAnchor,
+  };
 
   if (!type || type == LineType.Straight) {
-    graphicsLine.drawStraight(source, target, { sourceAnchor, targetAnchor });
+    graphicsLine.drawStraight(source, target, lineProps);
   }
 
   if (type == LineType.Orthogonal) {
-    graphicsLine.drawOrthogonal(source, target, {
-      anchorPoints,
-      sourceAnchor,
-      targetAnchor,
-    });
+    graphicsLine.drawOrthogonal(source, target, lineProps);
   }
 
   if (type == LineType.QuadraticCurve) {
-    const { anchorPoints } = config;
-    graphicsLine.drawQuadraticCurve(source, target, { anchorPoints });
+    graphicsLine.drawQuadraticCurve(source, target, lineProps);
   }
 
   if (type == LineType.BezierCurve) {
-    const { anchorPoints } = config;
-    graphicsLine.drawBezierCurve(source, target, { anchorPoints });
+    graphicsLine.drawBezierCurve(source, target, lineProps);
   }
 
   return graphicsLine;
 }
 
 export class RegisterContext {
-  public groups: Graphics[] = [];
+  public groups: Graphics[] | GraphicsOfLine[] = [];
   public inputProperties: RegisterContextOptions["inputProperties"] = null;
 
   constructor(options: RegisterContextOptions) {
@@ -245,14 +247,14 @@ export class RegisterContext {
     fixUnit(_confg);
 
     const shape = addShape(type, _confg);
-    this.groups.push(shape);
+    (this.groups as Graphics[]).push(shape);
     return shape;
   }
 
   public addEdge(type: string, config: AddEdgeConfig) {
     const _confg = { ...config, type };
-    const shape = addShape(type, _confg);
-    this.groups.push(shape);
+    const shape = addEdge(type, _confg);
+    (this.groups as GraphicsOfLine[]).push(shape);
     return shape;
   }
 }

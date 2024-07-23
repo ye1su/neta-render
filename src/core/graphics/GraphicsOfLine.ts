@@ -14,10 +14,12 @@ import { GraphicsGeometry } from "./GraphicsGeometry";
 import { ShapeStyle } from "./style";
 import {
   BezierCurveConfig,
+  IShapeStyle,
   OrthogonalConfig,
   QuadraticCurveConfig,
 } from "../types/graphics";
 import { Point } from "../math";
+import { fixFactor } from "../utils";
 
 export class GraphicsOfLine extends Container {
   private _render: CanvasRenderer;
@@ -28,6 +30,7 @@ export class GraphicsOfLine extends Container {
   constructor() {
     super();
     this.type = ItmeType.Line;
+    this._shapeStyle.fill = 'transparent'
   }
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
@@ -39,6 +42,31 @@ export class GraphicsOfLine extends Container {
     const ctx = render.ctx;
 
     const { shapeStyle, shape } = data;
+
+    if (shapeStyle.visible) {
+      // 设置颜色
+      ctx.fillStyle = shapeStyle.fill;
+
+      // 设置阴影
+      ctx.shadowColor = shapeStyle.shadowColor;
+      ctx.shadowBlur = shapeStyle.shadowBlur;
+
+      ctx.shadowOffsetX = shapeStyle.shadowOffsetX;
+      ctx.shadowOffsetY = shapeStyle.shadowOffsetY;
+
+      // 设置line
+      ctx.lineWidth = shapeStyle.lineWidth;
+      ctx.lineCap = shapeStyle.lineCap;
+      ctx.lineJoin = shapeStyle.lineJoin;
+      ctx.strokeStyle = shapeStyle.stroke;
+
+      // 设置虚线
+      if (Array.isArray(shapeStyle.lineDash)) {
+        ctx.setLineDash(shapeStyle.lineDash);
+      } else {
+        ctx.setLineDash([]);
+      }
+    }
 
     // 修改线的数据
     const { _polygon, targetId, sourceId } = shape as Line;
@@ -110,7 +138,7 @@ export class GraphicsOfLine extends Container {
       this.currentPath = null;
     }
 
-    // draw 2次贝塞尔
+    // draw 3次贝塞尔
     if (shape.type == LineType.BezierCurve) {
       const { anchorPoints } = (shape as QuadraticCurve).config;
       this.currentPath = new Polygon();
@@ -128,13 +156,7 @@ export class GraphicsOfLine extends Container {
       this.currentPath = null;
     }
 
-    if (shapeStyle.visible) {
-      ctx.fillStyle = shapeStyle.fill;
-      ctx.lineWidth = shapeStyle.lineWidth;
-      ctx.lineCap = shapeStyle.lineCap;
-      ctx.lineJoin = shapeStyle.lineJoin;
-      ctx.strokeStyle = shapeStyle.stroke;
-    }
+ 
     ctx.beginPath();
 
     // 渲染线上绘制的多边形
@@ -145,12 +167,11 @@ export class GraphicsOfLine extends Container {
     for (let i = 2; i < points.length; i += 2) {
       ctx.lineTo(points[i], points[i + 1]);
     }
+ 
 
     if (shapeStyle.visible) {
       ctx.globalAlpha = shapeStyle.alpha * this.worldAlpha;
-      ctx.lineWidth = 1
-      // ctx.fill();
-      // ctx.fillStyle = "#000";
+      ctx.fill();
       ctx.stroke();
     }
   }
@@ -358,4 +379,15 @@ export class GraphicsOfLine extends Container {
 
     return this;
   }
+
+  public style(styleConfig: IShapeStyle = {}) {
+    for (const styleKey in styleConfig) {
+      if (typeof styleConfig[styleKey] == "number") {
+        styleConfig[styleKey] = fixFactor(styleConfig[styleKey]);
+      }
+
+      this._shapeStyle[styleKey] = styleConfig[styleKey];
+    }
+  }
+
 }

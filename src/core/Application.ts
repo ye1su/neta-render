@@ -33,8 +33,6 @@ export class Application extends Eventemitter {
 
   //渲染
   public render() {
-    console.log('this.stage: ', this.stage);
-
     this.renderer.render(this.stage);
   }
 

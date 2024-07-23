@@ -29,6 +29,7 @@ export class Container extends DisplayObject {
    * 渲染自身，在container上面没有东西要渲染，所以这个函数的内容为空
    */
   protected renderCanvas(render: CanvasRenderer) {
+
     // nothing
     const { matrix, translate, scale } = render;
     this.anchor.globalTransform = { matrix, translate, scale };
@@ -42,6 +43,7 @@ export class Container extends DisplayObject {
       // 更新锚点位置
       const containerBox = this.getBBox();
       this.anchor.updateContainerBBox(containerBox);
+
     }
   }
 
@@ -151,6 +153,7 @@ export class Container extends DisplayObject {
   public updatePosition(x: number, y: number) {
     this.position.set(x, y);
   }
+
 
   /**
    * 获取container 的包围框

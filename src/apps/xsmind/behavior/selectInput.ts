@@ -88,8 +88,12 @@ const mindSelectNode = {
           id: `edge-${newNodeId}`,
           source: target.parent.id,
           target: `node-${newNodeId}`,
+          type: "mind-line",
           sourceAnchor: 4,
           targetAnchor: 3,
+          style: {
+            lineWidth: 4,
+          }
         });
         this.instance.refresh();
       }

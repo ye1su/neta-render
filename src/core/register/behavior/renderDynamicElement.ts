@@ -18,20 +18,26 @@ const renderDynamicElement = {
       if (!evt.container?.dynamicElement) return;
 
       const target = evt.target;
+      console.log('target: ', target);
       const node = getTargetNode(this.instance.model.nodes, target.parent.id);
       const shape = target._geometry?.graphicsData?.shape ?? null;
       const originThis = evt.originThis;
 
-      // 如果此时是input并且点击的关机为止
-      if ( ['expand-circle', "drag-pointer"].includes(shape.name)) {
-        if(node.nodeState.indexOf("input") > -1) {
-          originThis.onCanvasClick.call(this,evt)
-        }
+      if (node.nodeState.indexOf("input") > -1) {
+        originThis.onCanvasClick.call(this, evt);
         return
       }
+      // 如果此时是input并且点击的关机为止
+      // if (["expand-circle", "drag-pointer"].includes(shape.name)) {
+    
+      //   originThis.clearAllDynamicEles(this.instance.el);
+      //   return;
+      // }
 
-      if (node.nodeState.indexOf("select") == -1) return;
-
+      if (node.nodeState.indexOf("select") == -1) {
+        originThis.clearAllDynamicEles(this.instance.el);
+        return;
+      }
 
       const dynamicElementInfo = evt.container?.dynamicElement;
       originThis.renderContainer = evt.container;
@@ -45,7 +51,6 @@ const renderDynamicElement = {
       const newEle = document.createElement(dynamicElementInfo.eleType);
       newEle.id = originThis.id;
 
-
       if (typeof dynamicElementInfo.style == "object") {
         for (const key in dynamicElementInfo.style) {
           newEle.style[key] = dynamicElementInfo.style[key];
@@ -58,8 +63,8 @@ const renderDynamicElement = {
       );
 
       const offsetMargin = 12;
-      
-      newEle.style.fontSize = '24px'
+
+      newEle.style.fontSize = "24px";
       newEle.style.position = "absolute";
       newEle.style.left = ltPoint.x / 2 + offsetMargin + "px";
       newEle.style.top = ltPoint.y / 2 + offsetMargin + "px";
@@ -73,43 +78,37 @@ const renderDynamicElement = {
       // appendChild 完之后进行赋值
       newEle.value = dynamicElementInfo.text;
       // 进行高度计算
-      const initialHeight = '1.5em';
+      const initialHeight = "1.5em";
       newEle.style.height = initialHeight;
-      newEle.style.height = newEle.scrollHeight + 'px'
+      newEle.style.height = newEle.scrollHeight + "px";
       // 刷新元素高度
       const targetId = originThis.renderContainer.id;
       this.instance.updateNodeData({
         id: targetId,
-        height: newEle.scrollHeight / 2 + 13
+        height: newEle.scrollHeight / 2 + 13,
       });
 
-
       // 处理input时间
-      const _this = this
-      newEle.addEventListener('input', function(evt) {
-
+      const _this = this;
+      newEle.addEventListener("input", function (evt) {
         const targetId = originThis.renderContainer.id;
-    
+
         _this.instance.updateNodeData({
           id: targetId,
-          text: evt.target.value
+          text: evt.target.value,
         });
 
-        const targetNodeInfo = _this.instance.getContainerById(targetId)
+        const targetNodeInfo = _this.instance.getContainerById(targetId);
         const ltPoint = _this.instance.renderer.getPointByTransform(
-          targetNodeInfo.x ,
-          targetNodeInfo.y 
+          targetNodeInfo.x,
+          targetNodeInfo.y
         );
-  
-        newEle.style.top = ltPoint.y / 2 + offsetMargin + 'px'
-        const initialHeight = '1.5em';
+
+        newEle.style.top = ltPoint.y / 2 + offsetMargin + "px";
+        const initialHeight = "1.5em";
         newEle.style.height = initialHeight; // 重置高度
-        const newHeight = newEle.scrollHeight + 'px';
+        const newHeight = newEle.scrollHeight + "px";
         newEle.style.height = newHeight; // 设置为新的高度
-
-
-
-
       });
 
       setTimeout(() => {

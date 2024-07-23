@@ -19,15 +19,28 @@ export class GraphicsGeometry<T extends Shape | Line> {
   public clear() {
     this.graphicsData = null;
   }
+
+  /**
+   * 更新节点的位置
+   * @param x 
+   * @param y 
+   */
   public updateShapePosition(x: number, y: number) {
     if (!(this.graphicsData.shape instanceof Shape)) return;
     this.graphicsData.shape.setPosition(x, y);
   }
+
+  /**
+   * 更新全局的transform
+   * @param transform GlobalTransform
+   * @returns 
+   */
   public updateShapeGlobalTransform(transform: GlobalTransform) {
     if (!(this.graphicsData.shape instanceof Shape)) return;
 
     this.graphicsData.shape.globalTransform = transform;
   }
+
   /**
    * @param p 待检测点
    * @returns {boolean} 待检测点是否落在某一个子图形内

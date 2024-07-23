@@ -43,6 +43,11 @@ export class NetaGraph extends Application {
         this.registerMap.set(item.name, item.render);
       });
     }
+    if (Array.isArray(options.register?.edges)) {
+      options.register.edges.forEach((item) => {
+        this.registerMap.set(item.name, item.render);
+      });
+    }
 
     this.behaviors = options.behaviors;
 
@@ -117,9 +122,15 @@ export class NetaGraph extends Application {
       nodes.forEach((node) => {
         this.addNode(node);
       });
-
+    
     Array.isArray(edges) &&
       edges.forEach((edge) => {
+        if(edge.source) {
+          edge.sourceModel = nodes.find(n => n.id === edge.source)
+        }
+        if(edge.target) {
+          edge.targetModel = nodes.find(n => n.id === edge.target)
+        }
         this.addEdge(edge);
       });
   }
@@ -138,19 +149,18 @@ export class NetaGraph extends Application {
   }
 
   getContainerById(id) {
-
     function loopStage(list = []) {
-      for(const item of list) {
-        if(item instanceof Container && item.id == id) {
-          return item
+      for (const item of list) {
+        if (item instanceof Container && item.id == id) {
+          return item;
         }
-        if(Array.isArray(item.children)) {
-          loopStage(item.children)
+        if (Array.isArray(item.children)) {
+          loopStage(item.children);
         }
       }
     }
-    
-    return loopStage(this.stage.children)
+
+    return loopStage(this.stage.children);
   }
 
   /**

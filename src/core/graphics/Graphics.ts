@@ -32,6 +32,9 @@ export class Graphics extends Container {
     this.type = ItmeType.Graphics;
   }
 
+  /**
+   * 获取节点范围
+   */
   public getBBox() {
     const { shape } = this._geometry.graphicsData;
 
@@ -86,10 +89,18 @@ export class Graphics extends Container {
     }
   }
 
+
+  /**
+   * 绘制
+   */
   protected renderCanvas(render: CanvasRenderer) {
     this._render = render;
     const { matrix, translate, scale } = this._render;
+
+    // 更新global画布相关的便宜量
     this._geometry.updateShapeGlobalTransform({ matrix, translate, scale });
+
+    // 开始绘制
     this.startPoly();
     const ctx = render.ctx;
     const data = this._geometry.graphicsData;

@@ -1,5 +1,5 @@
-export const NODE_SPACE = 100;
-export const NODE_SPACE_X = 100;
+export const NODE_SPACE = 16;
+export const NODE_SPACE_X = 64;
 
 // 树节点类
 export class DrawTree {
