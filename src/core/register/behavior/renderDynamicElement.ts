@@ -18,7 +18,6 @@ const renderDynamicElement = {
       if (!evt.container?.dynamicElement) return;
 
       const target = evt.target;
-      console.log('target: ', target);
       const node = getTargetNode(this.instance.model.nodes, target.parent.id);
       const shape = target._geometry?.graphicsData?.shape ?? null;
       const originThis = evt.originThis;
@@ -28,11 +27,11 @@ const renderDynamicElement = {
         return
       }
       // 如果此时是input并且点击的关机为止
-      // if (["expand-circle", "drag-pointer"].includes(shape.name)) {
+      if (["expand-circle", "drag-pointer"].includes(shape.name)) {
     
-      //   originThis.clearAllDynamicEles(this.instance.el);
-      //   return;
-      // }
+        originThis.clearAllDynamicEles(this.instance.el);
+        return;
+      }
 
       if (node.nodeState.indexOf("select") == -1) {
         originThis.clearAllDynamicEles(this.instance.el);

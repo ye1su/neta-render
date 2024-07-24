@@ -1,10 +1,10 @@
 import { generateDynamicElement, MindNode } from "./nodeUtils";
 
-const headTitleNode = {
-  name: "headTitle",
+const contentNode = {
+  name: "content",
   render: {
     draw(action) {
-      const mindNode = new MindNode(action, "headTitle");
+      const mindNode = new MindNode(action, "content");
       const currentShape = mindNode.draw();
       return currentShape;
     },
@@ -12,4 +12,4 @@ const headTitleNode = {
   },
 };
 
-export default headTitleNode;
+export default contentNode;

@@ -26,8 +26,7 @@ const mindSelectNode = {
        * 点击选中
        */
       if (
-        shape.name !== "expand-circle" &&
-        target.parent._data?.type === "headTitle"
+        shape?.name !== "expand-circle" && ['headTitle', 'content'].includes(target.parent._data?.type)
       ) {
         const node = getTargetNode(this.instance.model.nodes, target.parent.id);
 
@@ -52,7 +51,7 @@ const mindSelectNode = {
           node.nodeState.push("select");
         } else if (selectIndex > -1 && shape.name === "drag-pointer") {
           node.nodeState.push("select");
-        } else {
+        } else if (inputIndex == -1) {
           node.nodeState.push("input");
         }
 
@@ -79,7 +78,7 @@ const mindSelectNode = {
         const newNodeId = new Date().getTime();
         this.instance.model.nodes.push({
           id: `node-${newNodeId}`,
-          type: "headTitle",
+          type: "content",
           label: "Company1",
           width: 65,
           nodeState: [],
@@ -93,7 +92,7 @@ const mindSelectNode = {
           targetAnchor: 3,
           style: {
             lineWidth: 4,
-          }
+          },
         });
         this.instance.refresh();
       }
@@ -111,7 +110,7 @@ const mindSelectNode = {
       }
 
       // hover进入后展示新增的bar
-      if (parent._data?.type === "headTitle") {
+      if (['headTitle', 'content'].includes(parent._data?.type)) {
         originThis.hoverShape = parent;
         const node = getTargetNode(this.instance.model.nodes, parent.id);
         const nodeState = node.nodeState;
