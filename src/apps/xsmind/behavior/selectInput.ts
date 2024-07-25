@@ -79,7 +79,6 @@ const mindSelectNode = {
         this.instance.model.nodes.push({
           id: `node-${newNodeId}`,
           type: "content",
-          label: "Company1",
           width: 65,
           nodeState: [],
         });

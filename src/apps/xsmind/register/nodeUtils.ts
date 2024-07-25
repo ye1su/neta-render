@@ -161,7 +161,7 @@ export class MindNode {
       syl = {
         ...syl,
         stroke: "#e7e6f8",
-        lineWidth: 6,
+        lineWidth: 8,
       };
     }
 

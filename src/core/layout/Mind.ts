@@ -30,6 +30,7 @@ class Mind extends Layer {
       const shapeHeight = textHeight + inputOutPadding * 2;
       node._computedWidth = shapeWidth;
       node._conputedHeight = shapeHeight;
+
     });
 
     const tree = BuildTree({ nodes: this.nodes, edges: this.edges });

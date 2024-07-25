@@ -6,20 +6,20 @@ export class DrawTree {
   id: string;
   width: number;
   height: number;
-  y: number
-  x: number
-  children: DrawTree[]
-  parent: DrawTree | null
-  thread : DrawTree | null
-  mod: number
-  ancestor: DrawTree
-  change: number
-  shift: number
-  _lmost_sibling: DrawTree | null
-  number: number
-  minY: number
-  maxY: number
-  offset: number
+  y: number;
+  x: number;
+  children: DrawTree[];
+  parent: DrawTree | null;
+  thread: DrawTree | null;
+  mod: number;
+  ancestor: DrawTree;
+  change: number;
+  shift: number;
+  _lmost_sibling: DrawTree | null;
+  number: number;
+  minY: number;
+  maxY: number;
+  offset: number;
 
   constructor(tree, parent = null, depth = 0, number = 1) {
     this.id = tree.id;
@@ -125,7 +125,8 @@ const firstwalk = (v) => {
     execute_shifts(v);
 
     // 子节点的中点
-    const midpoint = (v.children[0].y + v.children[v.children.length - 1].y) / 2;
+    const midpoint =
+      (v.children[0].y + v.children[v.children.length - 1].y) / 2;
     const w = v.left_brother();
     if (w) {
       // 如果是非叶子节点则其x坐标等于其左兄弟的x坐标加上间距distance
@@ -303,8 +304,10 @@ const fourth_walk = (tree, o = 0) => {
     return;
   }
   // 重新居于子节点中间
-  const mid = (tree.children[0].y + tree.children[len - 1].y) / 2;
-  tree.y = mid;
+  // const mid = (tree.children[0].y + tree.children[len - 1].y) / 2;
+  // tree.y = mid;
+
+
 };
 
 export const buchheim = (tree) => {
