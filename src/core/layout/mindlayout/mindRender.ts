@@ -19,7 +19,6 @@ export class DrawTree {
   number: number;
   minY: number;
   maxY: number;
-  offset: number;
 
   constructor(tree, parent = null, depth = 0, number = 1) {
     this.id = tree.id;
@@ -46,7 +45,6 @@ export class DrawTree {
     // this.maxChildrenWidth = 0
     this.minY = 0;
     this.maxY = 0;
-    this.offset = 0;
   }
 
   // 有线程返回线程节点，否则返回最右侧的子节点，也就是树的右轮廓
@@ -247,12 +245,6 @@ const second_walk = (v, m = 0, depth = 0, s = 0) => {
   v.y += m;
   v.x = depth * NODE_SPACE_X + s + NODE_SPACE_X;
   v.children.forEach((child) => {
-    // let maxWidth = 0
-    // if (v.parent) {
-    //     maxWidth = v.parent.maxChildrenWidth
-    // } else {
-    //     maxWidth = v.width
-    // }
     second_walk(child, m + v.mod, depth + 1, s + v.width);
   });
 };
@@ -261,6 +253,7 @@ const second_walk = (v, m = 0, depth = 0, s = 0) => {
 const third_walk = (tree) => {
   const selfMinY = tree.y - tree.height / 2;
   const selfMaxY = tree.y + tree.height / 2;
+
   // 计算每个节点的minY和maxY
   if (tree.children.length > 0) {
     let minY = Infinity;
@@ -275,8 +268,15 @@ const third_walk = (tree) => {
       }
     });
 
-    tree.minY = selfMinY < minY ? selfMinY : minY;
-    tree.maxY = selfMaxY > maxY ? selfMaxY : maxY;
+    if(tree.height > (maxY - minY)) {
+      tree.minY = selfMinY
+      tree.maxY = selfMaxY
+    } else {
+      tree.minY = minY
+      tree.maxY = maxY
+    }
+    // tree.minY = selfMinY < minY ? selfMinY : minY;
+    // tree.maxY = selfMaxY > maxY ? selfMaxY : maxY;
   } else {
     tree.minY = selfMinY;
     tree.maxY = selfMaxY;
@@ -285,7 +285,6 @@ const third_walk = (tree) => {
   if (tree.left_brother()) {
     if (tree.minY < tree.left_brother().maxY + NODE_SPACE) {
       const o = tree.left_brother().maxY - tree.minY + NODE_SPACE;
-      tree.offset = o; // 用于移动子节点
       tree.y += o; // 移动自身
       tree.minY += o; // 更新minY、maxY
       tree.maxY += o;
@@ -293,27 +292,49 @@ const third_walk = (tree) => {
   }
 };
 
-// 第四次遍历
-const fourth_walk = (tree, o = 0) => {
-  tree.y += o;
-  tree.children.forEach((child) => {
-    fourth_walk(child, o + tree.offset);
-  });
+
+
+const handleNodeHoming = (tree) => {
+  const children = tree.children;
   const len = tree.children.length;
   if (len <= 0) {
     return;
   }
-  // 重新居于子节点中间
-  // const mid = (tree.children[0].y + tree.children[len - 1].y) / 2;
-  // tree.y = mid;
+
+  const lenList = children.map((cur) => {
+    return cur.maxY - cur.minY;
+  });
 
 
+  const totalChildrenLength =
+    lenList.reduce((pre, cur) => {
+      return pre + cur;
+    }, 0) +
+    (len - 1) * NODE_SPACE;
+
+  let topPoint = tree.y - totalChildrenLength / 2 + lenList[0] / 2;
+
+  children.forEach((child, index) => {
+    child.y = topPoint;
+
+    const next = children[index + 1];
+    if (next) {
+      const nextLen = lenList[index + 1];
+      topPoint += lenList[index] / 2 + NODE_SPACE + nextLen / 2;
+    }
+  });
+
+  tree.children.forEach((child) => {
+    handleNodeHoming(child);
+  });
 };
+
 
 export const buchheim = (tree) => {
   const dt = firstwalk(tree);
   second_walk(dt);
   third_walk(dt);
-  fourth_walk(dt);
+  handleNodeHoming(tree);
+
   return dt;
 };
