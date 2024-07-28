@@ -21,13 +21,11 @@ const mindLine = {
       const xDist = endPoint!.x - startPoint!.x;
       const curvePosition = [1 / 2, 1 / 2];
       const curveOffset = [0, 0];
- 
 
       const innerPoint1 = [
         startPoint!.x + xDist * curvePosition[0] + curveOffset[0],
         startPoint!.y,
       ];
-
 
       const innerPoint2 = [
         endPoint!.x - xDist * curvePosition[1] + curveOffset[1],
@@ -35,7 +33,10 @@ const mindLine = {
       ];
 
       const anchorPoints = [innerPoint1, innerPoint2];
-      action.addEdge("BezierCurve", { ...config, anchorPoints });
+      action.addEdge("BezierCurve", {
+        ...config,
+        anchorPoints,
+      });
     },
   },
 };

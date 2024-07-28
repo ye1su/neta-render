@@ -30,10 +30,15 @@ export class CanvasRenderer extends Renderer {
 
     _canvas.setAttribute("width", fixFactor(this.screen.width) + "");
     _canvas.setAttribute("height", fixFactor(this.screen.height) + "");
-
+    _canvas.setAttribute("tabindex", "0");
+    
+    _canvas.style.outline = "none"
     _canvas.style.width = this.screen.width + "px";
     _canvas.style.height = this.screen.height + "px";
     _canvas.style.backgroundColor = this.background;
+
+    this.el.style.overflow = "hidden"
+
     this.el.appendChild(_canvas);
     this.viewer = _canvas;
 

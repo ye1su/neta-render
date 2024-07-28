@@ -6,7 +6,12 @@ const renderDynamicElement = {
     id: null,
     renderContainer: null,
     init() {},
-    destroy() {},
+    destroy() {
+      const stageChildren = this.instance.el.querySelectorAll("[id^='stagehtml-']");
+      for (const child of stageChildren) {
+        this.instance.el.removeChild(child);
+      }
+    },
     getEvents() {
       return {
         "graphics:pointerdown": "onPointerDown",

@@ -14,6 +14,7 @@ const mindSelectNode = {
         "canvas:pointerdown": "onCanvasDown",
         "canvas:pointermove": "onCanvasMove",
         "canvas:pointerup": "onCanvasUp",
+        keydown: "onKeyDown",
       };
     },
     onPointerDown(evt) {
@@ -26,7 +27,8 @@ const mindSelectNode = {
        * 点击选中
        */
       if (
-        shape?.name !== "expand-circle" && ['headTitle', 'content'].includes(target.parent._data?.type)
+        shape?.name !== "expand-circle" &&
+        ["headTitle", "content"].includes(target.parent._data?.type)
       ) {
         const node = getTargetNode(this.instance.model.nodes, target.parent.id);
 
@@ -91,6 +93,7 @@ const mindSelectNode = {
           targetAnchor: 3,
           style: {
             lineWidth: 4,
+            stroke: "#eca069",
           },
         });
         this.instance.refresh();
@@ -109,7 +112,7 @@ const mindSelectNode = {
       }
 
       // hover进入后展示新增的bar
-      if (['headTitle', 'content'].includes(parent._data?.type)) {
+      if (["headTitle", "content"].includes(parent._data?.type)) {
         originThis.hoverShape = parent;
         const node = getTargetNode(this.instance.model.nodes, parent.id);
         const nodeState = node.nodeState;
@@ -193,11 +196,66 @@ const mindSelectNode = {
       originThis.currentShape = null;
       originThis.currentNode = null;
     },
+    onKeyDown(evt) {
+      const originThis = evt.originThis;
+
+      if (evt.key === "Backspace" && evt.code === "Backspace") {
+        const targetNodes = this.instance.model.nodes.filter((node) =>
+          node.nodeState?.includes("select")
+        );
+        if (targetNodes.length > 1) {
+          console.error("DELETE ERROR: 删除的目标节点出现多个");
+          return;
+        }
+        const targetNode = targetNodes[0];
+        const [delNodes, delEdges] = seekTreeNodesEdges(
+          this.instance.model,
+          targetNode
+        );
+
+        const filterEdges = this.instance.model.edges.filter(
+          (e) => e.target === targetNode.id
+        );
+        filterEdges.forEach((te) => {
+          delEdges.push(te);
+        });
+
+        const delNodeIds = delNodes.map((n) => n.id);
+        const delEdgeIds = delEdges.map((e) => e.id);
+        this.instance.model.nodes = this.instance.model.nodes.filter(
+          (n) => !delNodeIds.includes(n.id)
+        );
+        this.instance.model.edges = this.instance.model.edges.filter(
+          (e) => !delEdgeIds.includes(e.id)
+        );
+        this.instance.refresh();
+
+        originThis.currentShape = null;
+        originThis.currentNode = null;
+        originThis.hoverShape = null
+      }
+    },
   },
 };
+
+export default mindSelectNode;
 
 function getTargetNode(nodes = [], id) {
   return nodes.find((node) => node.id === id);
 }
 
-export default mindSelectNode;
+function seekTreeNodesEdges(model, node, delNodes = [], delEdges = []) {
+  const { nodes, edges } = model;
+  const relationEdges = edges.filter((edge) => edge.source === node.id);
+
+  delNodes.push(node);
+
+  for (const edge of relationEdges) {
+    delEdges.push(edge);
+    const targetNodeId = edge.target;
+    const targetNode = nodes.find((n) => n.id === targetNodeId);
+    seekTreeNodesEdges(model, targetNode, delNodes, delEdges);
+  }
+
+  return [delNodes, delEdges];
+}

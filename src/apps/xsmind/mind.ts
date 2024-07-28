@@ -39,6 +39,8 @@ class Mind {
       edges: [],
     });
     this.netaRender.render();
+
+    this.netaRender.fitCenter()
   }
 
   destroy() {

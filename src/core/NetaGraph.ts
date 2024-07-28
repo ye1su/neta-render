@@ -59,6 +59,11 @@ export class NetaGraph extends Application {
     this.buildInEvent.init();
   }
 
+  public destroy(): void {
+    this.buildInEvent.destroy();
+    super.destroy();
+  }
+
   /**
    * 修改整个layout的内容
    * @param config
@@ -122,14 +127,14 @@ export class NetaGraph extends Application {
       nodes.forEach((node) => {
         this.addNode(node);
       });
-    
+
     Array.isArray(edges) &&
       edges.forEach((edge) => {
-        if(edge.source) {
-          edge.sourceModel = nodes.find(n => n.id === edge.source)
+        if (edge.source) {
+          edge.sourceModel = nodes.find((n) => n.id === edge.source);
         }
-        if(edge.target) {
-          edge.targetModel = nodes.find(n => n.id === edge.target)
+        if (edge.target) {
+          edge.targetModel = nodes.find((n) => n.id === edge.target);
         }
         this.addEdge(edge);
       });

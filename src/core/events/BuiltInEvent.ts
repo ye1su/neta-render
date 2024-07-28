@@ -54,7 +54,7 @@ export class BuiltInEvent {
     for (const behaviorKey in this.behaviors) {
       const behaviorIns = this.behaviors[behaviorKey];
       if (typeof behaviorIns?.render?.destroy == "function") {
-        behaviorIns.render.destroy();
+        behaviorIns.render.destroy.apply(this, null);
       }
     }
 

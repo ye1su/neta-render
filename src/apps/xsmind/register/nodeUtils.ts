@@ -71,7 +71,7 @@ export class MindNode {
         radius: 8,
         style: {
           fill: "transparent",
-          stroke: "#95a3cc",
+          stroke: "#eca069",
           lineWidth: 6,
         },
       });
@@ -199,6 +199,7 @@ export function generateDynamicElement({ config }) {
       outline: "none",
       resize: "none" /* 禁用调整大小 */,
       width: "100%" /* 可选：使 textarea 占满父容器的宽度 */,
+      overflow: "hidden",
     },
     text: config.text ?? "",
   };

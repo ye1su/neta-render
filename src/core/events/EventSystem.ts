@@ -17,7 +17,7 @@ export class EventSystem {
   public hitTarget: Graphics | Container | null = null;
   private emit;
 
-  private moveItem: Container = null
+  private moveItem: Container = null;
 
   constructor(stage: Container, renderer: CanvasRenderer, emit) {
     this.canvasEle = renderer.viewer;
@@ -25,18 +25,23 @@ export class EventSystem {
     this._renderer = renderer;
     this.emit = emit;
     this.addEvents();
+
   }
   private addEvents = () => {
     this.canvasEle.addEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.addEventListener("pointermove", this.onPointerMove);
     this.canvasEle.addEventListener("pointerup", this.onPointerup);
-    this.canvasEle.addEventListener('wheel', this.onWheel)
+    this.canvasEle.addEventListener("wheel", this.onWheel);
+
+    this.canvasEle.addEventListener("keydown", this.onKeyDown);
   };
   public removeEvents = () => {
     this.canvasEle.removeEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.removeEventListener("pointermove", this.onPointerMove);
     this.canvasEle.removeEventListener("pointerup", this.onPointerup);
     this.canvasEle.removeEventListener("wheel", this.onWheel);
+
+    this.canvasEle.removeEventListener("keydown", this.onKeyDown);
   };
 
   private onPointerDown = (event) => {
@@ -45,14 +50,13 @@ export class EventSystem {
       y: event.y,
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
-      hitTarget: this.hitTarget
+      hitTarget: this.hitTarget,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     e.target = target;
     e.container = target instanceof Graphics ? target.parent : null;
 
     if (target) {
-
       this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e);
       return;
     }
@@ -63,33 +67,31 @@ export class EventSystem {
     const e = Object.assign({}, event, {
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
-      hitTarget: this.hitTarget
+      hitTarget: this.hitTarget,
     });
 
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
 
-    if(!this.moveItem && target) {
-      this.moveItem = target
-      e.target = target
-      this.emit(EVENT_TYPE.GRAPHICS_MOUSEENTER, e)
-      
+    if (!this.moveItem && target) {
+      this.moveItem = target;
+      e.target = target;
+      this.emit(EVENT_TYPE.GRAPHICS_MOUSEENTER, e);
     }
-    if(this.moveItem && !target) {
-      e.target = target
-      this.moveItem = null
-      this.emit(EVENT_TYPE.GRAPHICS_MOUSEOUT, e)
+    if (this.moveItem && !target) {
+      e.target = target;
+      this.moveItem = null;
+      this.emit(EVENT_TYPE.GRAPHICS_MOUSEOUT, e);
     }
 
     // 传递事件
     this.emit(EVENT_TYPE.CANVAS_POINTERMOVE, e);
-
   };
 
   private onPointerup = (event) => {
     const e = Object.assign({}, event, {
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
-      hitTarget: this.hitTarget
+      hitTarget: this.hitTarget,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     e.target = target;
@@ -98,8 +100,8 @@ export class EventSystem {
   };
 
   private onWheel = (event) => {
-    event.preventDefault()
-    event.stopPropagation()
+    event.preventDefault();
+    event.stopPropagation();
     const e = Object.assign({}, event, {
       deltaX: event.deltaX,
       deltaY: event.deltaY,
@@ -107,7 +109,11 @@ export class EventSystem {
       offsetY: event.offsetY * 2,
     });
     this.emit(EVENT_TYPE.CANVAS_WHEEL, e);
-  }
+  };
+
+  private onKeyDown = (event) => {
+    this.emit(EVENT_TYPE.KEYDOWN, event);
+  };
 
   public hitTest(root: Container, globalPos: Point): Container | null {
     this.hasFoundTarget = false;
