@@ -1,7 +1,6 @@
 import { Container } from "./display";
 import { EventSystem } from "./events";
-import { getRenderer } from "./renderer";
-import { WebGlRenderer, CanvasRenderer } from "./renderer";
+import { getRenderer, CanvasRenderer } from "./renderer";
 import { IApplicationOptions } from "./types";
 import { default as Eventemitter } from "eventemitter3";
 

@@ -8,7 +8,18 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/core/index.ts', // 工具函数入口文件路径
-      formats: ['es'],
     },
+    rollupOptions: {
+      output: [
+        {
+          format: 'es',
+          dir: 'dist',
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+          entryFileNames: `[name].mjs`,
+        }
+      ]
+    }
   },
+  
 });

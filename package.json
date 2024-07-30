@@ -2,6 +2,7 @@
   "name": "neta-render",
   "version": "0.0.1",
   "main": "dist/render.js",
+  "type": "module",
   "author": "diaoge",
   "keywords": [
     "render",
@@ -11,6 +12,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "node ./script/build.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "docs:dev": "vitepress dev docs",
@@ -18,6 +20,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
     "antd": "^5.17.2",
     "d3-force": "^3.0.0",
     "dagre": "^0.8.5",
@@ -29,6 +32,7 @@
     "react-router-dom": "^6.23.0"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/d3-force": "^3.0.9",
     "@types/dagre": "^0.7.52",
     "@types/lodash-es": "^4.17.12",
@@ -40,6 +44,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "rollup": "^4.19.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vitepress": "^1.1.3"
