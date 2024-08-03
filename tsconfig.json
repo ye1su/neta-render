@@ -1,28 +1,29 @@
 {
   "compilerOptions": {
-
-
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "allowJs": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "noEmit": true,
-    "allowImportingTsExtensions":true,
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
 
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./es",
     /* Linting */
-    "strict": false,
+    "strict": false
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     // "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "exclude": ["**/*.svg"],
+  "include": ["src/core"],
+  "exclude": ["**/*.svg"]
   // "references": [{ "path": "./tsconfig.node.json" }]
 }

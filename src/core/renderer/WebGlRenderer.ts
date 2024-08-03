@@ -1,5 +1,5 @@
-import { Container } from '@/display'
-import { IApplicationOptions } from '@/types'
+import { Container } from '../display'
+import { IApplicationOptions } from '../types'
 import { Renderer } from './Renderer'
 
 export class WebGlRenderer extends Renderer {

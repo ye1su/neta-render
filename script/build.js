@@ -6,6 +6,7 @@ import pluginResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import commonjs from "@rollup/plugin-commonjs";
 import image from "@rollup/plugin-image";
+import glob from "fast-glob";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 console.log(
@@ -13,15 +14,28 @@ console.log(
   resolve(__dirname, "../tsconfig.json")
 );
 
+const excludeFiles = (files) => {
+  const excludes = ["node_modules", "type"];
+  return files.filter(
+    (path) => !excludes.some((exclude) => path.includes(exclude))
+  );
+};
+
 // 模块化打包任务函数
 const buildModules = async () => {
   let bundle;
   let buildFailed = false;
   try {
+    const entries = excludeFiles(
+      await glob(["src/core/**/*"], {
+        absolute: true, // 匹配隐藏文件和目录
+        onlyFiles: true, // 只匹配文件，忽略目录
+      })
+    );
     // 启动一次打包
     bundle = await rollup({
       // input: resolve(__dirname, '../src/core/index.ts'),
-      input: "src/core/index.ts",
+      input: entries,
       plugins: [
         pluginResolve({
           extensions: [".ts", ".js"], // Add any extensions you're using
@@ -47,13 +61,11 @@ const buildModules = async () => {
       entryFileNames: `[name].mjs`, // [name] 表示入口文件的文件名（不包含扩展名），也就是生产 .mjs 结尾的文件
     });
 
-
-
-    console.log('打包成功！');
+    console.log("打包成功！");
   } catch (error) {
     buildFailed = true;
     // 进行一些错误报告
-    console.error('打包失败:');
+    console.error("打包失败:");
     console.error(error);
   }
   if (bundle) {
