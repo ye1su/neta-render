@@ -19,6 +19,7 @@ import { CvsSelectPage } from "./RegNodePage/CvsSelectPage.tsx";
 import { FreedomPage } from "./RegNodePage/FreedomPage.tsx";
 import { TreePage } from "./LayoutPage/TreePage.tsx";
 import { MindPage } from "./AppPage/MindPage.tsx";
+import React from "react";
 
 const { Sider, Content } = Layout;
 
@@ -156,22 +157,6 @@ export const routes = [
     options: {
       name: "创建线",
       group: "Mode",
-    },
-  },
-  {
-    path: `${BASE_URL}/condition`,
-    element: <ConditionPage />,
-    options: {
-      name: "条件组件",
-      group: "App",
-    },
-  },
-  {
-    path: `${BASE_URL}/mind`,
-    element: <MindPage />,
-    options: {
-      name: "脑图",
-      group: "App",
     },
   },
 ].map((item) => {

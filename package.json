@@ -1,6 +1,6 @@
 {
   "name": "neta-render",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "module": "es/index.mjs",
   "type": "module",
   "author": "diaoge",
@@ -8,7 +8,12 @@
     "render",
     "neta"
   ],
-  "license": "ISC",
+  "files": [
+    "es",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "node ./script/build.js",
