@@ -14,7 +14,7 @@ export class Application extends Eventemitter {
     super();
     const { el } = options;
     this.el = el;
-
+    this.el.style.position = "relative";
     this.renderer = getRenderer({ ...options });
     this.render();
 

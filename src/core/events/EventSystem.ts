@@ -25,7 +25,6 @@ export class EventSystem {
     this._renderer = renderer;
     this.emit = emit;
     this.addEvents();
-
   }
   private addEvents = () => {
     this.canvasEle.addEventListener("pointerdown", this.onPointerDown);
@@ -34,6 +33,7 @@ export class EventSystem {
     this.canvasEle.addEventListener("wheel", this.onWheel);
 
     this.canvasEle.addEventListener("keydown", this.onKeyDown);
+    this.canvasEle.addEventListener("contextmenu", this.onContextmenu);
   };
   public removeEvents = () => {
     this.canvasEle.removeEventListener("pointerdown", this.onPointerDown);
@@ -42,6 +42,7 @@ export class EventSystem {
     this.canvasEle.removeEventListener("wheel", this.onWheel);
 
     this.canvasEle.removeEventListener("keydown", this.onKeyDown);
+    this.canvasEle.removeEventListener("contextmenu", this.onContextmenu);
   };
 
   private onPointerDown = (event) => {
@@ -113,6 +114,26 @@ export class EventSystem {
 
   private onKeyDown = (event) => {
     this.emit(EVENT_TYPE.KEYDOWN, event);
+  };
+
+  private onContextmenu = (event) => {
+    // 阻止默认的右键菜单弹出
+    event.preventDefault();
+
+    const e = Object.assign({}, event, {
+      x: event.x,
+      y: event.y,
+      offsetX: event.offsetX * 2,
+      offsetY: event.offsetY * 2,
+      hitTarget: this.hitTarget,
+    });
+    const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+    e.target = target;
+    e.container = target instanceof Graphics ? target.parent : null;
+
+    if(target) {
+      this.emit(EVENT_TYPE.GRAPHICS_CONTEXTMENU, event);
+    }
   };
 
   public hitTest(root: Container, globalPos: Point): Container | null {

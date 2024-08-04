@@ -1,4 +1,3 @@
-import UserTask from "./nodes/regUserTask";
 import AndOr from "./nodes/regAndOr";
 import CvsInput from "./nodes/regCvsInput";
 import Freedom from "./nodes/regFreedom";
@@ -8,9 +7,9 @@ import RenderDynamicElement from "./behavior/renderDynamicElement";
 import FreeDomRender from "./behavior/freeDomRender";
 import DragAll from './behavior/dragAll'
 import WheelCanvasMove from './behavior/wheelCanvasMove'
+import ContentMenu from './behavior/contextMenu'
 
 export const EXTEND_NODE = {
-  UserTask,
   AndOr,
   CvsInput,
   Freedom,
@@ -22,5 +21,6 @@ export const BEHAVIOR = {
   FreeDomRender,
   DragAll,
   WheelCanvasMove,
+  ContentMenu,
 };
 
