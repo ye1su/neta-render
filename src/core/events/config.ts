@@ -1,4 +1,5 @@
 export const EVENT_TYPE = {
+  POINTERDOWN: "pointerdown",
   GRAPHICS_POINTERDOWN: "graphics:pointerdown",
   GRAPHICS_MOUSEENTER: "graphics:mouseenter",
   GRAPHICS_MOUSEOUT: "graphics:mouseout",

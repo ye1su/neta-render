@@ -56,7 +56,7 @@ export class EventSystem {
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     e.target = target;
     e.container = target instanceof Graphics ? target.parent : null;
-
+    this.emit(EVENT_TYPE.POINTERDOWN, e);
     if (target) {
       this.emit(EVENT_TYPE.GRAPHICS_POINTERDOWN, e);
       return;

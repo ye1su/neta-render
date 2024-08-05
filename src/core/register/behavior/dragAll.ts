@@ -13,6 +13,7 @@ const dragAll = {
     getEvents() {
       return {
         "graphics:pointerdown": "onGraphicsPointerDown",
+        "graphics:contextmenu": "onGraphicsContextMenu",
         "canvas:pointerdown": "onCanvasPointerDown",
         "canvas:pointermove": "onCanvasPointerMove",
         "canvas:pointerup": "onCanvasPointerUp",
@@ -104,6 +105,10 @@ const dragAll = {
       const originThis = event.originThis;
       originThis._dragging = false;
     },
+    onGraphicsContextMenu(event) {
+      const originThis = event.originThis;
+      originThis._dragging = false;
+    }
   },
 };
 
