@@ -11,10 +11,18 @@ export class BuiltInEvent {
 
     // 加载注册内置的behavior
     if (Array.isArray(optBhvs)) {
-      for (const name of optBhvs) {
-        const modules = Object.values(BEHAVIOR).filter((i) => i.name === name);
+      for (const val of optBhvs) {
+        let modules = []
+        if(typeof val === 'string') {
+          const _modules = Object.values(BEHAVIOR).filter((i) => i.name === val);
+          modules = [...modules, ..._modules]
+        } else {
+          const _name = val.key
+          const _modules = Object.values(BEHAVIOR).filter((i) => i.name === _name);
+          modules = [...modules, ..._modules]
+        }
         modules.forEach((m) => {
-          this.behaviors[name] = m;
+          this.behaviors[m.name] = m;
         });
       }
     }

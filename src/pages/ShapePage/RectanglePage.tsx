@@ -8,9 +8,29 @@ export function RectanglePage() {
       rendererType: RendererType.Canvas,
       el: document.getElementById("dom")!,
       backgroundColor: "#fff",
-      behaviors: ['drag-all', 'contextMenu'],
+      behaviors: [
+        "drag-all",
+        {
+          key: "contextMenu",
+          options: {
+            menus: [
+              {
+                label: "自定义菜单1",
+                key: "1",
+              },
+              {
+                label: "自定义菜单244tttttt",
+                key: "2",
+              },
+            ],
+          },
+        },
+      ],
     });
-
+    console.log("appRef.current: ", appRef.current);
+    appRef.current.on("contextmenu", (...rest) => {
+      console.log("rest: ", rest);
+    });
     const model = {
       id: "node1",
       label: "node1",
@@ -24,7 +44,7 @@ export function RectanglePage() {
       },
     };
 
-    appRef.current.addItem('node', model)
+    appRef.current.addItem("node", model);
 
     const model2 = {
       id: "node1",
@@ -40,7 +60,7 @@ export function RectanglePage() {
       },
     };
 
-    appRef.current.addItem('node', model2)
+    appRef.current.addItem("node", model2);
     appRef.current.render();
 
     return () => {
@@ -48,10 +68,5 @@ export function RectanglePage() {
     };
   }, []);
 
-  return (
-    <div
-      id="dom"
-      style={{   width: 800, height: 600 }}
-    ></div>
-  );
+  return <div id="dom" style={{ width: 800, height: 600 }}></div>;
 }
