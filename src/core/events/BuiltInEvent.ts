@@ -1,14 +1,14 @@
 import { NetaGraph } from "../NetaGraph";
 import { BEHAVIOR } from "../register";
-import { RefBehavior, RefBehaviorItem, RegNodeType } from "../types/register";
+import { RefBehavior, RefBehaviorItem, RegBhvType } from "../types/register";
 import { EVENT_TYPE } from "./config";
 
 export class BuiltInEvent {
   private instance: NetaGraph;
-  private behaviors: RegNodeType[] = [];
+  private behaviors: RegBhvType[] = [];
   private propsBhvs: RefBehaviorItem[] = [];
 
-  constructor(instance: NetaGraph, registerEvent, optBhvs?: RefBehavior[]) {
+  constructor(instance: NetaGraph, registerEvent: RegBhvType[], optBhvs?: RefBehavior[]) {
     this.instance = instance;
     this.propsBhvs = optBhvs.filter((i) => typeof i !== "string");
     // 加载注册内置的behavior

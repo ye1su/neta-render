@@ -5,6 +5,17 @@ export interface RegNodeType {
   name: string;
   render: {
     init?: (val: any) => void;
+    draw: (action: RegisterContext) => Graphics | undefined;
+    dynamicElement?: (val: any) => any;
+    destroy?: () => void;
+  };
+  [key: string]: any;
+}
+
+export interface RegBhvType {
+  name: string;
+  render: {
+    init?: (val: any) => void;
     getEvents: () => Record<string, string>;
     draw: (action: RegisterContext) => Graphics | undefined;
     dynamicElement?: (val: any) => any;
@@ -12,6 +23,8 @@ export interface RegNodeType {
   };
   [key: string]: any;
 }
+
+
 
 export type RefBehavior = string | RefBehaviorItem;
 export interface RefBehaviorItem {

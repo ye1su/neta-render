@@ -1,5 +1,5 @@
 import { RendererType } from "../enums";
-import { RegNodeType } from "./register";
+import { RefBehavior, RegBhvType, RegNodeType } from "./register";
 import { ItemStyle } from "./style";
 
 // Application 的如惨
@@ -23,9 +23,9 @@ export interface NetaGraphOptions extends IApplicationOptions {
   register?: {
     nodes?: RegNodeType[];
     edges?: RegNodeType[];
-    behaviors?: RegNodeType[];
+    behaviors?: RegBhvType[];
   };
-  behaviors?: string[];
+  behaviors?: RefBehavior[];
 }
 
 // 布局配置
