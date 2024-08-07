@@ -2,10 +2,11 @@ import { EVENT_TYPE } from "../../events";
 
 const contextMenu = {
   name: "contextMenu",
-  
+  menus: [],
   render: {
-    init(){
-
+    init(options){
+      const originThis = options.originThis;
+      originThis.menus = options.menus
     },
     getEvents() {
       return {
@@ -15,7 +16,8 @@ const contextMenu = {
     },
     onGraphicsContextMenu(event) {
       const el = this.instance.el;
-      
+      const originThis = event.originThis
+
       const existingMenu = document.querySelector(".custom-menu");
       if (existingMenu) {
         existingMenu.remove();
@@ -25,16 +27,7 @@ const contextMenu = {
       const customMenu = document.createElement("div");
       customMenu.classList.add("custom-menu");
 
-      const menuList = [
-        {
-          label: "自定义菜单1",
-          key: "1",
-        },
-        {
-          label: "自定义菜单244tttttt",
-          key: "2",
-        },
-      ];
+      const menuList = originThis.menus;
 
       const menuHtml = menuList.reduce((pre, cur) => {
         const itemHtml = `<div class="custom-menu-item" >${cur.label}</div>`;

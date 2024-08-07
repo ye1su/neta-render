@@ -23,7 +23,7 @@ export interface NetaGraphOptions extends IApplicationOptions {
   register?: {
     nodes?: RegNodeType[];
     edges?: RegNodeType[];
-    behaviors?: any[];
+    behaviors?: RegNodeType[];
   };
   behaviors?: string[];
 }

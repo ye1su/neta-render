@@ -1,25 +1,31 @@
 import { NetaGraph } from "../NetaGraph";
 import { BEHAVIOR } from "../register";
+import { RefBehavior, RefBehaviorItem, RegNodeType } from "../types/register";
 import { EVENT_TYPE } from "./config";
 
 export class BuiltInEvent {
   private instance: NetaGraph;
-  private behaviors = [];
+  private behaviors: RegNodeType[] = [];
+  private propsBhvs: RefBehaviorItem[] = [];
 
-  constructor(instance: NetaGraph, registerEvent, optBhvs?: string[]) {
+  constructor(instance: NetaGraph, registerEvent, optBhvs?: RefBehavior[]) {
     this.instance = instance;
-
+    this.propsBhvs = optBhvs.filter((i) => typeof i !== "string");
     // 加载注册内置的behavior
     if (Array.isArray(optBhvs)) {
       for (const val of optBhvs) {
-        let modules = []
-        if(typeof val === 'string') {
-          const _modules = Object.values(BEHAVIOR).filter((i) => i.name === val);
-          modules = [...modules, ..._modules]
+        let modules = [];
+        if (typeof val === "string") {
+          const _modules = Object.values(BEHAVIOR).filter(
+            (i) => i.name === val
+          );
+          modules = [...modules, ..._modules];
         } else {
-          const _name = val.key
-          const _modules = Object.values(BEHAVIOR).filter((i) => i.name === _name);
-          modules = [...modules, ..._modules]
+          const _name = val.key;
+          const _modules = Object.values(BEHAVIOR).filter(
+            (i) => i.name === _name
+          );
+          modules = [...modules, ..._modules];
         }
         modules.forEach((m) => {
           this.behaviors[m.name] = m;
@@ -47,7 +53,10 @@ export class BuiltInEvent {
     for (const behaviorKey in this.behaviors) {
       const behaviorIns = this.behaviors[behaviorKey];
       if (typeof behaviorIns?.render?.init == "function") {
-        behaviorIns.render.init();
+        const _options =
+          this.propsBhvs.find((item) => item.key == behaviorKey)?.options ?? {};
+        const originThis = behaviorIns.render;
+        behaviorIns.render.init.apply(this, [{ ..._options, originThis }]);
       }
     }
 

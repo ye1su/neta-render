@@ -15,7 +15,7 @@ import { Application } from "./Application";
 import { LayoutType } from "./enums";
 import { cloneDeep } from "lodash-es";
 import { BuiltInEvent } from "./events";
-import { RegNodeType } from "./types/register";
+import { RefBehavior, RegNodeType } from "./types/register";
 import { EXTEND_NODE } from "./register";
 import _ from "lodash-es";
 import { Container } from "./display";
@@ -25,7 +25,7 @@ export class NetaGraph extends Application {
   public registerMap: Map<string, RegNodeType["render"]> = new Map();
   public layoutConfig: LayoutConfig = undefined;
   public buildInEvent: BuiltInEvent;
-  public behaviors?: string[];
+  public behaviors?: RefBehavior[];
 
   constructor(options: NetaGraphOptions) {
     super(options);
