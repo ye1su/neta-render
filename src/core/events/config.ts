@@ -1,9 +1,12 @@
 export const EVENT_TYPE = {
+  CLICK: "click",
   POINTERDOWN: "pointerdown",
+  GRAPHICS_CLICK: "graphics:click",
   GRAPHICS_POINTERDOWN: "graphics:pointerdown",
   GRAPHICS_MOUSEENTER: "graphics:mouseenter",
   GRAPHICS_MOUSEOUT: "graphics:mouseout",
   GRAPHICS_CONTEXTMENU: "graphics:contextmenu",
+  CANVAS_CLICK: "canvas:click",
   CANVAS_POINTERDOWN: "canvas:pointerdown",
   CANVAS_POINTERMOVE: "canvas:pointermove",
   CANVAS_POINTERUP: "canvas:pointerup",

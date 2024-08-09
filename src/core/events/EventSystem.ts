@@ -27,6 +27,7 @@ export class EventSystem {
     this.addEvents();
   }
   private addEvents = () => {
+    this.canvasEle.addEventListener("click", this.onClick);
     this.canvasEle.addEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.addEventListener("pointermove", this.onPointerMove);
     this.canvasEle.addEventListener("pointerup", this.onPointerup);
@@ -36,6 +37,7 @@ export class EventSystem {
     this.canvasEle.addEventListener("contextmenu", this.onContextmenu);
   };
   public removeEvents = () => {
+    this.canvasEle.removeEventListener("click", this.onClick);
     this.canvasEle.removeEventListener("pointerdown", this.onPointerDown);
     this.canvasEle.removeEventListener("pointermove", this.onPointerMove);
     this.canvasEle.removeEventListener("pointerup", this.onPointerup);
@@ -43,6 +45,25 @@ export class EventSystem {
 
     this.canvasEle.removeEventListener("keydown", this.onKeyDown);
     this.canvasEle.removeEventListener("contextmenu", this.onContextmenu);
+  };
+  private onClick = (event) => {
+    const e = Object.assign({}, event, {
+      x: event.x,
+      y: event.y,
+      offsetX: event.offsetX * 2,
+      offsetY: event.offsetY * 2,
+      hitTarget: this.hitTarget,
+      button: event.button,
+    });
+    const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
+    e.target = target;
+    e.container = target instanceof Graphics ? target.parent : null;
+    this.emit(EVENT_TYPE.CLICK, e);
+    if (target) {
+      this.emit(EVENT_TYPE.GRAPHICS_CLICK, e);
+      return;
+    }
+    this.emit(EVENT_TYPE.CANVAS_CLICK, e);
   };
 
   private onPointerDown = (event) => {
@@ -52,6 +73,7 @@ export class EventSystem {
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
       hitTarget: this.hitTarget,
+      button: event.button,
     });
     const target = this.hitTest(this.stage, new Point(e.offsetX, e.offsetY));
     e.target = target;
@@ -131,7 +153,7 @@ export class EventSystem {
     e.target = target;
     e.container = target instanceof Graphics ? target.parent : null;
 
-    if(target) {
+    if (target) {
       this.emit(EVENT_TYPE.GRAPHICS_CONTEXTMENU, event);
     }
   };

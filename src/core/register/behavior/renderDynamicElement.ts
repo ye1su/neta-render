@@ -7,7 +7,8 @@ const renderDynamicElement = {
     renderContainer: null,
     init() {},
     destroy() {
-      const stageChildren = this.instance.el.querySelectorAll("[id^='stagehtml-']");
+      const stageChildren =
+        this.instance.el.querySelectorAll("[id^='stagehtml-']");
       for (const child of stageChildren) {
         this.instance.el.removeChild(child);
       }
@@ -20,6 +21,8 @@ const renderDynamicElement = {
       };
     },
     onPointerDown(evt) {
+      // 右键就结束
+      if (evt.button === 2) return;
       if (!evt.container?.dynamicElement) return;
 
       const target = evt.target;
@@ -29,11 +32,10 @@ const renderDynamicElement = {
 
       if (node.nodeState.indexOf("input") > -1) {
         originThis.onCanvasClick.call(this, evt);
-        return
+        return;
       }
       // 如果此时是input并且点击的关机为止
       if (["expand-circle", "drag-pointer"].includes(shape.name)) {
-    
         originThis.clearAllDynamicEles(this.instance.el);
         return;
       }
@@ -76,6 +78,11 @@ const renderDynamicElement = {
         (bbox.maxX - bbox.minX) / 2 - offsetMargin * 2 + "px";
       // newEle.style.height =
       //   (bbox.maxY - bbox.minY) / 2 - offsetMargin * 2 + "px";
+
+      newEle.addEventListener("contextmenu", (event) => {
+        // 阻止默认的右键菜单弹出
+        event.preventDefault();
+      });
 
       this.instance.el.appendChild(newEle);
 
