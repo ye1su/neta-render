@@ -4,9 +4,9 @@ const contextMenu = {
   name: "contextMenu",
   menus: [],
   render: {
-    init(options){
+    init(options) {
       const originThis = options.originThis;
-      originThis.menus = options.menus
+      originThis.menus = options.menus;
     },
     getEvents() {
       return {
@@ -16,7 +16,7 @@ const contextMenu = {
     },
     onGraphicsContextMenu(event) {
       const el = this.instance.el;
-      const originThis = event.originThis
+      const originThis = event.originThis;
 
       const existingMenu = document.querySelector(".custom-menu");
       if (existingMenu) {
@@ -70,9 +70,10 @@ const contextMenu = {
           item.style.color = "#000";
         });
 
-        item.addEventListener("click",  () => {
-          el.removeChild(customMenu)
-          this.instance.emit(EVENT_TYPE.CONTEXTMENU, menuList[index])
+        item.addEventListener("click", () => {
+          el.removeChild(customMenu);
+          event.menu = menuList[index];
+          this.instance.emit(EVENT_TYPE.CONTEXTMENU, event);
         });
       });
     },

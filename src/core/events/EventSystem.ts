@@ -145,6 +145,8 @@ export class EventSystem {
     const e = Object.assign({}, event, {
       x: event.x,
       y: event.y,
+      clientX: event.clientX,
+      clientY: event.clientY,
       offsetX: event.offsetX * 2,
       offsetY: event.offsetY * 2,
       hitTarget: this.hitTarget,
@@ -154,7 +156,7 @@ export class EventSystem {
     e.container = target instanceof Graphics ? target.parent : null;
 
     if (target) {
-      this.emit(EVENT_TYPE.GRAPHICS_CONTEXTMENU, event);
+      this.emit(EVENT_TYPE.GRAPHICS_CONTEXTMENU, e);
     }
   };
 
